@@ -1,6 +1,12 @@
 ---
 name: check-repos
 description: Git repo health check — scans local repos for uncommitted changes, stale branches, and unpushed commits.
+triggers:
+  - check repos
+  - repo status
+  - git health
+  - uncommitted changes
+  - unpushed commits
 ---
 
 # Check Repos
@@ -9,60 +15,77 @@ Scan local git repos for uncommitted changes, stale branches, and unpushed commi
 
 ## 1. Find Git Repos
 
-Scan common locations for git repositories:
+Scan common code locations for git repositories:
+- ~/Projects
+- ~/Developer
+- ~/Code
+- ~/repos
+- ~/src
+- Home directory (shallow)
 
-```bash
-find ~/Projects ~/Developer ~/Code ~/repos ~/src -maxdepth 3 -name ".git" -type d 2>/dev/null
-```
-
-Also check the home directory:
-
-```bash
-find ~ -maxdepth 2 -name ".git" -type d 2>/dev/null
-```
+Skip dependency folders (node_modules, .cache, vendor, etc.).
 
 ## 2. Check Each Repo
 
-For each repository found:
+For each repository found, check:
 
 ### Uncommitted Changes
-```bash
-cd /path/to/repo && git status --porcelain
-```
+- Modified files not staged
+- Staged files not committed
+- Untracked files
 
 ### Unpushed Commits
-```bash
-git log --oneline @{u}..HEAD 2>/dev/null
-```
+- Local commits not pushed to remote
+- How many commits ahead of origin
 
 ### Stale Branches
-```bash
-git branch --merged main | grep -v "main\|master\|\*"
-git branch -v | grep '\[gone\]'
-```
+- Branches already merged to main
+- Branches with tracking gone (deleted on remote)
+- Branches not touched in 30+ days
 
-### Last Commit Date
-```bash
-git log -1 --format="%ar" 2>/dev/null
-```
+### Last Activity
+- Date of most recent commit
+- Flag repos inactive for 30+ days
 
-## 3. Summarize Findings
+## 3. Categorize Results
 
 Group repos by status:
-- **Needs attention** — uncommitted changes or unpushed commits
-- **Has stale branches** — merged branches that can be cleaned up
-- **Clean** — everything committed and pushed
+- **🔴 Needs attention** — uncommitted changes or unpushed commits
+- **🟡 Has stale branches** — merged branches that can be cleaned up
+- **🟢 Clean** — everything committed and pushed
 
-## After Running
+## 4. Present Findings
 
-Report:
-- Total repos scanned
-- Repos with uncommitted changes (list files)
-- Repos with unpushed commits (count per repo)
-- Stale branches that can be deleted
-- Repos that haven't been touched in over 30 days
+```
+🔍 Repo Health Check
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Repos scanned: 15
+• Need attention: 3
+• Have stale branches: 5
+• Clean: 7
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔴 NEEDS ATTENTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+my-project/
+  • 3 uncommitted files
+  • 2 unpushed commits
+
+api-server/
+  • 1 staged file not committed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🟡 STALE BRANCHES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+webapp/ — 4 merged branches
+cli-tool/ — 2 branches with gone tracking
+```
 
 ## Notes
 
 - Don't make any changes — just report what you find
-- Skip repos inside `node_modules`, `.cache`, or other dependency folders
+- Run weekly or before major work sessions
+- Helps prevent losing work and keeps repos tidy

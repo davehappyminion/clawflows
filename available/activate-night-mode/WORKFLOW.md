@@ -1,50 +1,68 @@
 ---
 name: activate-night-mode
 description: Wind-down mode — dims lights to a warm color, turns off bright switches, and plays sleep music.
-requires:
-  - name: openhue
-    description: Philips Hue smart bulbs
-  - name: lutron
-    description: Lutron Caseta light switches and dimmers
-  - name: sonos
-    description: Sonos wireless speakers
+triggers:
+  - night mode
+  - wind down
+  - evening mode
+  - dim the lights
 ---
 
 # Night Mode
 
-Wind down for the evening — dim warm lighting and sleep music.
+Wind down for the evening — dim warm lighting and relaxing atmosphere.
 
-## Run It
+## 1. Dim Lighting
 
-```bash
-bash {baseDir}/scripts/run.sh
-```
+Using your **smart lighting skill**:
+- Dim lights to 20-30% brightness
+- Use very warm color temperature (2200-2700K, orange/red tones)
+- Turn off overhead lights, use lamps instead
+- Turn off bright switches entirely
 
-## What It Does
+Blue light suppresses melatonin — warm dim light helps prepare for sleep.
 
-1. **Light switches off** — all dimmers to 0% (Lutron)
-2. **Smart lights dimmed** — warm red, low brightness (Hue)
-3. **Sleep music** — plays a sleep playlist on speakers (Sonos)
+## 2. Adjust Thermostat
+
+Using your **thermostat skill**:
+- Lower temperature slightly for sleep
+- 65-68°F / 18-20°C is optimal for sleep
+- Or set to night/sleep schedule
+
+## 3. Play Relaxing Audio
+
+Using your **speaker skill**:
+- Play a sleep/relaxation playlist
+- Ambient sounds, lo-fi, classical, or nature sounds
+- Low volume
+- Set a sleep timer (30-60 minutes)
+
+## 4. Reduce Stimulation
+
+Using your **system skill** (if available):
+- Enable night shift / blue light filter on devices
+- Enable Do Not Disturb
+- Dim device screens
 
 ## After Running
 
-Report what succeeded and what failed.
+Report the setup:
 
-## Config
-
-Copy `config.example.env` to `config.env` and set your values:
-
-```bash
-cp config.example.env config.env
 ```
+🌙 Night Mode Activated
 
-| Variable | What it is |
-|----------|-----------|
-| `ROOM` | Hue room name to dim |
-| `SPEAKER` | Sonos speaker name |
-| `PLAYLIST` | Spotify playlist URI for sleep music |
+✅ Lights: 25%, warm orange
+✅ Switches: Off
+✅ Thermostat: 66°F
+✅ Music: Sleep playlist (45 min timer)
+✅ Blue light filter: Enabled
+
+Time to wind down. Rest well!
+```
 
 ## Notes
 
-- The script sources `config.env` — no hardcoded values
-- Schedule via cron for automatic evening activation
+- Schedule 1-2 hours before target bedtime
+- Precedes activate-sleep-mode (full darkness)
+- Pairs with send-bedtime-reminder
+- Creates a consistent wind-down routine

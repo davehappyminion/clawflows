@@ -1,56 +1,71 @@
 ---
 name: activate-away-mode
 description: Away mode — turns everything off and sets thermostat to eco mode for when you leave the house.
-requires:
-  - name: openhue
-    description: Philips Hue smart bulbs
-  - name: lutron
-    description: Lutron Caseta light switches and dimmers
-  - name: nest
-    description: Google Nest smart thermostats
-  - name: kasa
-    description: TP-Link Kasa smart plugs
-  - name: sonos
-    description: Sonos wireless speakers
+triggers:
+  - away mode
+  - leaving home
+  - goodbye house
+  - I'm leaving
 ---
 
 # Away Mode
 
 Everything off, thermostat to eco — the house is empty.
 
-## Run It
+## 1. Turn Off Lights
 
-```bash
-bash {baseDir}/scripts/run.sh
-```
+Using your **smart lighting skill**, turn off all lights:
+- Smart bulbs (all rooms)
+- Light switches and dimmers to 0%
 
-## What It Does
+## 2. Set Thermostat to Eco
 
-1. **Smart lights off** — all rooms (Hue)
-2. **Light switches off** — all dimmers to 0% (Lutron)
-3. **Thermostat eco** — set to ECO mode (Nest)
-4. **Speakers off** — pause all playback (Sonos)
-5. **Smart plugs off** — all non-essential plugs (Kasa)
+Using your **thermostat skill**, set to ECO or AWAY mode:
+- Lower heating target
+- Raise cooling target
+- Or use the thermostat's built-in away mode
+
+## 3. Stop Music/Media
+
+Using your **speaker skill**, pause all playback:
+- Living room speakers
+- Bedroom speakers
+- Any active media
+
+## 4. Turn Off Smart Plugs
+
+Using your **smart plug skill**, turn off non-essential plugs:
+- Entertainment devices
+- Decorative lighting
+- Non-critical appliances
+
+Keep essential plugs on (refrigerator, etc.).
+
+## 5. Security (Optional)
+
+If available, using your **security skill**:
+- Arm the security system
+- Enable cameras
+- Lock smart locks
 
 ## After Running
 
-Report what succeeded and what failed — one line per item.
+Report what succeeded and what failed — one line per item:
 
-## Config
-
-Copy `config.example.env` to `config.env` and set your values:
-
-```bash
-cp config.example.env config.env
 ```
+🚪 Away Mode Activated
 
-| Variable | What it is |
-|----------|-----------|
-| `ROOM` | Hue room name to turn off |
-| `SPEAKER` | Sonos speaker name |
-| `SMART_PLUGS` | Comma-separated Kasa smart plug names to turn off |
+✅ Lights: All off
+✅ Thermostat: ECO mode (62°F)
+✅ Speakers: Paused
+✅ Smart plugs: 4 turned off
+⚠️ Security: Not configured
+
+House is buttoned up. See you later!
+```
 
 ## Notes
 
-- The script sources `config.env` — no hardcoded values
 - Pairs well with a geofence trigger or manual activation
+- Can be reversed with activate-morning-mode or a "home" mode
+- Don't turn off plugs that power things that shouldn't be interrupted

@@ -1,76 +1,105 @@
 ---
 name: sync-dotfiles
-description: Dotfiles backup — commits dotfiles and Homebrew config to a git repo for safekeeping.
+description: Dotfiles backup — commits dotfiles and package manager config to a git repo for safekeeping.
+triggers:
+  - sync dotfiles
+  - backup dotfiles
+  - dotfiles backup
+  - save config
 ---
 
 # Sync Dotfiles
 
-Backup dotfiles and Homebrew config to a git repo.
+Backup dotfiles and system config to a git repo.
 
 ## 1. Locate Dotfiles Repo
 
-Check common locations:
-
-```bash
-ls -d ~/dotfiles ~/.dotfiles ~/Projects/dotfiles 2>/dev/null
-```
+Check common locations for an existing dotfiles repo:
+- ~/dotfiles
+- ~/.dotfiles
+- ~/Projects/dotfiles
 
 If no repo exists, ask the user where to create one.
 
 ## 2. Sync Shell Config
 
 Copy current shell configuration:
+- `.zshrc`, `.bashrc`
+- `.zprofile`, `.bash_profile`
+- `.aliases`, `.functions`
 
-```bash
-cp ~/.zshrc ~/dotfiles/zshrc 2>/dev/null
-cp ~/.bashrc ~/dotfiles/bashrc 2>/dev/null
-cp ~/.zprofile ~/dotfiles/zprofile 2>/dev/null
-cp ~/.bash_profile ~/dotfiles/bash_profile 2>/dev/null
-```
+Strip any secrets or tokens before copying.
 
 ## 3. Sync Git Config
 
-```bash
-cp ~/.gitconfig ~/dotfiles/gitconfig 2>/dev/null
-cp ~/.gitignore_global ~/dotfiles/gitignore_global 2>/dev/null
-```
+Copy git configuration:
+- `.gitconfig`
+- `.gitignore_global`
 
-## 4. Sync Homebrew
+## 4. Sync Package Manager
 
-Export Homebrew bundle:
+Export installed packages:
 
-```bash
-brew bundle dump --file=~/dotfiles/Brewfile --force
-```
+### macOS (Homebrew)
+Export Brewfile with all installed packages, casks, and taps.
+
+### Linux (apt/dnf/pacman)
+Export package list.
+
+### Node.js
+List global npm packages.
+
+### Python
+List pip packages (or export requirements.txt).
 
 ## 5. Sync Other Configs
 
-Copy other useful configs:
-
-```bash
-cp ~/.ssh/config ~/dotfiles/ssh_config 2>/dev/null
-cp ~/.vimrc ~/dotfiles/vimrc 2>/dev/null
-cp ~/.tmux.conf ~/dotfiles/tmux.conf 2>/dev/null
-```
+Copy other useful configuration files:
+- SSH config (not keys!)
+- Vim/Neovim config
+- Tmux config
+- Editor settings (VS Code, etc.)
 
 ## 6. Commit and Push
 
-```bash
-cd ~/dotfiles
-git add -A
-git commit -m "dotfiles sync $(date +%Y-%m-%d)"
-git push origin main
+Using **git**, commit the changes:
+- Add all modified files
+- Commit with date: "dotfiles sync YYYY-MM-DD"
+- Push to remote
+
+## 7. Report
+
 ```
+📦 Dotfiles Sync
 
-## After Running
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 SYNCED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Shell config (zshrc, zprofile)
+✅ Git config
+✅ Brewfile (145 packages)
+✅ SSH config
+✅ Vim config
 
-Report:
-- Files synced (new/modified/unchanged)
-- Homebrew packages in Brewfile
-- Whether push succeeded
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 CHANGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• zshrc — 3 lines added
+• Brewfile — 2 new packages
+• gitconfig — unchanged
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ COMMITTED & PUSHED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Commit: abc1234
+Message: "dotfiles sync 2026-02-10"
+
+Your configs are backed up!
+```
 
 ## Notes
 
-- Never sync files containing secrets (`.env`, API keys, tokens)
+- **Never sync files containing secrets** (.env, API keys, tokens, SSH private keys)
 - Check `.gitignore` in the dotfiles repo excludes sensitive files
-- Schedule via cron for weekly automatic backup
+- Schedule weekly for automatic backup
+- Use symlinks to link dotfiles repo to actual locations

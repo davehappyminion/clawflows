@@ -1,39 +1,46 @@
 ---
 name: process-notifications
-description: Notification audit — reviews macOS notification settings, identifies noisy apps, and suggests which to silence.
+description: Notification audit — reviews notification settings, identifies noisy apps, and suggests which to silence.
+triggers:
+  - process notifications
+  - notification audit
+  - too many notifications
+  - silence notifications
 ---
 
 # Process Notifications
 
-Audit macOS notification settings, identify noisy apps, suggest silencing.
+Audit notification settings, identify noisy apps, suggest silencing.
 
-## 1. List Notification Settings
+## 1. List Notification Sources
 
-Get current notification preferences:
-
-```bash
-defaults read com.apple.ncprefs 2>/dev/null
-```
-
-List apps with notification access:
-
-```bash
-lsappinfo list | grep -i bundleID
-```
+Using your **system skill**, identify apps with notification access:
+- Apps that can send notifications
+- Current notification style for each (banner, alert, none)
+- Sound enabled/disabled
+- Badge counts enabled/disabled
 
 ## 2. Identify Noisy Apps
 
 Check for apps that are likely high-volume notification sources:
+
+### Usually Noisy
 - Social media apps (Twitter, Instagram, Facebook, TikTok)
 - News apps
 - Marketing/promotional apps
 - Games
 - Shopping apps
 
-## 3. Review Notification Style
+### Usually Important
+- Messages, Phone, FaceTime
+- Calendar, Reminders
+- Email (primary account)
+- Work apps (Slack, Teams)
 
-For each app, check:
-- Banner vs Alert style
+## 3. Review Current Settings
+
+For each app, note:
+- Notification style (banner vs alert)
 - Sound enabled
 - Badge count enabled
 - Lock screen visibility
@@ -42,27 +49,58 @@ For each app, check:
 ## 4. Recommend Changes
 
 Categorize apps into:
-- **Keep as-is** — important communications (Messages, Phone, Calendar)
-- **Reduce** — change from alert to banner, disable sound
-- **Silence** — turn off notifications entirely
-- **Schedule** — use Focus filters for time-based delivery
+- **Keep as-is** — Important communications
+- **Reduce** — Change from alert to banner, disable sound
+- **Silence** — Turn off notifications entirely
+- **Schedule** — Use Focus filters for time-based delivery
 
-Provide the commands to apply changes:
+## 5. Present Recommendations
 
-```bash
-# Example: disable notifications for an app
-defaults write com.apple.ncprefs apps -dict-add "com.example.app" '<dict><key>flags</key><integer>0</integer></dict>'
+```
+🔔 Notification Audit
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Apps with notifications: 47
+• Recommended to silence: 12
+• Recommended to reduce: 8
+• Keep as-is: 27
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔇 SILENCE THESE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Instagram — Social noise
+• Twitter — Social noise
+• News app — Constant updates
+• Game — Engagement bait
+...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔉 REDUCE THESE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Slack — Disable sound, keep banner
+• Email — Disable sound, keep badge
+...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ KEEP AS-IS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Messages
+• Calendar
+• Phone
+...
 ```
 
-## After Running
+## 6. Apply Changes (Optional)
 
-Report:
-- Total apps with notifications enabled
-- Noisy apps identified
-- Recommended changes (keep/reduce/silence/schedule)
-- Commands to apply the changes
+Using your **system skill**, apply the recommended changes:
+- Offer to apply all recommendations
+- Or apply selectively
 
 ## Notes
 
 - Don't change notification settings automatically — present recommendations first
 - Focus on reducing noise without missing important alerts
+- Consider setting up Focus modes for different contexts
+- Run after installing new apps or when feeling overwhelmed

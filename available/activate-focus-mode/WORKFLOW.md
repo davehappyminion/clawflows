@@ -1,51 +1,82 @@
 ---
 name: activate-focus-mode
 description: Focus mode — bright daylight lighting, mutes speakers, and blocks distracting websites.
-requires:
-  - name: openhue
-    description: Philips Hue smart bulbs
-  - name: lutron
-    description: Lutron Caseta light switches and dimmers
-  - name: sonos
-    description: Sonos wireless speakers
+triggers:
+  - focus mode
+  - deep work
+  - do not disturb
+  - concentration mode
 ---
 
 # Focus Mode
 
 Bright lights, no noise, no distractions — time to do deep work.
 
-## Run It
+## 1. Optimize Lighting
 
-```bash
-bash {baseDir}/scripts/run.sh
-```
+Using your **smart lighting skill**:
+- Set lights to full brightness
+- Use cool/daylight color temperature (4000-5000K)
+- Consistent lighting across workspace
 
-## What It Does
+Bright, cool light promotes alertness and focus.
 
-1. **Bright daylight lights** — full brightness, cool white (Hue)
-2. **Light switches up** — all dimmers to 100% (Lutron)
-3. **Speakers muted** — pause all playback (Sonos)
-4. **Distractions blocked** — adds distracting sites to /etc/hosts
+## 2. Silence Audio
+
+Using your **speaker skill**:
+- Pause all playback
+- Mute speakers
+
+Or optionally play focus-friendly audio (white noise, lo-fi).
+
+## 3. Block Distractions
+
+Using your **system skill** or **browser skill**:
+- Block distracting websites (social media, news, etc.)
+- Enable Do Not Disturb on your device
+- Silence non-essential notifications
+
+### Common sites to block
+- twitter.com, x.com
+- reddit.com
+- youtube.com
+- instagram.com
+- facebook.com
+- news sites
+
+## 4. Set a Timer (Optional)
+
+Using your **timer skill** or system timer:
+- Set a focus session (25-90 minutes)
+- Remind when the session is over
 
 ## After Running
 
-Report what succeeded and what failed — one line per item.
+Report the setup:
 
-## Config
+```
+🎯 Focus Mode Activated
 
-Copy `config.example.env` to `config.env` and set your values:
+✅ Lights: 100% brightness, daylight
+✅ Audio: Muted
+✅ Distractions: 6 sites blocked
+✅ Do Not Disturb: Enabled
+⏱️ Timer: 50 minutes
 
-```bash
-cp config.example.env config.env
+Time for deep work. You've got this!
 ```
 
-| Variable | What it is |
-|----------|-----------|
-| `ROOM` | Hue room name to brighten |
-| `SPEAKER` | Sonos speaker name |
-| `BLOCKED_SITES` | Comma-separated list of sites to block |
+## Deactivation
+
+To end focus mode:
+- "End focus mode"
+- "Normal mode"
+- Or wait for the timer
+
+This will unblock sites and restore normal settings.
 
 ## Notes
 
-- The script sources `config.env` — no hardcoded values
-- Run the script again with `--off` to unblock sites and restore normal mode
+- Ideal session length: 50-90 minutes
+- Take breaks between sessions
+- Pair with a physical cue (close the door, put on headphones)

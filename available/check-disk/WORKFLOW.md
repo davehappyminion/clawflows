@@ -1,6 +1,12 @@
 ---
 name: check-disk
 description: Disk space audit — finds large files, bloated caches, and recommends cleanup actions.
+triggers:
+  - check disk
+  - disk space
+  - storage audit
+  - what's taking up space
+  - clean up storage
 ---
 
 # Check Disk
@@ -9,73 +15,87 @@ Disk space audit — large files, caches, and cleanup recommendations.
 
 ## 1. Overall Disk Usage
 
-Check available space:
+Using your **file system skill**, check available disk space:
+- Total disk size
+- Used space
+- Available space
+- Percentage used
 
-```bash
-df -h /
-```
+Flag if usage is above 80%.
 
-Get top-level space usage:
+## 2. Top Space Consumers
 
-```bash
-du -sh ~/* 2>/dev/null | sort -rh | head -20
-```
+Find the largest directories in the home folder:
+- Top 10-20 space consumers
+- Grouped by category (Documents, Downloads, Code, etc.)
 
-## 2. Find Large Files
+## 3. Find Large Files
 
 Look for files over 500MB:
+- Exclude system/library folders
+- Focus on user-created files
+- Note file type and last accessed date
 
-```bash
-find ~ -type f -size +500M -not -path "*/Library/*" -not -path "*/.Trash/*" 2>/dev/null
+Check Downloads folder specifically for large forgotten files.
+
+## 4. Audit Caches
+
+Check common cache locations:
+- Browser caches
+- Package manager caches (npm, pip, homebrew)
+- IDE caches (Xcode DerivedData, etc.)
+- System caches
+
+Report sizes and recommend which can be cleared.
+
+## 5. Check Development Tools
+
+If applicable, audit:
+- Docker images and containers
+- Virtual machines
+- Old node_modules folders
+- Build artifacts
+
+## 6. Present Findings
+
+Report the audit:
+
+```
+💾 Disk Space Audit
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 OVERVIEW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Total: 500 GB
+Used: 412 GB (82%) ⚠️
+Available: 88 GB
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📁 TOP SPACE CONSUMERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. ~/Library — 45 GB
+2. ~/Documents — 38 GB
+3. ~/Projects — 32 GB
+...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🗑️ CLEANUP OPPORTUNITIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• npm cache: 8.2 GB — Safe to clear
+• Xcode DerivedData: 12 GB — Safe to clear
+• Old Downloads: 4.5 GB — Review needed
+• Docker images: 15 GB — Review needed
+
+Estimated recoverable: ~25 GB
 ```
 
-Check Downloads for large forgotten files:
+## 7. Provide Cleanup Commands
 
-```bash
-du -sh ~/Downloads/* 2>/dev/null | sort -rh | head -20
-```
-
-## 3. Check Caches
-
-Audit common cache locations:
-
-```bash
-du -sh ~/Library/Caches/* 2>/dev/null | sort -rh | head -10
-du -sh ~/.npm 2>/dev/null
-du -sh ~/.cache 2>/dev/null
-du -sh ~/Library/Developer/Xcode/DerivedData 2>/dev/null
-du -sh ~/Library/Developer/CoreSimulator 2>/dev/null
-```
-
-## 4. Check Homebrew
-
-Find old Homebrew versions:
-
-```bash
-brew cleanup --dry-run 2>/dev/null
-```
-
-## 5. Check Docker
-
-If Docker is installed, check image/container space:
-
-```bash
-docker system df 2>/dev/null
-```
-
-## After Running
-
-Report:
-- Total disk usage and available space
-- Top 10 space consumers in home directory
-- Large files that could be removed
-- Cache sizes and cleanup recommendations
-- Estimated space recoverable
-
-Provide cleanup commands for each recommendation.
+For each recommendation, provide the command to clean it up.
 
 ## Notes
 
 - Don't delete anything automatically — present recommendations with commands
 - Be cautious about Library folders — some caches are important
 - Distinguish between safe-to-delete and needs-review items
+- Schedule monthly for maintenance

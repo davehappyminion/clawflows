@@ -1,56 +1,70 @@
 ---
 name: activate-sleep-mode
 description: Bedtime automation — turns off all lights, thermostats, and music, then turns on the bedroom fan.
-requires:
-  - name: openhue
-    description: Philips Hue smart bulbs
-  - name: lutron
-    description: Lutron Caseta light switches and dimmers
-  - name: nest
-    description: Google Nest smart thermostats
-  - name: kasa
-    description: TP-Link Kasa smart plugs
-  - name: sonos
-    description: Sonos wireless speakers
+triggers:
+  - sleep mode
+  - bedtime
+  - lights out
+  - going to bed
 ---
 
 # Sleep Mode
 
 Turn everything off for bed.
 
-## Run It
+## 1. Turn Off All Lights
 
-```bash
-bash {baseDir}/scripts/run.sh
-```
+Using your **smart lighting skill**:
+- Turn off all smart bulbs
+- Set all dimmers to 0%
+- Every room — full darkness
 
-## What It Does
+## 2. Set Sleep Temperature
 
-1. **Smart lights off** — all rooms (Hue via `openhue`)
-2. **Light switches off** — all dimmers to 0% (Lutron)
-3. **Thermostats off** — all set to OFF mode (Nest)
-4. **Speakers off** — pause playback (Sonos)
-5. **Fan on** — bedroom fan smart plug (Kasa)
+Using your **thermostat skill**:
+- Set to sleep temperature (65-68°F / 18-20°C)
+- Or switch to OFF/sleep mode
+- Cooler temperatures promote better sleep
+
+## 3. Stop All Audio
+
+Using your **speaker skill**:
+- Pause all playback
+- Stop sleep timers
+- Silence everything
+
+## 4. Turn On Sleep Devices
+
+Using your **smart plug skill**:
+- Turn ON: Bedroom fan, white noise machine, humidifier
+- Turn OFF: Everything else
+
+## 5. Lock Up (Optional)
+
+Using your **security skill** (if available):
+- Lock smart locks
+- Arm night mode on security system
+- Ensure doors are secure
 
 ## After Running
 
-Report what succeeded and what failed — one line per item.
+Report briefly:
 
-## Config
-
-Copy `config.example.env` to `config.env` and set your values:
-
-```bash
-cp config.example.env config.env
 ```
+😴 Sleep Mode Activated
 
-| Variable | What it is |
-|----------|-----------|
-| `ROOM` | Hue room name to turn off |
-| `SPEAKER` | Sonos speaker name |
-| `FAN_DEVICE` | Kasa smart plug name for the fan |
+✅ All lights off
+✅ Thermostat: 66°F
+✅ Speakers: Silent
+✅ Bedroom fan: On
+✅ Doors: Locked
+
+Good night! 💤
+```
 
 ## Notes
 
-- The script sources `config.env` — no hardcoded values
-- Schedule via cron for automatic nightly activation
+- The final step before sleep
+- Follows activate-night-mode (wind-down)
+- Schedule via voice command or bedtime trigger
+- Keep it simple — you're about to sleep

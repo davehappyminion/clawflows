@@ -1,90 +1,106 @@
 ---
 name: check-security
-description: Security hygiene check — verifies macOS updates, scans open ports, checks FileVault and Firewall status.
+description: Security hygiene check — verifies system updates, scans open ports, checks encryption and firewall status.
+triggers:
+  - check security
+  - security audit
+  - security status
+  - am I secure
 ---
 
 # Check Security
 
-Security hygiene — updates, open ports, FileVault, Firewall status.
+Security hygiene — updates, encryption, firewall, and open ports.
 
 ## 1. System Updates
 
-Check for pending macOS updates:
+Check for pending system updates:
+- Operating system updates
+- Security patches
+- Application updates
 
-```bash
-softwareupdate -l 2>&1
-```
+Using your **package manager skill** (if available):
+- Check for outdated packages
+- Flag packages with known vulnerabilities
 
-Check Homebrew for outdated packages:
+## 2. Disk Encryption
 
-```bash
-brew outdated 2>/dev/null
-```
+Verify full-disk encryption is enabled:
+- FileVault (macOS)
+- BitLocker (Windows)
+- LUKS (Linux)
 
-## 2. FileVault Status
-
-Verify full-disk encryption:
-
-```bash
-fdesetup status
-```
+Flag if encryption is disabled — this is critical for laptops.
 
 ## 3. Firewall Status
 
-Check macOS firewall:
-
-```bash
-sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate
-sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getstealthmode
-```
+Check firewall configuration:
+- Is the firewall enabled?
+- Stealth mode (don't respond to probes)?
+- What apps have exceptions?
 
 ## 4. Open Ports
 
 Scan for open listening ports:
+- What services are listening?
+- Are any unexpected?
+- Which are accessible externally?
 
-```bash
-lsof -iTCP -sTCP:LISTEN -P -n
-```
-
-Flag any unexpected services.
+Flag any suspicious or unnecessary open ports.
 
 ## 5. SSH Configuration
 
-Check SSH settings:
+If SSH is used, verify:
+- Key-based authentication preferred
+- No overly permissive key file permissions
+- No passwords in configs
 
-```bash
-cat ~/.ssh/config 2>/dev/null | head -20
-ls -la ~/.ssh/ 2>/dev/null
+## 6. Browser Security
+
+Using your **browser skill** (if available):
+- Check for suspicious extensions
+- Verify important security extensions are active
+- Check for outdated browser
+
+## 7. Present Findings
+
 ```
+🔒 Security Audit
 
-Verify:
-- Key-based auth is preferred
-- No overly permissive permissions on key files
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 OVERALL STATUS: Good ✅
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-```bash
-stat -f "%A %N" ~/.ssh/* 2>/dev/null
+🔄 SYSTEM UPDATES
+• OS: Up to date ✅
+• Apps: 3 updates available ⚠️
+
+🔐 ENCRYPTION
+• Full-disk encryption: Enabled ✅
+
+🛡️ FIREWALL
+• Status: Enabled ✅
+• Stealth mode: Enabled ✅
+
+🌐 OPEN PORTS
+• 22 (SSH) — Expected
+• 3000 (Node dev server) — Expected
+• 5432 (PostgreSQL) — Review if needed
+
+🔑 SSH
+• Key permissions: Correct ✅
+• Config: Clean ✅
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ RECOMMENDATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Install 3 pending app updates
+• Consider closing port 5432 if not needed
 ```
-
-## 6. Browser Extensions
-
-Check for installed browser extensions that might be risky:
-
-```bash
-ls ~/Library/Application\ Support/Google/Chrome/Default/Extensions/ 2>/dev/null
-```
-
-## After Running
-
-Report:
-- Pending system updates
-- FileVault: enabled/disabled
-- Firewall: enabled/disabled, stealth mode status
-- Open ports and what's listening
-- SSH configuration issues
-- Overall security score (Good/Fair/Needs Attention)
 
 ## Notes
 
 - Don't change any settings automatically — report and recommend
-- Some open ports are normal (development servers, etc.) — note which are expected
-- Flag critical issues prominently (FileVault off, Firewall off)
+- Some open ports are normal (development servers) — note which are expected
+- Flag critical issues prominently (encryption off, firewall off)
+- Run monthly or after installing new software

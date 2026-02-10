@@ -1,9 +1,11 @@
 ---
 name: send-weekly-digest
 description: Weekly digest — compiles a week-in-review summary and delivers it via messaging.
-requires:
-  - name: telegram
-    description: Telegram messaging
+triggers:
+  - weekly digest
+  - week summary
+  - weekly update
+  - what happened this week
 ---
 
 # Weekly Digest
@@ -14,64 +16,87 @@ Week-in-review summary delivered via messaging.
 
 Compile information from the past 7 days:
 
-### Git activity
-```bash
-find ~/Projects ~/Developer ~/Code -maxdepth 3 -name ".git" -type d 2>/dev/null | while read gitdir; do
-  repo=$(dirname "$gitdir")
-  count=$(cd "$repo" && git log --oneline --after="$(date -v-7d +%Y-%m-%d)" --author="$(git config user.name)" 2>/dev/null | wc -l)
-  [ "$count" -gt 0 ] && echo "$(basename "$repo"): $count commits"
-done
-```
+### Git Activity
+Using **git**, find commits across your repositories:
+- Total commits
+- Commits per repo
+- Notable changes
 
-### Calendar summary
-```bash
-icalBuddy -f -nc -nrd -df "%Y-%m-%d" -po "datetime,title" eventsFrom:today-7 to:today
-```
+### Calendar Summary
+Using your **calendar skill**, summarize the week:
+- Total meetings
+- Hours in meetings
+- Key meetings and outcomes
 
-### Key accomplishments
-Summarize major completions based on git messages and calendar events.
+### Task Completions
+Using your **task manager skill** (if available):
+- Tasks completed
+- Tasks still open
+- Overdue items
 
-## 2. Format Digest
+### Key Accomplishments
+Summarize major completions based on commits, meetings, and tasks.
+
+## 2. Look Ahead
+
+### Next Week Preview
+Using your **calendar skill**, check next week:
+- Key meetings coming up
+- Deadlines
+- Important events
+
+## 3. Format Digest
 
 Structure the message:
 
 ```
 📋 Weekly Digest — Week of [DATE]
 
-🏗 Code: X commits across Y repos
-📅 Meetings: X total (Y hours)
-✅ Highlights:
-  • [Top accomplishment 1]
-  • [Top accomplishment 2]
-  • [Top accomplishment 3]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏗 CODE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+X commits across Y repos
+• [Notable change 1]
+• [Notable change 2]
 
-📌 Coming up next week:
-  • [Key upcoming event 1]
-  • [Key upcoming event 2]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 MEETINGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+X meetings (Y hours total)
+• [Key meeting outcome]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ HIGHLIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• [Top accomplishment 1]
+• [Top accomplishment 2]
+• [Top accomplishment 3]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 NEXT WEEK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• [Key upcoming event 1]
+• [Key upcoming event 2]
+• [Deadline or priority]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Have a great weekend! 🎉
 ```
 
-## 3. Deliver
+## 4. Deliver
 
-Send via Telegram (or other configured messaging):
-
-```bash
-telegram send --message "DIGEST_CONTENT"
-```
+Using your **messaging skill**, send the digest to the user.
 
 ## Tracking
 
-Track delivery to avoid sending twice:
-
-```json
-{
-  "lastWeeklyDigest": "2026-02-09"
-}
-```
-
-Only send if `lastWeeklyDigest` is not this week.
+Remember:
+- Last digest date (avoid sending twice)
+- Week number for reference
 
 ## Notes
 
-- Schedule via cron for end of week (e.g., Friday 5:00 PM)
+- Schedule for end of week (Friday 5 PM or Sunday evening)
 - Keep it scannable — bullet points over paragraphs
 - Focus on accomplishments, not just activity
+- Compare to previous weeks if tracking history

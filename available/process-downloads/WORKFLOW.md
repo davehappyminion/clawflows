@@ -1,6 +1,11 @@
 ---
 name: process-downloads
 description: Downloads folder cleanup — organizes files by type, removes duplicates, and archives old downloads.
+triggers:
+  - process downloads
+  - clean downloads
+  - organize downloads
+  - downloads folder
 ---
 
 # Process Downloads
@@ -9,57 +14,81 @@ Organize the Downloads folder by file type, remove duplicates, archive old files
 
 ## 1. Inventory Downloads
 
-Scan the Downloads folder:
+Using your **file system skill**, scan the Downloads folder:
+- List all files (top-level only)
+- Note file types, sizes, and dates
+- Count total files and space used
 
-```bash
-ls -la ~/Downloads/ | head -50
-```
+## 2. Categorize by Type
 
-Categorize files by type:
-- **Documents:** `.pdf`, `.doc`, `.docx`, `.txt`, `.md`, `.csv`, `.xlsx`
-- **Images:** `.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, `.webp`
-- **Archives:** `.zip`, `.tar`, `.gz`, `.dmg`, `.pkg`
-- **Code:** `.py`, `.js`, `.ts`, `.sh`, `.json`, `.yaml`
-- **Media:** `.mp3`, `.mp4`, `.mov`, `.wav`
+Group files into categories:
+- **Documents:** PDF, DOC, DOCX, TXT, MD, CSV, XLSX
+- **Images:** PNG, JPG, JPEG, GIF, SVG, WEBP
+- **Archives:** ZIP, TAR, GZ, DMG, PKG
+- **Code:** PY, JS, TS, SH, JSON, YAML
+- **Media:** MP3, MP4, MOV, WAV
+- **Other:** Everything else
 
-## 2. Organize by Type
+## 3. Organize Files
 
 Create category folders and move files:
+- `~/Downloads/_sorted/documents/`
+- `~/Downloads/_sorted/images/`
+- `~/Downloads/_sorted/archives/`
+- etc.
 
-```bash
-mkdir -p ~/Downloads/_sorted/{documents,images,archives,code,media,other}
-mv ~/Downloads/*.pdf ~/Downloads/_sorted/documents/
-```
+Or use the user's preferred organization scheme.
 
-## 3. Remove Duplicates
+## 4. Remove Duplicates
 
-Find files with identical names (with ` (1)`, ` (2)` suffixes):
+Find duplicate files:
+- Files with `(1)`, `(2)`, `(3)` suffixes
+- Files with identical sizes and similar names
+- Compare checksums if needed
 
-```bash
-find ~/Downloads -name "* (1)*" -o -name "* (2)*" -o -name "* (3)*"
-```
+Remove duplicates, keeping the original.
 
-Compare with the original and remove the duplicate if identical.
-
-## 4. Archive Old Files
+## 5. Archive Old Files
 
 Find files older than 60 days that haven't been accessed:
+- Move to `~/Downloads/_archive/YYYY-MM/`
+- Or flag for user review
 
-```bash
-find ~/Downloads -maxdepth 1 -type f -atime +60
+## 6. Present Results
+
 ```
+📥 Downloads Cleanup
 
-Move them to `~/Downloads/_archive/YYYY-MM/`.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 BEFORE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Files: 234
+• Size: 8.7 GB
+• Oldest: 6 months ago
 
-## After Running
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📁 SORTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Documents: 45 files → _sorted/documents/
+• Images: 89 files → _sorted/images/
+• Archives: 23 files → _sorted/archives/
+• Other: 12 files → _sorted/other/
 
-Report:
-- Files sorted by category (count per type)
-- Duplicates removed
-- Old files archived
-- Space reclaimed
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🗑️ CLEANED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Duplicates removed: 18 files (450 MB)
+• Archived (60+ days): 34 files (1.2 GB)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ AFTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Space recovered: 1.65 GB
+• Downloads folder: Clean!
+```
 
 ## Notes
 
 - Don't touch files in existing subfolders — only process top-level files
 - Ask before deleting anything that isn't an obvious duplicate
+- Run weekly or monthly for maintenance
