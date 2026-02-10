@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-CONFIG="$(dirname "$0")/../config.env"
-[ -f "$CONFIG" ] && source "$CONFIG"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+[ -f "$SCRIPT_DIR/../config.env" ] && source "$SCRIPT_DIR/../config.env"
 
 echo "Activating Night Mode..."
 
