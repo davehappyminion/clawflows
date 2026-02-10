@@ -30,6 +30,21 @@ bash {baseDir}/scripts/run.sh
 
 Report what succeeded and what failed.
 
+## Config
+
+Copy `config.example.env` to `config.env` and set your values:
+
+```bash
+cp config.example.env config.env
+```
+
+| Variable | What it is |
+|----------|-----------|
+| `ROOM` | Hue room name to dim |
+| `SPEAKER` | Sonos speaker name |
+| `PLAYLIST` | Spotify playlist URI for sleep music |
+
 ## Notes
 
+- The script sources `config.env` — no hardcoded values
 - Schedule via cron for automatic evening activation

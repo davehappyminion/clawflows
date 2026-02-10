@@ -36,7 +36,21 @@ bash {baseDir}/scripts/run.sh
 
 Report what succeeded and what failed — one line per item.
 
+## Config
+
+Copy `config.example.env` to `config.env` and set your values:
+
+```bash
+cp config.example.env config.env
+```
+
+| Variable | What it is |
+|----------|-----------|
+| `ROOM` | Hue room name to turn off |
+| `SPEAKER` | Sonos speaker name |
+| `FAN_DEVICE` | Kasa smart plug name for the fan |
+
 ## Notes
 
-- The script is self-contained — just run it, no interaction needed
+- The script sources `config.env` — no hardcoded values
 - Schedule via cron for automatic nightly activation

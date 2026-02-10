@@ -27,8 +27,10 @@ Each workflow is a folder with a `WORKFLOW.md` and optional scripts:
 
 ```
 activate-sleep-mode/
-├── WORKFLOW.md       # Instructions (frontmatter + steps)
-└── scripts/          # Optional automation scripts
+├── WORKFLOW.md          # Instructions (frontmatter + steps)
+├── config.example.env   # Example config (commit this)
+├── config.env           # Your config (gitignored)
+└── scripts/             # Optional automation scripts
     └── run.sh
 ```
 
@@ -114,11 +116,19 @@ Browse the folders. Each `WORKFLOW.md` explains what it does.
 
 Look at the `requires` field. Make sure you have those tools installed and configured. If you use different tools (e.g., LIFX instead of Hue), swap the commands in the workflow.
 
-### 3. Customize
+### 3. Configure
 
-- Replace placeholder values (`YOUR_EMAIL`, `YOUR_PLAYLIST_ID`, room names, device names)
-- Update scripts with your specific setup
-- Adjust the steps to match your tools
+For workflows with scripts, copy the example config and fill in your values:
+
+```bash
+cd activate-sleep-mode
+cp config.example.env config.env
+# Edit config.env with your room names, speaker names, etc.
+```
+
+The `config.env` file is gitignored so your personal setup stays local. Scripts source it automatically — no hardcoded values to find and replace.
+
+For workflows without scripts, update the `WORKFLOW.md` steps directly.
 
 ### 4. Run it
 
@@ -143,7 +153,8 @@ openclaw cron create \
 1. Create a folder: `workflows/<verb-noun>/`
 2. Add a `WORKFLOW.md` with frontmatter (`name`, `description`, `requires`) and step-by-step instructions
 3. Optionally add `scripts/run.sh` for executable automation
-4. Keep it self-contained — someone reading just the `WORKFLOW.md` should be able to follow it
+4. If using scripts, add a `config.example.env` with placeholder values (users copy to `config.env`)
+5. Keep it self-contained — someone reading just the `WORKFLOW.md` should be able to follow it
 
 ## License
 

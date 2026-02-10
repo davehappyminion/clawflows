@@ -1,16 +1,11 @@
 #!/usr/bin/env bash
-# Sleep Mode
-#
-# Customize the commands below for your setup:
-# - Replace room names with yours ("Living room" -> your room)
-# - Replace speaker names with yours
-# - Replace device names with yours ("Bedroom fan" -> your device)
-# - Update skill paths if installed elsewhere
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/../config.env"
 
 echo "Activating Sleep Mode..."
 
 # Smart lights: all off
-openhue set room "Living room" --off
+openhue set room "$ROOM" --off
 echo "Done: Smart lights off"
 
 # Light switches: all off
@@ -24,13 +19,12 @@ echo "Done: Light switches off"
 echo "Done: Thermostats off"
 
 # Speakers: pause
-# Update speaker name to yours
-sonos pause --name "Living Room" 2>/dev/null
+sonos pause --name "$SPEAKER" 2>/dev/null
 echo "Done: Speakers off"
 
 # Fan: on
-# Update device name to yours
-~/.openclaw/workspace/skills/kasa/scripts/kasa.sh "Bedroom fan" on
+# Update path to your kasa skill
+~/.openclaw/workspace/skills/kasa/scripts/kasa.sh "$FAN_DEVICE" on
 echo "Done: Fan on"
 
 echo "Sleep Mode active. Good night!"

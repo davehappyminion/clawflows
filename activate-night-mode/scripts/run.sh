@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-# Night Mode
-#
-# Customize the commands below for your setup:
-# - Replace room names, speaker names, and playlist URIs with yours
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/../config.env"
 
 echo "Activating Night Mode..."
 
@@ -11,13 +9,13 @@ echo "Activating Night Mode..."
 echo "Done: Light switches off"
 
 # Smart lights: warm red, low brightness
-openhue set room "Living room" --on --color red --brightness 15
+openhue set room "$ROOM" --on --color red --brightness 15
 echo "Done: Night mode lighting"
 
 # Sleep music
-sonos stop --name "Living Room" 2>/dev/null
-sonos queue clear --name "Living Room" 2>/dev/null
-sonos open --name "Living Room" "spotify:playlist:YOUR_PLAYLIST_ID"
+sonos stop --name "$SPEAKER" 2>/dev/null
+sonos queue clear --name "$SPEAKER" 2>/dev/null
+sonos open --name "$SPEAKER" "$PLAYLIST"
 echo "Done: Sleep music playing"
 
 echo "Night Mode active. Sweet dreams!"
