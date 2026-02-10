@@ -1,4 +1,4 @@
-# Clawflows
+# ClawFlows
 
 Reusable workflows for AI agents. Each workflow is a self-contained folder that tells an agent exactly what to do — step by step, with the specific commands to run.
 
@@ -9,6 +9,17 @@ Workflows follow the [Agent Skills](https://agentskills.io) format so they work 
 A workflow is a repeatable task broken down into clear steps. Instead of telling your agent "go clean up my email" and hoping for the best, you give it a `WORKFLOW.md` with exact instructions — what tools to use, what order to do things, and what to report back.
 
 Think of it as a runbook for your AI agent.
+
+## Why Use ClawFlows?
+
+Centralized workflows give AI agents a major advantage over ad-hoc prompting:
+
+1. **Easily shareable** — Share workflows between teams, communities, or projects. Someone solves a problem once, everyone benefits.
+2. **Deterministic execution** — Scripts handle specific functions reliably. No guessing, no variation. The agent follows the same steps every time.
+3. **Efficient and lightweight** — One workflow library serves all your agents. No bloated prompts or repeated instructions eating up context windows and memory.
+4. **No duplication** — Common patterns live in one place. Update once, apply everywhere. No more copy-pasting the same steps across different automations.
+5. **Version controlled** — Track changes, roll back mistakes, collaborate with others. Workflows evolve with your needs.
+6. **Agent-agnostic** — Works with Claude Code, OpenClaw, or any agent that supports the Agent Skills spec. Switch agents without rewriting your automations.
 
 ## Structure
 
