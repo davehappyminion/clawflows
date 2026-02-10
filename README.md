@@ -1,10 +1,10 @@
+# ⚡️ ClawFlows — Superpowers For Your OpenClaw
+
+---
+
 <p align="center">
   <img src="assets/header.png" alt="ClawFlows - Lobster Minions doing ALL the tasks" width="100%" />
 </p>
-
-# ClawFlows
-
-⚡️ Instant Superpowers for your Openclaw
 
 Prebuilt useful workflows for your agent to learn.
 
