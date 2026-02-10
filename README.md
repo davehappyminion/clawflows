@@ -4,8 +4,7 @@
   <img src="assets/header.png" alt="ClawFlows - Lobster Minions doing ALL the tasks" width="100%" />
 </p>
 
-Prebuilt useful workflows for your agent to learn.
-
+**ClawFlows** is a collection of ready-to-use workflows for [OpenClaw](https://github.com/openclaw/openclaw) agents. Each workflow is a complete automation your agent can run — smart home control, email triage, morning briefings, and more. Just install a workflow and your agent learns a new trick.
 
 ## What is this used for?
 
