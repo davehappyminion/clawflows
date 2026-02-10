@@ -128,6 +128,8 @@ cp config.example.env config.env
 
 The `config.env` file is gitignored so your personal setup stays local. Scripts source it automatically — no hardcoded values to find and replace.
 
+Config is optional. Scripts still work without it — they'll just use whatever values are hardcoded in the script itself.
+
 For workflows without scripts, update the `WORKFLOW.md` steps directly.
 
 ### 4. Run it
