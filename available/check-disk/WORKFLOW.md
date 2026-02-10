@@ -1,6 +1,6 @@
 ---
 name: check-disk
-description: Disk space audit — finds large files, bloated caches, and recommends cleanup actions. Use when the user says "check disk", "disk space", "storage full", "what's using space", or "clean up disk".
+description: Disk space audit — finds large files, bloated caches, and recommends cleanup actions.
 ---
 
 # Check Disk

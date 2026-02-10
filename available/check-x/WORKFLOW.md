@@ -1,6 +1,6 @@
 ---
 name: check-x
-description: X (Twitter) engagement workflow — check notifications, respond to mentions, generate custom profile pictures for followers, and post original content. Use when the user says "check X", "check Twitter", "check mentions", or "post to X".
+description: X (Twitter) engagement workflow — check notifications, respond to mentions, generate custom profile pictures for followers, and post original content.
 requires:
   - name: bird
     description: X (Twitter) CLI

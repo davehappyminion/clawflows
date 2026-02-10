@@ -1,6 +1,6 @@
 ---
 name: send-expense-report
-description: Expense report generator — scans Gmail for receipts, categorizes spending, and sends a monthly summary. Use when the user says "expense report", "check my spending", "monthly expenses", or "send expense report".
+description: Expense report generator — scans Gmail for receipts, categorizes spending, and sends a monthly summary.
 requires:
   - name: gog
     description: Google Gmail CLI

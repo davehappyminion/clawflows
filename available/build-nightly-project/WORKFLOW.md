@@ -1,6 +1,6 @@
 ---
 name: build-nightly-project
-description: Autonomous nightly build — picks an idea from a queue, builds it as a small project, tests it, and reports what was built. Use when the user says "nightly build", "build something", or when triggered by a scheduled cron.
+description: Autonomous nightly build — picks an idea from a queue, builds it as a small project, tests it, and reports what was built.
 requires:
   - name: claude-code
     description: Anthropic Claude Code AI coding agent

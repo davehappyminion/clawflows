@@ -1,6 +1,6 @@
 ---
 name: process-downloads
-description: Downloads folder cleanup — organizes files by type, removes duplicates, and archives old downloads. Use when the user says "clean up downloads", "organize downloads", "process downloads", or "my downloads folder is a mess".
+description: Downloads folder cleanup — organizes files by type, removes duplicates, and archives old downloads.
 ---
 
 # Process Downloads

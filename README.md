@@ -31,25 +31,31 @@ Workflows follow the [Agent Skills](https://agentskills.io) format, so they work
 
 ## Getting Started
 
-### 1. Clone the repo
+### 1. Install
 
 ```bash
-git clone https://github.com/davehappyminion/clawflows.git
+curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/install.sh | bash
 ```
 
-### 2. Browse available workflows
+This clones the repo to `~/.clawflows`, adds the CLI to your PATH, and syncs with your agent's AGENTS.md.
 
-All workflows live in the `available/` folder. Each has a `WORKFLOW.md` explaining what it does and what tools it needs.
+Already cloned? Run `bash install.sh` from the repo root instead.
 
-### 3. Enable a workflow
-
-Copy it to `enabled/`:
+### 2. Enable a workflow
 
 ```bash
-cp -r available/activate-sleep-mode enabled/
+clawflows enable activate-sleep-mode
 ```
 
-### 4. Configure (if needed)
+This copies the workflow from `available/` to `enabled/` and automatically updates your agent's `AGENTS.md` with the workflow catalog.
+
+To see what's available:
+
+```bash
+clawflows list
+```
+
+### 3. Configure (if needed)
 
 Some workflows have scripts with configurable values. Copy the example config and fill in your values:
 
@@ -59,7 +65,7 @@ cp config.example.env config.env
 # Edit config.env with your room names, speaker names, etc.
 ```
 
-### 5. Run it
+### 4. Run it
 
 Tell your agent to follow the workflow:
 
@@ -76,6 +82,28 @@ openclaw cron create \
   --tz "America/New_York" \
   --message "Read and follow clawflows/enabled/activate-sleep-mode/WORKFLOW.md"
 ```
+
+## CLI Reference
+
+The `clawflows` CLI manages your enabled workflows and keeps your agent's `AGENTS.md` in sync.
+
+| Command | What it does |
+|---------|-------------|
+| `clawflows list` | Show all available workflows with enabled/disabled status |
+| `clawflows enable <name>` | Copy workflow from `available/` to `enabled/`, update AGENTS.md |
+| `clawflows disable <name>` | Remove workflow from `enabled/`, update AGENTS.md |
+| `clawflows sync` | Regenerate the ClawFlows section in AGENTS.md from current `enabled/` |
+
+### AGENTS.md Integration
+
+When you enable or disable a workflow, `clawflows` automatically maintains a section in `AGENTS.md` (between `<!-- clawflows:start -->` and `<!-- clawflows:end -->` markers) with:
+
+- Instructions for managing workflows
+- A catalog of all enabled workflows with descriptions and paths
+
+This gives your agent full discovery of available workflows at startup with zero manual maintenance. The agent reads AGENTS.md on every session and knows exactly which workflows are enabled and where to find them.
+
+Set `AGENTS_MD` to override the default path (`~/.openclaw/workspace/AGENTS.md`).
 
 ## Available Workflows
 

@@ -1,6 +1,6 @@
 ---
 name: sync-dotfiles
-description: Dotfiles backup — commits dotfiles and Homebrew config to a git repo for safekeeping. Use when the user says "sync dotfiles", "backup dotfiles", "save my config", or "dotfiles backup".
+description: Dotfiles backup — commits dotfiles and Homebrew config to a git repo for safekeeping.
 ---
 
 # Sync Dotfiles

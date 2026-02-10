@@ -1,6 +1,6 @@
 ---
 name: check-calendar
-description: Calendar review — scans the next 48 hours for events, detects conflicts, and generates prep notes. Use when the user says "check calendar", "what's on my calendar", "any meetings coming up", or "calendar review".
+description: Calendar review — scans the next 48 hours for events, detects conflicts, and generates prep notes.
 ---
 
 # Check Calendar

@@ -1,6 +1,6 @@
 ---
 name: sync-bookmarks
-description: Bookmark maintenance — checks bookmarks for dead links, removes duplicates, and organizes by topic. Use when the user says "sync bookmarks", "clean up bookmarks", "check my bookmarks", or "organize bookmarks".
+description: Bookmark maintenance — checks bookmarks for dead links, removes duplicates, and organizes by topic.
 ---
 
 # Sync Bookmarks

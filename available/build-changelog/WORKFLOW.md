@@ -1,6 +1,6 @@
 ---
 name: build-changelog
-description: Changelog generator — creates a formatted changelog from git history since the last tag or release. Use when the user says "build changelog", "generate changelog", "what changed since last release", or "release notes".
+description: Changelog generator — creates a formatted changelog from git history since the last tag or release.
 ---
 
 # Build Changelog

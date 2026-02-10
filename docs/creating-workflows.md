@@ -44,15 +44,15 @@ Tell me what worked and what didn't.
 | Field | Required | Description |
 |-------|----------|-------------|
 | `name` | Yes | Matches the folder name. Lowercase, hyphenated, verb-first. |
-| `description` | Yes | What it does + trigger phrases (how the agent knows when to use it). |
+| `description` | Yes | What it does — a plain description the agent can match on. |
 | `requires` | No | Skills and tools needed. Each has a `name` and `description`. |
 
 ### Writing Good Descriptions
 
-The `description` field serves two purposes: telling humans what the workflow does, and telling agents when to activate it. Include trigger phrases — the words a user would naturally say:
+The `description` field tells humans and agents what the workflow does. Write a clear, concise description — the agent will match on it naturally without explicit trigger phrases:
 
 ```yaml
-description: Bedtime automation — turns off all lights, thermostats, and music. Use when the user says "sleep mode", "bedtime", "going to bed", or "shut everything down".
+description: Bedtime automation — turns off all lights, thermostats, and music, then turns on the bedroom fan.
 ```
 
 ### The `requires` Field

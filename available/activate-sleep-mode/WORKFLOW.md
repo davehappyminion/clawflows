@@ -1,6 +1,6 @@
 ---
 name: activate-sleep-mode
-description: Bedtime automation — turns off all lights, thermostats, and music, then turns on the bedroom fan. Use when the user says "sleep mode", "bedtime", "going to bed", or "shut everything down".
+description: Bedtime automation — turns off all lights, thermostats, and music, then turns on the bedroom fan.
 requires:
   - name: openhue
     description: Philips Hue smart bulbs

@@ -1,6 +1,6 @@
 ---
 name: process-contacts
-description: Contacts cleanup — deduplicates macOS contacts, flags entries with missing fields, and identifies stale contacts. Use when the user says "clean up contacts", "deduplicate contacts", "process contacts", or "organize my address book".
+description: Contacts cleanup — deduplicates macOS contacts, flags entries with missing fields, and identifies stale contacts.
 ---
 
 # Process Contacts

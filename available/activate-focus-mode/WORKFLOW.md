@@ -1,6 +1,6 @@
 ---
 name: activate-focus-mode
-description: Focus mode — bright daylight lighting, mutes speakers, and blocks distracting websites. Use when the user says "focus mode", "deep work", "block distractions", or "I need to concentrate".
+description: Focus mode — bright daylight lighting, mutes speakers, and blocks distracting websites.
 requires:
   - name: openhue
     description: Philips Hue smart bulbs

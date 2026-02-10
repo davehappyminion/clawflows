@@ -1,6 +1,6 @@
 ---
 name: build-weekly-review
-description: Weekly review generator — compiles the week's git commits, calendar events, and accomplishments into a review document. Use when the user says "weekly review", "what did I do this week", "build my review", or "week in review".
+description: Weekly review generator — compiles the week's git commits, calendar events, and accomplishments into a review document.
 ---
 
 # Weekly Review

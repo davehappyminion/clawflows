@@ -1,6 +1,6 @@
 ---
 name: check-security
-description: Security hygiene check — verifies macOS updates, scans open ports, checks FileVault and Firewall status. Use when the user says "check security", "security audit", "am I secure", or "security hygiene".
+description: Security hygiene check — verifies macOS updates, scans open ports, checks FileVault and Firewall status.
 ---
 
 # Check Security

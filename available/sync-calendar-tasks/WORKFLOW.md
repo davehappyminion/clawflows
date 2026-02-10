@@ -1,6 +1,6 @@
 ---
 name: sync-calendar-tasks
-description: Calendar task extractor — scans calendar events for action items and suggests tasks to create. Use when the user says "sync calendar tasks", "extract action items", "calendar to tasks", or "what do I need to do from my meetings".
+description: Calendar task extractor — scans calendar events for action items and suggests tasks to create.
 ---
 
 # Sync Calendar Tasks

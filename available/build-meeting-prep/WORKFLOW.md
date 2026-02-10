@@ -1,6 +1,6 @@
 ---
 name: build-meeting-prep
-description: Meeting prep generator — creates a prep document for the next upcoming meeting with attendee context and talking points. Use when the user says "prep for my meeting", "meeting prep", "get ready for my next meeting", or "build meeting prep".
+description: Meeting prep generator — creates a prep document for the next upcoming meeting with attendee context and talking points.
 ---
 
 # Meeting Prep

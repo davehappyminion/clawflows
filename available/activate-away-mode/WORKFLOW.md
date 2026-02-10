@@ -1,6 +1,6 @@
 ---
 name: activate-away-mode
-description: Away mode — turns everything off and sets thermostat to eco mode for when you leave the house. Use when the user says "away mode", "leaving the house", "I'm heading out", or "shut it all down".
+description: Away mode — turns everything off and sets thermostat to eco mode for when you leave the house.
 requires:
   - name: openhue
     description: Philips Hue smart bulbs

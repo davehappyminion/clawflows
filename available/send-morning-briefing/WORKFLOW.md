@@ -1,6 +1,6 @@
 ---
 name: send-morning-briefing
-description: Daily morning briefing — gathers weather, calendar events, and news, then delivers a summary via messaging. Use when the user says "morning briefing", "what's happening today", or "daily update".
+description: Daily morning briefing — gathers weather, calendar events, and news, then delivers a summary via messaging.
 requires:
   - name: telegram
     description: Telegram messaging

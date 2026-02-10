@@ -1,0 +1,198 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ── Config ──────────────────────────────────────────────────────────────────
+CLAWFLOWS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
+AVAILABLE_DIR="$CLAWFLOWS_DIR/available"
+ENABLED_DIR="$CLAWFLOWS_DIR/enabled"
+
+START_MARKER="<!-- clawflows:start -->"
+END_MARKER="<!-- clawflows:end -->"
+
+# ── Helpers ─────────────────────────────────────────────────────────────────
+
+usage() {
+  cat <<EOF
+Usage: clawflows <command> [args]
+
+Commands:
+  list                Show available workflows and their status
+  enable <name>       Enable a workflow (copies from available/ to enabled/)
+  disable <name>      Disable a workflow (removes from enabled/)
+  sync                Regenerate the ClawFlows section in AGENTS.md
+
+Environment:
+  AGENTS_MD           Path to AGENTS.md (default: ~/.openclaw/workspace/AGENTS.md)
+EOF
+  exit 1
+}
+
+die() { echo "error: $1" >&2; exit 1; }
+
+# Extract a frontmatter field from a WORKFLOW.md file.
+# Usage: get_field <file> <field>
+get_field() {
+  local file="$1" field="$2"
+  awk -v field="$field" '
+    BEGIN { in_fm=0 }
+    /^---$/ { in_fm++; next }
+    in_fm == 1 && $0 ~ "^" field ":" {
+      sub("^" field ":[ ]*", "")
+      # strip surrounding quotes if present
+      gsub(/^["'"'"']|["'"'"']$/, "")
+      print
+      exit
+    }
+    in_fm >= 2 { exit }
+  ' "$file"
+}
+
+# ── Commands ────────────────────────────────────────────────────────────────
+
+cmd_list() {
+  local name status
+  for dir in "$AVAILABLE_DIR"/*/; do
+    [ -d "$dir" ] || continue
+    name="$(basename "$dir")"
+    if [ -d "$ENABLED_DIR/$name" ]; then
+      status="enabled"
+    else
+      status="disabled"
+    fi
+    local desc=""
+    if [ -f "$dir/WORKFLOW.md" ]; then
+      desc="$(get_field "$dir/WORKFLOW.md" description)"
+    fi
+    if [ -n "$desc" ]; then
+      printf "  %-8s  %-35s  %s\n" "$status" "$name" "$desc"
+    else
+      printf "  %-8s  %s\n" "$status" "$name"
+    fi
+  done
+}
+
+cmd_enable() {
+  local name="$1"
+  [ -d "$AVAILABLE_DIR/$name" ] || die "workflow '$name' not found in available/"
+  if [ -d "$ENABLED_DIR/$name" ]; then
+    echo "already enabled: $name"
+    return
+  fi
+  cp -r "$AVAILABLE_DIR/$name" "$ENABLED_DIR/$name"
+  echo "enabled: $name"
+
+  # If there's a config.example.env but no config.env, remind the user
+  if [ -f "$ENABLED_DIR/$name/config.example.env" ] && [ ! -f "$ENABLED_DIR/$name/config.env" ]; then
+    echo "  note: copy config.example.env to config.env and fill in your values"
+  fi
+
+  cmd_sync
+}
+
+cmd_disable() {
+  local name="$1"
+  if [ ! -d "$ENABLED_DIR/$name" ]; then
+    echo "not enabled: $name"
+    return
+  fi
+  rm -rf "$ENABLED_DIR/$name"
+  echo "disabled: $name"
+  cmd_sync
+}
+
+cmd_sync() {
+  local block
+  block="$(_build_block)"
+
+  if [ ! -f "$AGENTS_MD" ]; then
+    die "AGENTS.md not found at $AGENTS_MD"
+  fi
+
+  if grep -qF "$START_MARKER" "$AGENTS_MD"; then
+    # Replace existing block between markers (inclusive)
+    _replace_block "$block"
+  else
+    # Append block to end of file
+    printf "\n%s\n" "$block" >> "$AGENTS_MD"
+  fi
+
+  echo "synced AGENTS.md"
+}
+
+# ── Block builder ───────────────────────────────────────────────────────────
+
+_build_block() {
+  local lines=()
+
+  lines+=("$START_MARKER")
+  lines+=("## ClawFlows")
+  lines+=("")
+  lines+=("Community workflows from \`$CLAWFLOWS_DIR/\`. Manage with the \`clawflows\` CLI.")
+  lines+=("")
+  lines+=("### Managing Workflows")
+  lines+=("- **List:** \`clawflows list\`")
+  lines+=("- **Enable:** \`clawflows enable <name>\` (then edit \`config.env\` if needed)")
+  lines+=("- **Disable:** \`clawflows disable <name>\`")
+  lines+=("- **Browse available:** \`ls $CLAWFLOWS_DIR/available/\`")
+  lines+=("- **Create new:** See \`$CLAWFLOWS_DIR/docs/creating-workflows.md\`")
+  lines+=("")
+
+  # Collect enabled workflows
+  local has_enabled=false
+  local entries=()
+  for dir in "$ENABLED_DIR"/*/; do
+    [ -d "$dir" ] || continue
+    local name desc wf_file
+    name="$(basename "$dir")"
+    [ "$name" = ".gitkeep" ] && continue
+    wf_file="$dir/WORKFLOW.md"
+    [ -f "$wf_file" ] || continue
+    desc="$(get_field "$wf_file" description)"
+    entries+=("- $name: $desc → follow $CLAWFLOWS_DIR/enabled/$name/WORKFLOW.md")
+    has_enabled=true
+  done
+
+  if $has_enabled; then
+    lines+=("### Enabled Workflows")
+    for entry in "${entries[@]}"; do
+      lines+=("$entry")
+    done
+  else
+    lines+=("No workflows enabled yet. Run \`clawflows list\` to see what's available.")
+  fi
+
+  lines+=("$END_MARKER")
+
+  printf '%s\n' "${lines[@]}"
+}
+
+_replace_block() {
+  local new_block="$1"
+  local tmpfile blockfile
+  tmpfile="$(mktemp)"
+  blockfile="$(mktemp)"
+
+  printf '%s\n' "$new_block" > "$blockfile"
+
+  awk -v start="$START_MARKER" -v end="$END_MARKER" -v bf="$blockfile" '
+    $0 == start { while ((getline line < bf) > 0) print line; close(bf); skip=1; next }
+    $0 == end   { skip=0; next }
+    !skip       { print }
+  ' "$AGENTS_MD" > "$tmpfile"
+
+  mv "$tmpfile" "$AGENTS_MD"
+  rm -f "$blockfile"
+}
+
+# ── Main ────────────────────────────────────────────────────────────────────
+
+[ $# -ge 1 ] || usage
+
+case "$1" in
+  list)    cmd_list ;;
+  enable)  [ $# -ge 2 ] || die "usage: clawflows enable <name>"; cmd_enable "$2" ;;
+  disable) [ $# -ge 2 ] || die "usage: clawflows disable <name>"; cmd_disable "$2" ;;
+  sync)    cmd_sync ;;
+  *)       usage ;;
+esac

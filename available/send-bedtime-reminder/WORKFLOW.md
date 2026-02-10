@@ -1,6 +1,6 @@
 ---
 name: send-bedtime-reminder
-description: Bedtime reminder — sends a friendly nudge with tomorrow's first event and a wind-down suggestion. Use when the user says "bedtime reminder", "remind me to go to bed", or when triggered by evening cron.
+description: Bedtime reminder — sends a friendly nudge with tomorrow's first event and a wind-down suggestion.
 requires:
   - name: telegram
     description: Telegram messaging

@@ -1,6 +1,6 @@
 ---
 name: process-notifications
-description: Notification audit — reviews macOS notification settings, identifies noisy apps, and suggests which to silence. Use when the user says "audit notifications", "too many notifications", "process notifications", or "fix notification overload".
+description: Notification audit — reviews macOS notification settings, identifies noisy apps, and suggests which to silence.
 ---
 
 # Process Notifications

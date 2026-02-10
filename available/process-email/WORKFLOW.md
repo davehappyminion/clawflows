@@ -1,6 +1,6 @@
 ---
 name: process-email
-description: Email processing workflow — fetch recent emails, auto-unsubscribe from mailing lists, archive junk, and summarize important emails. Use when the user says "check email", "process email", "clean up inbox", or "email patrol".
+description: Email processing workflow — fetch recent emails, auto-unsubscribe from mailing lists, archive junk, and summarize important emails.
 requires:
   - name: gog
     description: Google Gmail CLI

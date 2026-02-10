@@ -1,6 +1,6 @@
 ---
 name: send-weekly-digest
-description: Weekly digest — compiles a week-in-review summary and delivers it via messaging. Use when the user says "send weekly digest", "week in review", "weekly summary", or "send my weekly update".
+description: Weekly digest — compiles a week-in-review summary and delivers it via messaging.
 requires:
   - name: telegram
     description: Telegram messaging

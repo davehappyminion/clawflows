@@ -1,6 +1,6 @@
 ---
 name: check-repos
-description: Git repo health check — scans local repos for uncommitted changes, stale branches, and unpushed commits. Use when the user says "check repos", "any uncommitted changes", "git status all", or "repo health check".
+description: Git repo health check — scans local repos for uncommitted changes, stale branches, and unpushed commits.
 ---
 
 # Check Repos

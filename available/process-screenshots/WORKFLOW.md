@@ -1,6 +1,6 @@
 ---
 name: process-screenshots
-description: Screenshot organizer — sorts screenshots from Desktop and Downloads into dated folders, identifies duplicates, and deletes old ones. Use when the user says "organize screenshots", "clean up screenshots", "sort my screenshots", or "process screenshots".
+description: Screenshot organizer — sorts screenshots from Desktop and Downloads into dated folders, identifies duplicates, and deletes old ones.
 ---
 
 # Process Screenshots

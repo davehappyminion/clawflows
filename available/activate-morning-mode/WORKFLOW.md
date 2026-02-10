@@ -1,6 +1,6 @@
 ---
 name: activate-morning-mode
-description: Morning mode — bright warm lighting, comfortable thermostat, and energizing music to start the day. Use when the user says "morning mode", "good morning", "wake up mode", or "start the day".
+description: Morning mode — bright warm lighting, comfortable thermostat, and energizing music to start the day.
 requires:
   - name: openhue
     description: Philips Hue smart bulbs

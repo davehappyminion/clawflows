@@ -1,6 +1,6 @@
 ---
 name: activate-night-mode
-description: Wind-down mode — dims lights to a warm color, turns off bright switches, and plays sleep music. Use when the user says "night mode", "wind down", "dim the lights", or "relaxation mode".
+description: Wind-down mode — dims lights to a warm color, turns off bright switches, and plays sleep music.
 requires:
   - name: openhue
     description: Philips Hue smart bulbs
