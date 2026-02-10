@@ -36,31 +36,31 @@ The 13 workflows every agent needs. Your complete daily rhythm — from wake to 
 
 | # | Workflow | When | What it does |
 |---|----------|------|--------------|
-| 1 | [send-morning-quote](available/send-morning-quote/) | 7am | Inspirational quote to start the day |
-| 2 | [send-morning-briefing](available/send-morning-briefing/) | 7am | Weather, calendar, priorities, overnight alerts |
-| 3 | [check-calendar](available/check-calendar/) | Morning + evening | 48-hour radar with conflicts and prep notes |
-| 4 | [triage-tasks](available/triage-tasks/) | Morning | What's due, what's overdue, top 3 priorities |
-| 5 | [send-news-digest](available/send-news-digest/) | Morning or evening | Curated news on topics you care about |
-| 6 | [build-meeting-prep](available/build-meeting-prep/) | Before calls | Attendee context, history, talking points |
-| 7 | [process-email](available/process-email/) | 2-3x/day | Auto-unsubscribe, archive junk, summarize important |
-| 8 | [check-follow-ups](available/check-follow-ups/) | Daily | Unanswered emails, promises you made, balls about to drop |
-| 9 | [check-messages](available/check-messages/) | Ongoing | Unified Slack, Discord, Telegram, WhatsApp triage |
-| 10 | [check-x](available/check-x/) | 1-2x/day | Mentions, DMs, engagement, content |
-| 11 | [build-standup](available/build-standup/) | 9am | Auto-generate daily standup from git + tasks |
-| 12 | [send-daily-wrap](available/send-daily-wrap/) | 9pm | What you accomplished, what's pending, tomorrow preview |
-| 13 | [send-bedtime-reminder](available/send-bedtime-reminder/) | 10pm | Tomorrow's first event, sleep math, wind-down nudge |
+| 1 | ✨ [send-morning-inspiration](available/send-morning-inspiration/) | 7am | Inspirational quote to start the day |
+| 2 | ☀️ [send-morning-briefing](available/send-morning-briefing/) | 7am | Weather, calendar, priorities, overnight alerts |
+| 3 | 📅 [check-calendar](available/check-calendar/) | Morning + evening | 48-hour radar with conflicts and prep notes |
+| 4 | ✅ [triage-tasks](available/triage-tasks/) | Morning | What's due, what's overdue, top 3 priorities |
+| 5 | 📰 [send-news-digest](available/send-news-digest/) | Morning or evening | Curated news on topics you care about |
+| 6 | 🎯 [build-meeting-prep](available/build-meeting-prep/) | Before calls | Attendee context, history, talking points |
+| 7 | 📧 [process-email](available/process-email/) | 2-3x/day | Auto-unsubscribe, archive junk, summarize important |
+| 8 | 🔔 [check-follow-ups](available/check-follow-ups/) | Daily | Unanswered emails, promises you made, balls about to drop |
+| 9 | 💬 [check-messages](available/check-messages/) | Ongoing | Unified Slack, Discord, Telegram, WhatsApp triage |
+| 10 | 🐦 [check-x](available/check-x/) | 1-2x/day | Mentions, DMs, engagement, content |
+| 11 | 🧍 [build-standup](available/build-standup/) | 9am | Auto-generate daily standup from git + tasks |
+| 12 | 🌆 [send-daily-wrap](available/send-daily-wrap/) | 9pm | What you accomplished, what's pending, tomorrow preview |
+| 13 | 😴 [send-bedtime-reminder](available/send-bedtime-reminder/) | 10pm | Tomorrow's first event, sleep math, wind-down nudge |
 
 **The daily rhythm:**
 
 ```
-MORNING     quote → briefing → calendar → tasks → news → standup
-MIDDAY      meeting-prep → email → follow-ups → messages → X
-EVENING     daily-wrap → bedtime-reminder
+MORNING     ✨ inspiration → ☀️ briefing → 📅 calendar → ✅ tasks → 📰 news → 🧍 standup
+MIDDAY      🎯 meeting-prep → 📧 email → 🔔 follow-ups → 💬 messages → 🐦 X
+EVENING     🌆 daily-wrap → 😴 bedtime-reminder
 ```
 
 Enable all essentials at once:
 ```bash
-clawflows enable send-morning-quote send-morning-briefing check-calendar triage-tasks send-news-digest build-meeting-prep process-email check-follow-ups check-messages check-x build-standup send-daily-wrap send-bedtime-reminder
+clawflows enable send-morning-inspiration send-morning-briefing check-calendar triage-tasks send-news-digest build-meeting-prep process-email check-follow-ups check-messages check-x build-standup send-daily-wrap send-bedtime-reminder
 ```
 
 ## Getting Started
@@ -143,39 +143,39 @@ Set `AGENTS_MD` to override the default path (`~/.openclaw/workspace/AGENTS.md`)
 
 | Workflow | What it does |
 |----------|-------------|
-| [activate-away-mode](available/activate-away-mode/) | Everything off, thermostat to eco — for when you leave the house |
-| [activate-focus-mode](available/activate-focus-mode/) | Bright daylight lights, mutes speakers, blocks distracting sites |
-| [activate-morning-mode](available/activate-morning-mode/) | Bright warm lights, comfortable thermostat, energizing music |
-| [activate-night-mode](available/activate-night-mode/) | Dims lights to warm red, plays sleep music |
-| [activate-sleep-mode](available/activate-sleep-mode/) | Turns off all lights, speakers, thermostats + turns on bedroom fan |
-| [build-changelog](available/build-changelog/) | Generates a formatted changelog from git history since the last tag |
-| [build-meeting-prep](available/build-meeting-prep/) | Comprehensive prep doc with attendee research, history, and talking points |
-| [build-nightly-project](available/build-nightly-project/) | Picks an idea from a queue and builds a small project overnight |
-| [build-standup](available/build-standup/) | Auto-generates daily standup from git commits and completed tasks |
-| [build-weekly-review](available/build-weekly-review/) | Compiles the week's git commits, calendar, and accomplishments into a review doc |
-| [check-calendar](available/check-calendar/) | 48-hour radar with conflict detection, travel time, and prep notes |
-| [check-disk](available/check-disk/) | Disk space audit — large files, caches, cleanup recommendations |
-| [check-follow-ups](available/check-follow-ups/) | Finds unanswered emails, promises you made, and balls about to drop |
-| [check-messages](available/check-messages/) | Unified triage across Slack, Discord, Telegram, WhatsApp |
-| [check-repos](available/check-repos/) | Scans local git repos for uncommitted changes, stale branches, unpushed commits |
-| [check-security](available/check-security/) | Security hygiene — updates, open ports, FileVault, Firewall status |
-| [check-x](available/check-x/) | X/Twitter engagement — notifications, mentions, content, custom PFPs |
-| [process-contacts](available/process-contacts/) | Deduplicates macOS contacts, flags missing fields, identifies stale entries |
-| [process-downloads](available/process-downloads/) | Organizes downloads by file type, removes duplicates, archives old files |
-| [process-email](available/process-email/) | Auto-unsubscribes, archives noise, summarizes what needs attention |
-| [process-notifications](available/process-notifications/) | Audits macOS notification settings, identifies noisy apps, suggests silencing |
-| [process-screenshots](available/process-screenshots/) | Sorts screenshots into dated folders, removes duplicates, cleans up old ones |
-| [send-bedtime-reminder](available/send-bedtime-reminder/) | Tomorrow preview, sleep math, and wind-down suggestions |
-| [send-daily-wrap](available/send-daily-wrap/) | End-of-day summary — what you accomplished, what's pending, tomorrow preview |
-| [send-expense-report](available/send-expense-report/) | Scans Gmail for receipts, categorizes spending, sends a monthly report |
-| [send-morning-briefing](available/send-morning-briefing/) | Weather, calendar, priorities, urgent items — your daily command center |
-| [send-morning-quote](available/send-morning-quote/) | Inspirational quote to start the day, themed to your goals |
-| [send-news-digest](available/send-news-digest/) | Curated news on topics you care about — no doom-scrolling required |
-| [send-weekly-digest](available/send-weekly-digest/) | Week-in-review summary delivered via messaging |
-| [sync-bookmarks](available/sync-bookmarks/) | Checks bookmarks for dead links, removes duplicates, organizes by topic |
-| [sync-calendar-tasks](available/sync-calendar-tasks/) | Extracts action items from calendar events, suggests tasks |
-| [sync-dotfiles](available/sync-dotfiles/) | Backs up dotfiles and Homebrew config to a git repo |
-| [triage-tasks](available/triage-tasks/) | Morning task review — what's due, overdue, and your top 3 priorities |
+| 🚪 [activate-away-mode](available/activate-away-mode/) | Everything off, thermostat to eco — for when you leave the house |
+| 🧘 [activate-focus-mode](available/activate-focus-mode/) | Bright daylight lights, mutes speakers, blocks distracting sites |
+| 🌅 [activate-morning-mode](available/activate-morning-mode/) | Bright warm lights, comfortable thermostat, energizing music |
+| 🌙 [activate-night-mode](available/activate-night-mode/) | Dims lights to warm red, plays sleep music |
+| 🛏️ [activate-sleep-mode](available/activate-sleep-mode/) | Turns off all lights, speakers, thermostats + turns on bedroom fan |
+| 📝 [build-changelog](available/build-changelog/) | Generates a formatted changelog from git history since the last tag |
+| 🎯 [build-meeting-prep](available/build-meeting-prep/) | Comprehensive prep doc with attendee research, history, and talking points |
+| 🔨 [build-nightly-project](available/build-nightly-project/) | Picks an idea from a queue and builds a small project overnight |
+| 🧍 [build-standup](available/build-standup/) | Auto-generates daily standup from git commits and completed tasks |
+| 📊 [build-weekly-review](available/build-weekly-review/) | Compiles the week's git commits, calendar, and accomplishments into a review doc |
+| 📅 [check-calendar](available/check-calendar/) | 48-hour radar with conflict detection, travel time, and prep notes |
+| 💾 [check-disk](available/check-disk/) | Disk space audit — large files, caches, cleanup recommendations |
+| 🔔 [check-follow-ups](available/check-follow-ups/) | Finds unanswered emails, promises you made, and balls about to drop |
+| 💬 [check-messages](available/check-messages/) | Unified triage across Slack, Discord, Telegram, WhatsApp |
+| 🔍 [check-repos](available/check-repos/) | Scans local git repos for uncommitted changes, stale branches, unpushed commits |
+| 🔒 [check-security](available/check-security/) | Security hygiene — updates, open ports, FileVault, Firewall status |
+| 🐦 [check-x](available/check-x/) | X/Twitter engagement — notifications, mentions, content, custom PFPs |
+| 📇 [process-contacts](available/process-contacts/) | Deduplicates macOS contacts, flags missing fields, identifies stale entries |
+| 📥 [process-downloads](available/process-downloads/) | Organizes downloads by file type, removes duplicates, archives old files |
+| 📧 [process-email](available/process-email/) | Auto-unsubscribes, archives noise, summarizes what needs attention |
+| 🔕 [process-notifications](available/process-notifications/) | Audits macOS notification settings, identifies noisy apps, suggests silencing |
+| 📸 [process-screenshots](available/process-screenshots/) | Sorts screenshots into dated folders, removes duplicates, cleans up old ones |
+| 😴 [send-bedtime-reminder](available/send-bedtime-reminder/) | Tomorrow preview, sleep math, and wind-down suggestions |
+| 🌆 [send-daily-wrap](available/send-daily-wrap/) | End-of-day summary — what you accomplished, what's pending, tomorrow preview |
+| 💰 [send-expense-report](available/send-expense-report/) | Scans Gmail for receipts, categorizes spending, sends a monthly report |
+| ☀️ [send-morning-briefing](available/send-morning-briefing/) | Weather, calendar, priorities, urgent items — your daily command center |
+| ✨ [send-morning-inspiration](available/send-morning-inspiration/) | Inspirational quote to start the day, themed to your goals |
+| 📰 [send-news-digest](available/send-news-digest/) | Curated news on topics you care about — no doom-scrolling required |
+| 📋 [send-weekly-digest](available/send-weekly-digest/) | Week-in-review summary delivered via messaging |
+| 🔖 [sync-bookmarks](available/sync-bookmarks/) | Checks bookmarks for dead links, removes duplicates, organizes by topic |
+| 📆 [sync-calendar-tasks](available/sync-calendar-tasks/) | Extracts action items from calendar events, suggests tasks |
+| 📦 [sync-dotfiles](available/sync-dotfiles/) | Backs up dotfiles and Homebrew config to a git repo |
+| ✅ [triage-tasks](available/triage-tasks/) | Morning task review — what's due, overdue, and your top 3 priorities |
 
 ## Creating Your Own
 
