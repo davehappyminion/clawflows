@@ -1,11 +1,11 @@
 ---
 name: check-x
-description: X (Twitter) engagement — check notifications, respond to mentions, engage authentically, and optionally generate content or custom profile pictures.
-requires:
-  - name: bird
-    description: X (Twitter) CLI
-  - name: browser
-    description: Browser automation
+description: X (Twitter) engagement — check notifications, respond to mentions, engage authentically, and optionally generate content.
+triggers:
+  - check x
+  - check twitter
+  - x notifications
+  - twitter mentions
 ---
 
 # X Engagement
@@ -14,162 +14,95 @@ Manage your X presence — notifications, engagement, and content. Be present wi
 
 ## 1. Check Notifications
 
-Scan https://x.com/notifications for:
+Using your **X/Twitter skill** or **browser skill**, scan notifications for:
+- Mentions and replies
+- DMs
+- New followers
+- Quote tweets
+- Likes on your content
 
-```bash
-bird notifications list --limit 50
-```
-
-Or via browser:
-```bash
-browser navigate to x.com/notifications
-```
-
-### Categorize Notifications
+### Categorize
 
 **🔴 Respond Now**
 - Direct @mentions asking questions
-- DMs from real people (not bots)
-- Replies to your content needing acknowledgment
+- DMs from real people
+- Replies needing acknowledgment
 - Requests for help
 
 **🟡 Engage Today**
 - New followers worth acknowledging
 - Nice comments on your posts
 - Relevant conversations in your niche
-- Mutual follows engaging with you
 
 **🟢 Optional**
-- Likes (no action needed, but nice to see)
+- Likes (no action needed)
 - Reposts (maybe thank if significant)
-- Quote tweets (engage if thoughtful)
 
 **⚪ Skip**
-- Bots and spam accounts
-- Hostile or bad-faith replies
+- Bots and spam
+- Hostile replies
 - Engagement bait
-- Crypto scams
 
 ## 2. Engagement Guidelines
 
 ### Voice & Vibe
-- **Be yourself** — Consistent personality across all interactions
-- **Be helpful** — Offer value, not just presence
-- **Be genuine** — Real engagement beats performative posting
-- **Be positive** — Lift people up, don't dunk (usually)
+- **Be yourself** — Consistent personality
+- **Be helpful** — Offer value
+- **Be genuine** — Real beats performative
+- **Be positive** — Lift people up
 
 ### When to Reply
-- **Always:** Direct questions, genuine compliments, requests for help
-- **Usually:** Thoughtful comments, fellow builders, mutual follows
-- **Sometimes:** Random nice comments (a like might suffice)
-- **Never:** Trolls, bots, bad-faith actors (don't feed them)
+- **Always:** Direct questions, genuine compliments, help requests
+- **Usually:** Thoughtful comments, fellow builders
+- **Sometimes:** Random nice comments (like might suffice)
+- **Never:** Trolls, bots, bad-faith actors
 
 ### When to Like
 - Show appreciation without adding noise
-- Acknowledge mentions you don't need to reply to
+- Acknowledge mentions you won't reply to
 - Support friends' posts
-- Bookmark interesting content
 
 ### When to Repost
-- Content genuinely valuable to your audience
+- Genuinely valuable to your audience
 - Friends' wins worth amplifying
 - Important news in your niche
-- Your own evergreen content (sparingly)
 
 ## 3. Respond to Key Mentions
 
 For high-priority mentions:
-
-1. **Understand context** — Read the thread, not just the mention
-2. **Match energy** — Casual for casual, professional for professional
-3. **Add value** — Answer the question, help with the problem
+1. **Read context** — Full thread, not just mention
+2. **Match energy** — Casual for casual, pro for pro
+3. **Add value** — Answer the question
 4. **Be concise** — X rewards brevity
 
-```bash
-bird reply <tweet_id> "Your response here"
-```
+## 4. Original Content (Optional)
 
-### Response Templates (Adapt, Don't Copy)
+If appropriate, post 1-3 times per day:
+- **Observations** — Things you noticed
+- **Lessons** — What you learned
+- **Builds** — Progress updates
+- **Wins** — Milestones (sharing, not bragging)
+- **Helpful content** — Tips, resources
 
-**For questions:**
-> "{Answer}. Happy to elaborate if helpful!"
+### Guidelines
+- Quality > quantity
+- Best times: Morning (8-9am), evening (5-7pm)
+- Be around 30 min after posting to engage
 
-**For compliments:**
-> "Thanks! Glad it resonated 🙏"
-
-**For help requests:**
-> "Happy to help! {Brief answer or offer to DM}"
-
-**For new followers:**
-> "Welcome! What brings you here?" (for notable accounts)
-
-## 4. Original Content (1-3 Posts/Day)
-
-### What to Post
-- **Observations** — Things you noticed in your domain
-- **Lessons** — What you learned (especially from failures)
-- **Builds** — What you're working on, progress updates
-- **Wins** — Milestones, achievements (not bragging, sharing)
-- **Helpful content** — Tips, tutorials, resources
-- **Opinions** — Takes on relevant topics (thoughtful, not hot)
-
-### Posting Guidelines
-- **Quality > quantity** — One great post beats five mediocre ones
-- **Timing** — Morning (8-9am) and evening (5-7pm) often best
-- **Engagement window** — Be around for 30 min after posting to reply
-- **Threads** — For complex topics, break into digestible chunks
-
-```bash
-bird post "Your post content here"
-```
-
-## 5. Owner's Posts (If Managing an Account)
-
-**ALWAYS engage with the account owner's posts:**
-- Reply with genuine addition to the conversation
-- Repost if relevant to the audience
-- Like at minimum
-
-## 6. Privacy & Safety Rules
+## 5. Privacy & Safety
 
 ### Absolute Rules
-- **NEVER share personal information** about the owner
-- **NEVER mention family members** publicly
-- **NEVER delete posts** without explicit permission
-- **NEVER engage in arguments** that could damage reputation
-- **NEVER post when angry** — Draft, wait, review
+- **NEVER share personal info** about the owner
+- **NEVER mention family** publicly
+- **NEVER delete posts** without permission
+- **NEVER engage in damaging arguments**
 
-### Content Boundaries
-- Stay in your lane (topics you know)
+### Boundaries
+- Stay in your lane
 - Don't comment on breaking news without verification
 - Avoid politics unless that's your brand
-- Don't subtweet or vague-post
 
-## 7. Custom PFP Generation (Optional)
-
-For followers who engage positively, offer custom profile pictures:
-
-### Download Original
-```bash
-browser navigate to x.com/USERNAME/photo
-# Extract image URL
-curl -sL "IMAGE_URL" -o images/username-original.jpg
-```
-
-### Generate Styled Version
-Use image generation with appropriate prompt for your style/brand.
-
-### Deliver
-```bash
-bird reply <tweet_id> "Made you something! 🎨" --media images/username-original.jpg --media images/username-styled.png
-```
-
-Include:
-- Both images (before/after)
-- Invite them to use it
-- Ask for a repost to spread the word
-
-## 8. Present Summary
+## 6. Present Summary
 
 ```
 🐦 X Check — {Date} {Time}
@@ -180,41 +113,26 @@ Include:
 • {Z} DMs
 
 ✅ RESPONDED TO
-• @user1 — Answered their question about X
-• @user2 — Thanked for the kind words
+• @user1 — Answered question about X
+• @user2 — Thanked for kind words
 
 👋 NEW FOLLOWERS ({count})
-• @notable_person — {Bio snippet, why notable}
+• @notable_person — {Why notable}
 • {X} others
 
 💬 ENGAGEMENT OPPORTUNITIES
 • @user's thread on {topic} — Could add value
-• Trending: #{hashtag} — Relevant to your niche?
+• Trending: #{hashtag} — Relevant?
 
 📝 POSTING SUGGESTION
-Based on recent engagement, consider posting about:
+Based on engagement, consider posting about:
 • {Topic that's resonating}
-• {Follow-up to previous popular post}
-```
-
-## Tracking
-
-```json
-{
-  "lastXCheck": "2026-02-09T14:30:00",
-  "stats": {
-    "mentionsToday": 15,
-    "repliesSent": 8,
-    "postsToday": 2,
-    "newFollowers": 12
-  }
-}
 ```
 
 ## Notes
 
-- Check 2-3x daily max — Don't live on the platform
-- Batch engagement — 15-30 min sessions, not constant checking
-- Quality interactions > vanity metrics
+- Check 2-3x daily max — Don't live there
+- Batch engagement — 15-30 min sessions
+- Quality > vanity metrics
 - Mute liberally, block rarely
-- It's okay to not respond to everything
+- It's okay not to respond to everything

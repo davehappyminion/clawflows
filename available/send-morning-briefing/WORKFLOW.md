@@ -1,9 +1,11 @@
 ---
 name: send-morning-briefing
 description: Daily morning briefing — gathers weather, calendar, priorities, and urgent items, then delivers a comprehensive summary to start your day.
-requires:
-  - name: telegram
-    description: Telegram messaging
+triggers:
+  - morning briefing
+  - what's happening today
+  - daily briefing
+  - start my day
 ---
 
 # Morning Briefing
@@ -12,63 +14,42 @@ Your daily command center. Everything you need to know before the day begins.
 
 ## 1. Gather Weather
 
-Get today's forecast:
-
-```bash
-curl -s "wttr.in/YOUR_CITY?format=%C+%t+%w+%p"
-```
-
-Or use a weather API for detailed info:
+Using your **weather skill** or a weather service, get today's forecast for the user's location:
 - Current temperature and conditions
 - High/low for the day
 - Rain/snow probability
-- "Grab an umbrella" or "Sunglasses day" advice
+- Advice: "Grab an umbrella" or "Sunglasses day"
 
 ## 2. Gather Calendar
 
-Pull today's events:
-
-```bash
-icalBuddy -f -nc -n -nrd -df "%Y-%m-%d" -tf "%H:%M" -po "datetime,title,location" eventsToday
-```
-
-Highlight:
-- **First event** — When does your day officially start?
+Using your **calendar skill**, pull today's events:
+- **First event** — When does the day officially start?
 - **Key meetings** — 1:1s, external calls, important syncs
 - **Free blocks** — Windows for focused work
-- **After-hours events** — Dinner plans, personal appointments
+- **After-hours** — Dinner plans, personal appointments
 
 ## 3. Check Overnight Urgency
 
 Scan for things that can't wait:
 
 ### Urgent Emails
-```bash
-gog gmail search 'in:inbox is:unread newer_than:12h' --account YOUR_EMAIL
-```
-
-Flag emails from:
-- Your manager
-- Direct reports (if applicable)
+Using your **email skill**, check for unread messages from the last 12 hours. Flag emails from:
+- Manager or leadership
 - VIP contacts
 - With "urgent", "ASAP", "time-sensitive" in subject
 
-### Slack/Discord Mentions
-Check for overnight @mentions in critical channels.
+### Mentions
+Check for overnight @mentions in critical channels using your **messaging skills**.
 
-### System Alerts
-- Failed cron jobs
-- Server alerts
-- Security notifications
+### Alerts
+Any system alerts, failed jobs, or security notifications.
 
 ## 4. Pull Top Priorities
 
-From task manager:
-```bash
-todoist list --filter "today | overdue" --limit 5
-```
-
-Or reference the output from triage-tasks if run first.
+Using your **task manager skill**, get today's top tasks:
+- What's due today
+- What's overdue
+- Top 3 priorities
 
 ## 5. Compile the Briefing
 
@@ -77,11 +58,10 @@ Or reference the output from triage-tasks if run first.
 
 🌤️ WEATHER
 {City}: {Conditions}, {Temp}
-High {X}° / Low {Y}° — {Rain chance or advice}
+High {X}° / Low {Y}° — {Advice}
 
 📅 TODAY'S SCHEDULE
 {First event time} — {Event name} ← Day starts here
-{Time} — {Event}
 {Time} — {Event}
 {X} meetings total, {Y} hours of free time
 
@@ -91,14 +71,10 @@ High {X}° / Low {Y}° — {Rain chance or advice}
 3. {Third priority}
 
 🚨 NEEDS ATTENTION
-{Urgent emails or items from overnight}
-• {Item} — {Why it's urgent}
+{Urgent items from overnight}
 
 💡 TODAY'S TIP
-{Contextual advice based on schedule}
-"Heavy meeting day — block 30 min for lunch."
-"Light calendar — great day for deep work."
-"Back-to-back from 10-3 — prep materials now."
+{Contextual advice: "Heavy meeting day — block lunch" or "Light calendar — great for deep work"}
 
 ---
 Have a great day! ☕
@@ -106,28 +82,16 @@ Have a great day! ☕
 
 ## 6. Deliver
 
-Send via messaging:
-
-```bash
-telegram send --message "BRIEFING_CONTENT"
-```
+Using your **messaging skill**, send the briefing to the user.
 
 ## Tracking
 
-```json
-{
-  "lastMorningBriefing": "2026-02-09",
-  "deliveryTime": "07:00",
-  "timezone": "America/New_York"
-}
-```
-
-Only send if `lastMorningBriefing` is not today's date.
+Only send if not already sent today.
 
 ## Notes
 
 - Schedule for 15-30 min before typical wake time
 - Deliver AFTER send-morning-quote (inspiration first, then logistics)
 - Keep it scannable — busy mornings need quick info
-- If nothing urgent, say so: "Clear overnight — smooth start!"
-- Personalize the greeting based on day (Monday motivation vs Friday energy)
+- If nothing urgent: "Clear overnight — smooth start!"
+- Personalize greeting by day (Monday motivation vs Friday energy)

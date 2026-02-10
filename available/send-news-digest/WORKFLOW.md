@@ -1,77 +1,62 @@
 ---
 name: send-news-digest
 description: Curated news digest — gathers news on topics you care about and delivers a concise summary via messaging.
-requires:
-  - name: telegram
-    description: Telegram messaging
+triggers:
+  - news digest
+  - what's in the news
+  - daily news
+  - news update
 ---
 
 # News Digest
 
 Curated news on topics you care about — no doom-scrolling required.
 
-## 1. Define Topics
+## 1. Identify Topics
 
-The user should configure their interests. Common categories:
-
-- **Tech:** AI, startups, product launches, funding rounds
+Check what topics the user cares about:
+- **Tech:** AI, startups, product launches
 - **Crypto:** Bitcoin, Ethereum, DeFi, regulation
-- **Business:** Markets, earnings, M&A, economy
-- **Industry-specific:** Healthcare, fintech, climate, etc.
-- **Personal interests:** Hobbies, sports teams, local news
+- **Business:** Markets, earnings, economy
+- **Industry-specific:** Healthcare, fintech, climate
+- **Personal interests:** Hobbies, sports, local news
 
-Store preferences:
-```json
-{
-  "newsTopics": ["AI", "startups", "crypto"],
-  "newsSourcesPreferred": ["TechCrunch", "The Verge", "Hacker News"],
-  "newsSourcesBlocked": ["source-to-avoid"]
-}
-```
+If unknown, ask the user or default to general tech/business.
 
 ## 2. Gather News
 
-### Sources to Check
+Using your **web browsing skill** or news sources, check:
 
 **Tech & Startups**
-- Hacker News top stories: `https://news.ycombinator.com/`
-- TechCrunch: `https://techcrunch.com/`
-- The Verge: `https://www.theverge.com/`
-- Product Hunt (new launches): `https://www.producthunt.com/`
+- Hacker News top stories
+- TechCrunch, The Verge
+- Product Hunt launches
 
-**Crypto**
-- CoinDesk: `https://www.coindesk.com/`
-- The Block: `https://www.theblock.co/`
+**Crypto** (if relevant)
+- CoinDesk, The Block
 
 **General**
-- Reuters: `https://www.reuters.com/`
-- AP News: `https://apnews.com/`
+- Reuters, AP News
 
 **Social/Trends**
-- X/Twitter trending in user's niche
-- Reddit top posts in relevant subreddits
-
-### Fetching
-Use browser automation or RSS feeds to pull headlines and summaries.
+- Trending topics in user's niche
 
 ## 3. Filter and Rank
 
 **Include:**
 - Stories matching user's topics
-- High-signal sources (user's preferred list)
 - Breaking news or significant developments
+- High-quality sources
 
 **Exclude:**
-- Clickbait headlines
-- Duplicate stories (same news from multiple sources)
-- Stories older than 24 hours (unless major)
-- Blocked sources
+- Clickbait
+- Duplicate stories
+- Old news (>24 hours unless major)
 
 **Rank by:**
 1. Relevance to user's topics
 2. Recency
-3. Source credibility
-4. Engagement/importance signals
+3. Source quality
 
 ## 4. Format the Digest
 
@@ -87,41 +72,30 @@ Use browser automation or RSS feeds to pull headlines and summaries.
 • {Headline} — {One sentence} [Source]
 • {Headline} — {One sentence} [Source]
 
-**Crypto**
+**{Other Topic}**
 • {Headline} — {One sentence} [Source]
 
 **Worth Reading**
-• {Longer piece or analysis worth bookmarking}
+• {Longer piece worth bookmarking}
 
 —
-{Total: X stories from Y sources}
+{Total: X stories}
 ```
 
 Keep it to 5-10 items max. Quality over quantity.
 
 ## 5. Deliver
 
-Send via messaging:
-
-```bash
-telegram send --message "DIGEST_CONTENT"
-```
+Using your **messaging skill**, send the digest to the user.
 
 ## Tracking
 
-```json
-{
-  "lastNewsDigest": "2026-02-09",
-  "storiesSent": ["story_id_1", "story_id_2"]
-}
-```
-
 - Only send once per day
-- Track sent stories to avoid repeats tomorrow
+- Track sent stories to avoid repeats
 
 ## Notes
 
-- Schedule for morning (with briefing) or evening (wind-down reading)
-- User can reply "more on [topic]" to get deeper coverage
-- If no significant news, say so: "Quiet news day — nothing major in your topics"
-- Link to full articles — don't try to replace reading, just curate
+- Schedule for morning or evening
+- User can reply "more on [topic]" for deeper coverage
+- If quiet news day: "Nothing major in your topics today"
+- Link to full articles — curate, don't replace reading

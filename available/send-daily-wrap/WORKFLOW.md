@@ -1,11 +1,11 @@
 ---
 name: send-daily-wrap
 description: Daily wrap-up — summarizes what you accomplished today from git, tasks, and calendar, then previews tomorrow.
-requires:
-  - name: telegram
-    description: Telegram messaging
-  - name: git
-    description: Git version control
+triggers:
+  - daily wrap
+  - end of day
+  - wrap up
+  - what did I do today
 ---
 
 # Daily Wrap
@@ -15,65 +15,38 @@ End-of-day summary — what you did, what's pending, what's tomorrow. Close the 
 ## 1. Gather Today's Accomplishments
 
 ### Git Commits
-```bash
-git log --author="YOUR_EMAIL" --since="today 00:00" --oneline --all
-```
-
-For multiple repos:
-```bash
-for repo in ~/code/*/; do
-  commits=$(git -C "$repo" log --author="YOUR_EMAIL" --since="today 00:00" --oneline 2>/dev/null)
-  if [ -n "$commits" ]; then
-    echo "**$(basename $repo)**"
-    echo "$commits"
-  fi
-done
-```
+Using **git**, find your commits from today across all repositories.
 
 ### Completed Tasks
-```bash
-# Todoist
-todoist list --filter "completed today"
-
-# Things 3
-osascript -e 'tell application "Things3" to get name of to dos of list "Logbook" whose completion date is today'
-```
+Using your **task manager skill**, get tasks completed today.
 
 ### Meetings Attended
-```bash
-icalBuddy -f -nc -nrd eventsFrom:today to:today
-```
+Using your **calendar skill**, list today's meetings.
 
 ### Emails Sent
-```bash
-gog gmail search 'in:sent newer_than:1d' --account YOUR_EMAIL --count
-```
+Using your **email skill**, count emails sent today.
 
 ## 2. Identify What's Still Open
 
-### Tasks Started But Not Finished
-- Items marked "in progress"
+### Unfinished
+- Tasks started but not completed
 - PRs opened but not merged
 - Threads awaiting response
 
 ### Rolled Over
 - Tasks due today that didn't get done
-- Will auto-promote to tomorrow
+- Will become tomorrow's priorities
 
 ## 3. Preview Tomorrow
 
-### Tomorrow's Calendar
-```bash
-icalBuddy -f -nc -nrd -li 5 eventsFrom:tomorrow to:tomorrow+1
-```
+### Calendar
+Using your **calendar skill**, get tomorrow's events.
+- First event time
+- Total meetings
+- Any high-stakes items
 
-### Tasks Due Tomorrow
-```bash
-todoist list --filter "tomorrow"
-```
-
-### First Event
-What time does tomorrow start? Calculate optimal bedtime.
+### Tasks Due
+Using your **task manager skill**, get tomorrow's tasks.
 
 ## 4. Generate the Wrap
 
@@ -83,68 +56,57 @@ What time does tomorrow start? Calculate optimal bedtime.
 ✅ ACCOMPLISHED
 • Merged auth refactor PR (#234)
 • Fixed Safari payment bug
-• Wrote 3 tests for checkout flow
-• Attended team sync, 1:1 with Sarah
+• Wrote 3 tests for checkout
+• Team sync, 1:1 with Sarah
 
 📊 BY THE NUMBERS
 • {X} commits across {Y} repos
 • {Z} tasks completed
 • {N} emails sent
-• {M} meetings attended
+• {M} meetings
 
 🔄 STILL OPEN
-• Dashboard redesign — started, 60% done
-• PR review for Mike — will finish tomorrow
+• Dashboard redesign — 60% done
+• PR review for Mike — tomorrow
 
 📅 TOMORROW
-• First event: Team standup at 9:00 AM
+• First event: Standup at 9:00 AM
 • {X} meetings scheduled
 • Top priority: Finish dashboard
 
 💡 REFLECTION
-{Auto-generated or user's notes}
-"Solid progress on auth. Dashboard taking longer than expected —
-might need to cut scope or push deadline."
+{Summary of the day}
+"Solid progress on auth. Dashboard taking longer — might need to adjust scope."
 
 ---
-{Motivational closing based on productivity}
-"Strong day — {X} tasks knocked out. Rest up!"
+{Closing based on productivity}
+"Strong day — {X} tasks done. Rest up!"
 or
-"Lighter day — sometimes that's what you need. Tomorrow's a new one."
+"Lighter day — momentum builds tomorrow."
 ```
 
 ## 5. Deliver
 
-Send via messaging:
+Using your **messaging skill**, send the wrap to the user.
 
-```bash
-telegram send --message "WRAP_CONTENT"
-```
+## 6. Prompt for Reflection (Optional)
 
-## 6. Optional: Prompt for Reflection
-
-Ask the user:
-- "Anything you want to add about today?"
-- "What's the one thing to focus on tomorrow?"
+Ask:
+- "Anything to add about today?"
+- "What's the one thing for tomorrow?"
 - "Any wins worth celebrating?"
 
-Store their response for weekly review.
+Store responses for weekly review.
 
 ## Tracking
 
-```json
-{
-  "lastDailyWrap": "2026-02-09",
-  "dailyStats": {
-    "2026-02-09": {"commits": 5, "tasks": 3, "meetings": 2}
-  }
-}
-```
+- Last wrap date
+- Daily stats history (for trends)
 
 ## Notes
 
-- Schedule for end of workday (e.g., 5-6 PM) or before bed (9 PM)
-- Pairs with send-bedtime-reminder — wrap first, then sleep nudge
+- Schedule for end of workday (5-6 PM) or before bed (9 PM)
+- Runs before send-bedtime-reminder
 - Keep history for weekly/monthly reviews
-- Celebrate consistency: "That's 5 days in a row of closing loops!"
-- If nothing accomplished, don't shame — "Planning day. Momentum builds."
+- Celebrate consistency: "5 days in a row of closing loops!"
+- If nothing accomplished: "Planning day. Momentum builds."
