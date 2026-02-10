@@ -97,12 +97,32 @@ Workflow names start with a verb. Pick from these six:
 
 | Workflow | What it does |
 |----------|-------------|
-| [activate-sleep-mode](activate-sleep-mode/) | Turns off all lights, speakers, thermostats + turns on bedroom fan |
+| [activate-away-mode](activate-away-mode/) | Everything off, thermostat to eco — for when you leave the house |
+| [activate-focus-mode](activate-focus-mode/) | Bright daylight lights, mutes speakers, blocks distracting sites |
+| [activate-morning-mode](activate-morning-mode/) | Bright warm lights, comfortable thermostat, energizing music |
 | [activate-night-mode](activate-night-mode/) | Dims lights to warm red, plays sleep music |
+| [activate-sleep-mode](activate-sleep-mode/) | Turns off all lights, speakers, thermostats + turns on bedroom fan |
+| [build-changelog](build-changelog/) | Generates a formatted changelog from git history since the last tag |
+| [build-meeting-prep](build-meeting-prep/) | Creates a prep doc for your next meeting with attendee context and talking points |
 | [build-nightly-project](build-nightly-project/) | Picks an idea from a queue and builds a small project overnight |
+| [build-weekly-review](build-weekly-review/) | Compiles the week's git commits, calendar, and accomplishments into a review doc |
+| [check-calendar](check-calendar/) | 48-hour calendar review with conflict detection and prep notes |
+| [check-disk](check-disk/) | Disk space audit — large files, caches, cleanup recommendations |
+| [check-repos](check-repos/) | Scans local git repos for uncommitted changes, stale branches, unpushed commits |
+| [check-security](check-security/) | Security hygiene — updates, open ports, FileVault, Firewall status |
 | [check-x](check-x/) | Checks X/Twitter notifications, engages with followers |
+| [process-contacts](process-contacts/) | Deduplicates macOS contacts, flags missing fields, identifies stale entries |
+| [process-downloads](process-downloads/) | Organizes downloads by file type, removes duplicates, archives old files |
 | [process-email](process-email/) | Unsubscribes from junk, archives mailing lists, summarizes important mail |
+| [process-notifications](process-notifications/) | Audits macOS notification settings, identifies noisy apps, suggests silencing |
+| [process-screenshots](process-screenshots/) | Sorts screenshots into dated folders, removes duplicates, cleans up old ones |
+| [send-bedtime-reminder](send-bedtime-reminder/) | Friendly bedtime nudge with tomorrow's first event |
+| [send-expense-report](send-expense-report/) | Scans Gmail for receipts, categorizes spending, sends a monthly report |
 | [send-morning-briefing](send-morning-briefing/) | Gathers weather, calendar, news and delivers a daily summary |
+| [send-weekly-digest](send-weekly-digest/) | Week-in-review summary delivered via messaging |
+| [sync-bookmarks](sync-bookmarks/) | Checks bookmarks for dead links, removes duplicates, organizes by topic |
+| [sync-calendar-tasks](sync-calendar-tasks/) | Extracts action items from calendar events, suggests tasks |
+| [sync-dotfiles](sync-dotfiles/) | Backs up dotfiles and Homebrew config to a git repo |
 
 ## The `requires` Field
 
