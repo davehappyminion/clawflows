@@ -1,5 +1,6 @@
 ---
 name: check-x
+emoji: 🐦
 description: X (Twitter) engagement — check notifications, respond to mentions, engage authentically, and optionally generate content.
 triggers:
   - check x

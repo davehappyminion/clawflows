@@ -1,5 +1,6 @@
 ---
 name: check-security
+emoji: 🔒
 description: Security hygiene check — verifies system updates, scans open ports, checks encryption and firewall status.
 triggers:
   - check security

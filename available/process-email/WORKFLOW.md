@@ -1,5 +1,6 @@
 ---
 name: process-email
+emoji: 📧
 description: Email processing — auto-unsubscribes from newsletters, archives mailing lists, and gives you a clean summary of what actually needs attention.
 triggers:
   - process email

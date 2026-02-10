@@ -1,5 +1,6 @@
 ---
 name: check-messages
+emoji: 💬
 description: Unified message triage — checks Slack, Discord, Telegram, WhatsApp, and other messaging platforms for what needs your attention.
 triggers:
   - check messages

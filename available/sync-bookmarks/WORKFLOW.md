@@ -1,5 +1,6 @@
 ---
 name: sync-bookmarks
+emoji: 🔖
 description: Bookmark maintenance — checks bookmarks for dead links, removes duplicates, and organizes by topic.
 triggers:
   - sync bookmarks

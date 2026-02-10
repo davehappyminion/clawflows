@@ -1,5 +1,6 @@
 ---
 name: process-notifications
+emoji: 🔕
 description: Notification audit — reviews notification settings, identifies noisy apps, and suggests which to silence.
 triggers:
   - process notifications

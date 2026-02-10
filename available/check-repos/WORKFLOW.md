@@ -1,5 +1,6 @@
 ---
 name: check-repos
+emoji: 🔍
 description: Git repo health check — scans local repos for uncommitted changes, stale branches, and unpushed commits.
 triggers:
   - check repos

@@ -1,5 +1,6 @@
 ---
 name: process-screenshots
+emoji: 📸
 description: Screenshot organizer — sorts screenshots from Desktop and Downloads into dated folders, identifies duplicates, and deletes old ones.
 triggers:
   - process screenshots

@@ -1,5 +1,6 @@
 ---
 name: build-weekly-review
+emoji: 📊
 description: Weekly review generator — compiles the week's git commits, calendar events, and accomplishments into a review document.
 triggers:
   - weekly review

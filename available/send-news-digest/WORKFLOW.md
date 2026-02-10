@@ -1,5 +1,6 @@
 ---
 name: send-news-digest
+emoji: 📰
 description: Curated news digest — gathers news on topics you care about and delivers a concise summary via messaging.
 triggers:
   - news digest

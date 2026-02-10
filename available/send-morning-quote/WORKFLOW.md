@@ -1,5 +1,6 @@
 ---
 name: send-morning-quote
+emoji: ✨
 description: Morning inspiration — delivers an uplifting quote to start the day, optionally themed to your goals or current challenges.
 triggers:
   - morning quote

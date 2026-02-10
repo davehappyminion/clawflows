@@ -1,5 +1,6 @@
 ---
 name: triage-tasks
+emoji: ✅
 description: Daily task triage — reviews your task list, identifies what's due and overdue, and suggests your top 3 priorities for the day.
 triggers:
   - triage tasks

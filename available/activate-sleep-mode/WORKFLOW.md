@@ -1,5 +1,6 @@
 ---
 name: activate-sleep-mode
+emoji: 🛏️
 description: Bedtime automation — turns off all lights, thermostats, and music, then turns on the bedroom fan.
 triggers:
   - sleep mode

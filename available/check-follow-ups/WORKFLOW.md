@@ -1,5 +1,6 @@
 ---
 name: check-follow-ups
+emoji: 🔔
 description: Follow-up checker — scans for unanswered emails, promises you made, and things about to slip through the cracks.
 triggers:
   - check follow ups
