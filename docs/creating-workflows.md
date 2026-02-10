@@ -19,24 +19,27 @@ my-workflow/
 
 ```yaml
 ---
-name: activate-sleep-mode
-description: What this does and when to trigger it.
+name: send-morning-briefing
+emoji: ☀️
+description: Daily morning briefing — gathers weather, calendar, priorities, and news into one summary.
+schedule: "7am"
 requires:
-  - name: openhue
-    description: Philips Hue smart bulbs
-  - name: sonos
-    description: Sonos wireless speakers
+  - name: calendar
+    description: Google Calendar or similar
+  - name: weather
+    description: Weather service
 ---
 
-# Sleep Mode
+# Morning Briefing
 
 ## What It Does
-1. Turn off all lights
-2. Pause speakers
-3. Report results
+1. Check today's calendar
+2. Get weather forecast
+3. Summarize priorities
+4. Deliver briefing
 
 ## After Running
-Tell me what worked and what didn't.
+Send the briefing to the user's preferred channel.
 ```
 
 ## Frontmatter Fields
@@ -44,16 +47,32 @@ Tell me what worked and what didn't.
 | Field | Required | Description |
 |-------|----------|-------------|
 | `name` | Yes | Matches the folder name. Lowercase, hyphenated, verb-first. |
+| `emoji` | No | Single emoji for display. |
 | `description` | Yes | What it does — a plain description the agent can match on. |
+| `schedule` | No | When to run automatically. Omit for on-demand only. |
 | `requires` | No | Skills and tools needed. Each has a `name` and `description`. |
 
 ### Writing Good Descriptions
 
-The `description` field tells humans and agents what the workflow does. Write a clear, concise description — the agent will match on it naturally without explicit trigger phrases:
+The `description` field tells humans and agents what the workflow does. Write a clear, concise description — the agent matches on it naturally:
 
 ```yaml
 description: Bedtime automation — turns off all lights, thermostats, and music, then turns on the bedroom fan.
 ```
+
+### The `schedule` Field
+
+Set when the workflow runs automatically. Use simple times like `"7am"` or multiple times like `"9am, 1pm, 5pm"`:
+
+```yaml
+schedule: "7am"                    # Once daily
+schedule: "9am, 1pm, 5pm"          # Three times daily
+schedule: "8am, 6pm"               # Twice daily
+```
+
+Times are in 12-hour format with am/pm. No days — scheduled workflows run daily at the specified times.
+
+Omit the `schedule` field for on-demand workflows that only run when triggered manually.
 
 ### The `requires` Field
 

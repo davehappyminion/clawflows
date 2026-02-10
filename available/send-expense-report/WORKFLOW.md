@@ -2,11 +2,6 @@
 name: send-expense-report
 emoji: 💰
 description: Expense report generator — scans email for receipts, categorizes spending, and sends a monthly summary.
-triggers:
-  - expense report
-  - spending summary
-  - monthly expenses
-  - receipt summary
 ---
 
 # Expense Report

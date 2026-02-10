@@ -2,11 +2,7 @@
 name: check-follow-ups
 emoji: 🔔
 description: Follow-up checker — scans for unanswered emails, promises you made, and things about to slip through the cracks.
-triggers:
-  - check follow ups
-  - what am I forgetting
-  - dropped balls
-  - follow up check
+schedule: "9am, 4pm"
 ---
 
 # Check Follow-Ups

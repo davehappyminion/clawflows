@@ -2,11 +2,7 @@
 name: send-news-digest
 emoji: 📰
 description: Curated news digest — gathers news on topics you care about and delivers a concise summary via messaging.
-triggers:
-  - news digest
-  - what's in the news
-  - daily news
-  - news update
+schedule: "7am"
 ---
 
 # News Digest

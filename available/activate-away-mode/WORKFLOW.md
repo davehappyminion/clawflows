@@ -2,11 +2,6 @@
 name: activate-away-mode
 emoji: 🚪
 description: Away mode — turns everything off and sets thermostat to eco mode for when you leave the house.
-triggers:
-  - away mode
-  - leaving home
-  - goodbye house
-  - I'm leaving
 ---
 
 # Away Mode

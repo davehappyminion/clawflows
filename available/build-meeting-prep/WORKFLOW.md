@@ -2,11 +2,6 @@
 name: build-meeting-prep
 emoji: 🎯
 description: Meeting prep generator — creates a comprehensive prep document for any meeting with attendee research, history, talking points, and questions.
-triggers:
-  - prep for meeting
-  - meeting prep
-  - prepare for my call
-  - get ready for meeting
 ---
 
 # Meeting Prep

@@ -2,12 +2,6 @@
 name: check-disk
 emoji: 💾
 description: Disk space audit — finds large files, bloated caches, and recommends cleanup actions.
-triggers:
-  - check disk
-  - disk space
-  - storage audit
-  - what's taking up space
-  - clean up storage
 ---
 
 # Check Disk

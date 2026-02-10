@@ -2,11 +2,7 @@
 name: send-daily-wrap
 emoji: 🌆
 description: Daily wrap-up — summarizes what you accomplished today from git, tasks, and calendar, then previews tomorrow.
-triggers:
-  - daily wrap
-  - end of day
-  - wrap up
-  - what did I do today
+schedule: "6pm"
 ---
 
 # Daily Wrap
