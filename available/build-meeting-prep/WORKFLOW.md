@@ -1,70 +1,198 @@
 ---
 name: build-meeting-prep
-description: Meeting prep generator — creates a prep document for the next upcoming meeting with attendee context and talking points.
+description: Meeting prep generator — creates a comprehensive prep document for any meeting with attendee research, history, talking points, and questions.
 ---
 
 # Meeting Prep
 
-Generate a prep doc for the next meeting with attendee context and talking points.
+Never walk into a meeting cold. Context, history, and talking points — ready to go.
 
-## 1. Find Next Meeting
+## 1. Identify the Meeting
 
-Get the next upcoming calendar event:
+Find the target meeting:
 
 ```bash
+# Next upcoming meeting
 icalBuddy -f -nc -n -ea -nrd -li 1 -df "%Y-%m-%d" -tf "%H:%M" -po "datetime,title,attendees,location,notes" eventsToday+1
 ```
 
-If the user specifies a particular meeting, find that one instead.
+Or if user specifies: "Prep me for my 2pm with Jake"
 
-## 2. Gather Attendee Context
+Extract:
+- Meeting title
+- Date/time
+- Location (Zoom link, room, address)
+- Attendees
+- Any existing notes/agenda
+
+## 2. Research Attendees
 
 For each attendee:
-- Check contacts for their title/company
-- Check recent email threads with them
-- Check previous calendar events with them
 
-## 3. Review Previous Meetings
+### Internal (Colleagues)
+- Role/title
+- Team/department
+- Recent interactions (emails, meetings)
+- Shared projects or dependencies
 
-Find past events with the same title or attendees:
+### External (Clients, Partners, New Contacts)
+- Company and role
+- LinkedIn summary (if accessible)
+- Previous correspondence
+- Company news or context
 
 ```bash
-icalBuddy -f -nc -nrd -df "%Y-%m-%d" -po "datetime,title,notes" eventsFrom:today-30 to:today | grep -i "MEETING_TITLE"
+# Check recent emails with attendee
+gog gmail search "from:attendee@email.com OR to:attendee@email.com" --limit 10 --account YOUR_EMAIL
 ```
 
-Look for notes, action items, or follow-ups from previous sessions.
+### VIP Flags
+- Is this your manager? → Higher stakes, be prepared
+- Is this a skip-level? → Know your highlights
+- Is this a prospect/client? → Know their business
+- First meeting ever? → Extra research needed
 
-## 4. Build Prep Doc
+## 3. Review History
 
-Create a prep document:
+### Previous Meetings
+```bash
+# Find past events with same attendees or title
+icalBuddy -f -nc -nrd -df "%Y-%m-%d" -po "datetime,title,notes" eventsFrom:today-90 to:today | grep -i "SEARCH_TERM"
+```
+
+Look for:
+- Previous meeting notes
+- Action items assigned
+- Decisions made
+- Open questions
+
+### Email Threads
+Recent email context with attendees:
+- What have you been discussing?
+- Any pending items?
+- Promises made (by you or them)?
+
+### Shared Documents
+- Google Docs recently shared
+- Slack threads
+- Project boards (Linear, Notion, etc.)
+
+## 4. Build the Prep Doc
 
 ```markdown
-# Meeting Prep: [Meeting Title]
-**When:** YYYY-MM-DD HH:MM
-**Where:** [Location or video link]
+# Meeting Prep: {Meeting Title}
 
-## Attendees
-- [Name] — [Role/context]
+📅 **When:** {Date} at {Time}
+📍 **Where:** {Location/Link}
+⏱️ **Duration:** {Length}
+🎯 **Type:** {1:1 / Group / External / Interview}
 
-## Previous Meeting Notes
-- [Key points from last time]
-- [Open action items]
+---
 
-## Suggested Talking Points
-1. [Based on context and previous meetings]
-2. [Follow-up items]
-3. [New topics]
+## 👥 Attendees
 
-## Questions to Ask
-- [Based on gaps in knowledge or pending items]
+### {Name} — {Role/Title}
+- **Context:** {How you know them, relationship}
+- **Recent:** {Last interaction, what you discussed}
+- **Note:** {Anything to remember — preferences, style, topics to avoid}
+
+### {Name 2} — {Role/Title}
+{...}
+
+---
+
+## 📜 History
+
+### Last Meeting ({Date})
+- Discussed: {Key topics}
+- Decided: {Outcomes}
+- Action items:
+  - [ ] {Your item} — Status: {done/pending}
+  - [ ] {Their item} — Status: {unknown}
+
+### Recent Email Thread
+- Topic: {Subject line}
+- Status: {Where it left off}
+- Your last message: "{Summary}"
+
+---
+
+## 🎯 Agenda / Purpose
+
+{If agenda exists, list it}
+{If no agenda, infer purpose from title and context}
+
+1. {Topic 1}
+2. {Topic 2}
+3. {Topic 3}
+
+---
+
+## 💬 Talking Points
+
+### Must Cover
+1. **{Topic}** — {Why it's important, what you need from it}
+2. **{Topic}** — {Context or data to reference}
+
+### If Time Permits
+3. **{Topic}** — {Nice to discuss but not critical}
+
+### Follow-ups from Last Time
+- "{Action item}" — {Status update to share}
+
+---
+
+## ❓ Questions to Ask
+
+1. {Question based on open items}
+2. {Question based on their expertise}
+3. {Question to understand their priorities}
+
+---
+
+## 📎 Reference Materials
+
+- {Link to relevant doc}
+- {Link to project board}
+- {Attachment or screenshot}
+
+---
+
+## ⚡ Quick Prep Checklist
+
+- [ ] Review the doc/deck being discussed
+- [ ] Test screen share if presenting
+- [ ] Have relevant tabs open
+- [ ] Silence notifications
+- [ ] {Custom item}
+
+---
+
+## 🧠 Notes Space
+
+{Leave blank for live note-taking}
 ```
 
-## After Running
+## 5. Deliver
 
-Present the prep doc. If the meeting is within 2 hours, highlight urgent prep items.
+Options:
+- **Display** — Show in terminal/chat
+- **Save as file** — `meeting-prep-{date}-{title}.md`
+- **Copy to clipboard** — Ready to paste into notes app
+- **Send to self** — Email or message for reference
+
+## Timing
+
+Generate prep based on meeting proximity:
+- **>24 hours out:** Basic prep, flag for deeper research
+- **2-24 hours:** Full prep doc
+- **<2 hours:** Quick summary + critical points only
+- **<15 minutes:** "Here's what you need to know in 60 seconds"
 
 ## Notes
 
-- Prioritize actionable prep over background research
-- If no previous meetings exist with these attendees, note it — it might be a first meeting
-- Keep talking points to 3-5 items max
+- Run automatically before important meetings (via cron or calendar trigger)
+- Integrate with check-calendar to identify meetings needing prep
+- First meeting with someone? Go deeper on research
+- Internal routine syncs? Keep it light
+- Store prep docs for future reference — builds meeting history

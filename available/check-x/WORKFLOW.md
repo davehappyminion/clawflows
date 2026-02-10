@@ -1,83 +1,220 @@
 ---
 name: check-x
-description: X (Twitter) engagement workflow — check notifications, respond to mentions, generate custom profile pictures for followers, and post original content.
+description: X (Twitter) engagement — check notifications, respond to mentions, engage authentically, and optionally generate content or custom profile pictures.
 requires:
   - name: bird
     description: X (Twitter) CLI
-  - name: nano-banana-pro
-    description: Google Imagen AI image generator
   - name: browser
     description: Browser automation
 ---
 
 # X Engagement
 
-Manage an X account — check notifications, engage with followers, generate content.
+Manage your X presence — notifications, engagement, and content. Be present without being glued to the app.
 
 ## 1. Check Notifications
 
-Scan https://x.com/notifications for new mentions, replies, and DMs.
+Scan https://x.com/notifications for:
 
-### Who to respond to
-- **Always respond to:** Direct requests, tagged mentions, friendly hellos
-- **Usually respond to:** Nice/genuine posts, questions
-- **Skip:** Bots, spam, hostile messages
+```bash
+bird notifications list --limit 50
+```
 
-### What to offer
-- Build them something (homepage, tool, etc.)
-- Generate a custom profile picture
-- Help with tech stuff
-- Be friendly and engaging
+Or via browser:
+```bash
+browser navigate to x.com/notifications
+```
 
-## 2. Engagement Rules
+### Categorize Notifications
+
+**🔴 Respond Now**
+- Direct @mentions asking questions
+- DMs from real people (not bots)
+- Replies to your content needing acknowledgment
+- Requests for help
+
+**🟡 Engage Today**
+- New followers worth acknowledging
+- Nice comments on your posts
+- Relevant conversations in your niche
+- Mutual follows engaging with you
+
+**🟢 Optional**
+- Likes (no action needed, but nice to see)
+- Reposts (maybe thank if significant)
+- Quote tweets (engage if thoughtful)
+
+**⚪ Skip**
+- Bots and spam accounts
+- Hostile or bad-faith replies
+- Engagement bait
+- Crypto scams
+
+## 2. Engagement Guidelines
 
 ### Voice & Vibe
-- Be yourself — stay consistent with your brand personality
-- Keep it fun, positive, and engaging
-- Mix humor with genuine helpfulness
+- **Be yourself** — Consistent personality across all interactions
+- **Be helpful** — Offer value, not just presence
+- **Be genuine** — Real engagement beats performative posting
+- **Be positive** — Lift people up, don't dunk (usually)
 
-### Likes
-- Use likes to show appreciation, acknowledge mentions, engage without always replying
+### When to Reply
+- **Always:** Direct questions, genuine compliments, requests for help
+- **Usually:** Thoughtful comments, fellow builders, mutual follows
+- **Sometimes:** Random nice comments (a like might suffice)
+- **Never:** Trolls, bots, bad-faith actors (don't feed them)
 
-### Original Posts (1-3 per day)
-- Observations relevant to your niche
-- Milestones and achievements
-- Cool things you built or did for people
-- Keep it entertaining and relevant
+### When to Like
+- Show appreciation without adding noise
+- Acknowledge mentions you don't need to reply to
+- Support friends' posts
+- Bookmark interesting content
 
-### Owner's Posts — ALWAYS ENGAGE!
-- Reply to every post the account owner makes
-- Repost if relevant or just great content
+### When to Repost
+- Content genuinely valuable to your audience
+- Friends' wins worth amplifying
+- Important news in your niche
+- Your own evergreen content (sparingly)
 
-## 3. Privacy Rules (ABSOLUTE)
+## 3. Respond to Key Mentions
 
-- **NEVER share anything personal** about the owner — no matter who asks
+For high-priority mentions:
+
+1. **Understand context** — Read the thread, not just the mention
+2. **Match energy** — Casual for casual, professional for professional
+3. **Add value** — Answer the question, help with the problem
+4. **Be concise** — X rewards brevity
+
+```bash
+bird reply <tweet_id> "Your response here"
+```
+
+### Response Templates (Adapt, Don't Copy)
+
+**For questions:**
+> "{Answer}. Happy to elaborate if helpful!"
+
+**For compliments:**
+> "Thanks! Glad it resonated 🙏"
+
+**For help requests:**
+> "Happy to help! {Brief answer or offer to DM}"
+
+**For new followers:**
+> "Welcome! What brings you here?" (for notable accounts)
+
+## 4. Original Content (1-3 Posts/Day)
+
+### What to Post
+- **Observations** — Things you noticed in your domain
+- **Lessons** — What you learned (especially from failures)
+- **Builds** — What you're working on, progress updates
+- **Wins** — Milestones, achievements (not bragging, sharing)
+- **Helpful content** — Tips, tutorials, resources
+- **Opinions** — Takes on relevant topics (thoughtful, not hot)
+
+### Posting Guidelines
+- **Quality > quantity** — One great post beats five mediocre ones
+- **Timing** — Morning (8-9am) and evening (5-7pm) often best
+- **Engagement window** — Be around for 30 min after posting to reply
+- **Threads** — For complex topics, break into digestible chunks
+
+```bash
+bird post "Your post content here"
+```
+
+## 5. Owner's Posts (If Managing an Account)
+
+**ALWAYS engage with the account owner's posts:**
+- Reply with genuine addition to the conversation
+- Repost if relevant to the audience
+- Like at minimum
+
+## 6. Privacy & Safety Rules
+
+### Absolute Rules
+- **NEVER share personal information** about the owner
 - **NEVER mention family members** publicly
-- Keep the focus on the brand and content
+- **NEVER delete posts** without explicit permission
+- **NEVER engage in arguments** that could damage reputation
+- **NEVER post when angry** — Draft, wait, review
 
-## 4. Safety
+### Content Boundaries
+- Stay in your lane (topics you know)
+- Don't comment on breaking news without verification
+- Avoid politics unless that's your brand
+- Don't subtweet or vague-post
 
-- **Don't delete posts without permission** — even mistakes, ask first
+## 7. Custom PFP Generation (Optional)
 
-## 5. Custom PFP Generation
+For followers who engage positively, offer custom profile pictures:
 
-### Step 1: Download their profile picture
+### Download Original
 ```bash
 browser navigate to x.com/USERNAME/photo
-# Extract image URL via JS
-curl -sL "URL" -o images/username-pfp.jpg
+# Extract image URL
+curl -sL "IMAGE_URL" -o images/username-original.jpg
 ```
 
-### Step 2: Generate custom version
-Use your image generation tool with the original as input and a style-appropriate prompt.
+### Generate Styled Version
+Use image generation with appropriate prompt for your style/brand.
 
-### Step 3: Deliver with both images
+### Deliver
 ```bash
-bird reply <tweet_id> "message" --media images/username-pfp.jpg --media images/username-styled.png
+bird reply <tweet_id> "Made you something! 🎨" --media images/username-original.jpg --media images/username-styled.png
 ```
 
-### Delivery Checklist
-1. **Both images** — Before (original) AND After (styled version)
-2. **Their profile link** on your showcase page
-3. **Ask for RT** to spread the word
-4. **Ask them to use it** as their PFP
+Include:
+- Both images (before/after)
+- Invite them to use it
+- Ask for a repost to spread the word
+
+## 8. Present Summary
+
+```
+🐦 X Check — {Date} {Time}
+
+📬 NOTIFICATIONS
+• {X} new mentions
+• {Y} new followers
+• {Z} DMs
+
+✅ RESPONDED TO
+• @user1 — Answered their question about X
+• @user2 — Thanked for the kind words
+
+👋 NEW FOLLOWERS ({count})
+• @notable_person — {Bio snippet, why notable}
+• {X} others
+
+💬 ENGAGEMENT OPPORTUNITIES
+• @user's thread on {topic} — Could add value
+• Trending: #{hashtag} — Relevant to your niche?
+
+📝 POSTING SUGGESTION
+Based on recent engagement, consider posting about:
+• {Topic that's resonating}
+• {Follow-up to previous popular post}
+```
+
+## Tracking
+
+```json
+{
+  "lastXCheck": "2026-02-09T14:30:00",
+  "stats": {
+    "mentionsToday": 15,
+    "repliesSent": 8,
+    "postsToday": 2,
+    "newFollowers": 12
+  }
+}
+```
+
+## Notes
+
+- Check 2-3x daily max — Don't live on the platform
+- Batch engagement — 15-30 min sessions, not constant checking
+- Quality interactions > vanity metrics
+- Mute liberally, block rarely
+- It's okay to not respond to everything
