@@ -1,6 +1,4 @@
-# ⚡️ ClawFlows — Superpowers For Your OpenClaw
-
----
+# ⚡️ ClawFlows — Superpowers for your OpenClaw
 
 <p align="center">
   <img src="assets/header.png" alt="ClawFlows - Lobster Minions doing ALL the tasks" width="100%" />
