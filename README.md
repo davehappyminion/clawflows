@@ -1,4 +1,4 @@
-# ⚡️ ClawFlows
+# ⚡️ Claw Workflows - Superpowers For Your Agent
 
 <p align="center">
   <img src="assets/header.png" alt="ClawFlows" width="100%" />
