@@ -11,33 +11,60 @@ CLAWFLOWS_DIR="$(cd "$(dirname "$SELF")/../.." && pwd)"
 AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
 AVAILABLE_DIR="$CLAWFLOWS_DIR/workflows/available"
 ENABLED_DIR="$CLAWFLOWS_DIR/workflows/enabled"
+BIN_TARGET="$HOME/.local/bin/clawflows"
 
 START_MARKER="<!-- clawflows:start -->"
 END_MARKER="<!-- clawflows:end -->"
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
 
-usage() {
-  cat <<EOF
-Usage: clawflows <command> [args]
+cmd_help() {
+  cat <<'EOF'
 
-Commands:
-  list                Show available workflows and their status
-  enable <name>       Enable a workflow (copies from available/ to enabled/)
-  disable <name>      Disable a workflow (removes from enabled/)
-  update              Pull the latest workflows from GitHub
-  sync                Regenerate the ClawFlows section in AGENTS.md
+  ⚡️ ClawFlows — Superpowers for your OpenClaw agent
 
-Environment:
-  AGENTS_MD           Path to AGENTS.md (default: ~/.openclaw/workspace/AGENTS.md)
+  Usage: clawflows <command> [args]
+
+  Browsing
+    list                 Show all workflows (enabled + available)
+    list enabled         Show only enabled workflows
+    list available       Show only available workflows
+
+  Managing
+    enable <name>        Turn on a workflow
+    disable <name>       Turn off a workflow
+
+  Maintenance
+    update               Pull the latest workflows from GitHub
+    sync                 Refresh your agent's workflow list in AGENTS.md
+    uninstall            Remove clawflows and clean up
+
+  Info
+    help, --help, -h     Show this help
+
+  Examples
+    clawflows list                          See everything
+    clawflows enable send-morning-briefing  Turn on morning briefings
+    clawflows disable check-x               Turn off X/Twitter workflow
+    clawflows update                        Get new workflows
+
+  How it works
+    Workflows live in ~/.openclaw/workspace/clawflows/workflows/
+    • available/  — all workflows from the repo
+    • enabled/    — the ones you've turned on (copied from available)
+
+    When you enable or disable a workflow, your agent's AGENTS.md is
+    updated automatically so it knows what's available.
+
+    Scheduled workflows run automatically via the clawflows-scheduler
+    cron job (set up during install, checks every 15 min).
+
 EOF
-  exit 1
 }
 
 die() { echo "error: $1" >&2; exit 1; }
 
 # Extract a frontmatter field from a WORKFLOW.md file.
-# Usage: get_field <file> <field>
 get_field() {
   local file="$1" field="$2"
   awk -v field="$field" '
@@ -45,7 +72,6 @@ get_field() {
     /^---$/ { in_fm++; next }
     in_fm == 1 && $0 ~ "^" field ":" {
       sub("^" field ":[ ]*", "")
-      # strip surrounding quotes if present
       gsub(/^["'"'"']|["'"'"']$/, "")
       print
       exit
@@ -54,12 +80,30 @@ get_field() {
   ' "$file"
 }
 
+# Build a line for a workflow: emoji + name + description
+_workflow_line() {
+  local dir="$1"
+  local name emoji desc label
+  name="$(basename "$dir")"
+  emoji=""
+  desc=""
+  if [ -f "$dir/WORKFLOW.md" ]; then
+    emoji="$(get_field "$dir/WORKFLOW.md" emoji)"
+    desc="$(get_field "$dir/WORKFLOW.md" description)"
+  fi
+  label="${emoji:+$emoji }$name"
+  if [ -n "$desc" ]; then
+    printf "    %-40s %s" "$label" "$desc"
+  else
+    printf "    %s" "$label"
+  fi
+}
+
 # ── Commands ────────────────────────────────────────────────────────────────
 
 cmd_list() {
-  local name emoji desc found=false
-  local enabled_names=()
-  local available_names=()
+  local filter="${1:-all}"
+  local name found=false
   local enabled_lines=()
   local available_lines=()
 
@@ -67,26 +111,11 @@ cmd_list() {
     [ -d "$dir" ] || continue
     found=true
     name="$(basename "$dir")"
-    emoji=""
-    desc=""
-    if [ -f "$dir/WORKFLOW.md" ]; then
-      emoji="$(get_field "$dir/WORKFLOW.md" emoji)"
-      desc="$(get_field "$dir/WORKFLOW.md" description)"
-    fi
-    local label="${emoji:+$emoji }$name"
 
     if [ -d "$ENABLED_DIR/$name" ]; then
-      if [ -n "$desc" ]; then
-        enabled_lines+=("$(printf "    %-40s %s" "$label" "$desc")")
-      else
-        enabled_lines+=("    $label")
-      fi
+      enabled_lines+=("$(_workflow_line "$dir")")
     else
-      if [ -n "$desc" ]; then
-        available_lines+=("$(printf "    %-40s %s" "$label" "$desc")")
-      else
-        available_lines+=("    $label")
-      fi
+      available_lines+=("$(_workflow_line "$dir")")
     fi
   done
 
@@ -97,27 +126,33 @@ cmd_list() {
     echo "  Make sure clawflows is installed correctly:"
     echo "    curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/install.sh | bash"
     echo ""
-    echo "  Workflows should be in: $AVAILABLE_DIR/"
-    echo ""
     return
   fi
 
-  if [ ${#enabled_lines[@]} -gt 0 ]; then
-    echo ""
-    echo "  Enabled (${#enabled_lines[@]})"
-    echo "  ─────────"
-    for line in "${enabled_lines[@]}"; do
-      echo "$line"
-    done
+  if [ "$filter" = "all" ] || [ "$filter" = "enabled" ]; then
+    if [ ${#enabled_lines[@]} -gt 0 ]; then
+      echo ""
+      echo "  Enabled (${#enabled_lines[@]})"
+      echo "  ─────────"
+      for line in "${enabled_lines[@]}"; do
+        echo "$line"
+      done
+    elif [ "$filter" = "enabled" ]; then
+      echo ""
+      echo "  No workflows enabled yet."
+      echo "  Run 'clawflows list' to see what's available."
+    fi
   fi
 
-  if [ ${#available_lines[@]} -gt 0 ]; then
-    echo ""
-    echo "  Available (${#available_lines[@]})"
-    echo "  ───────────"
-    for line in "${available_lines[@]}"; do
-      echo "$line"
-    done
+  if [ "$filter" = "all" ] || [ "$filter" = "available" ]; then
+    if [ ${#available_lines[@]} -gt 0 ]; then
+      echo ""
+      echo "  Available (${#available_lines[@]})"
+      echo "  ───────────"
+      for line in "${available_lines[@]}"; do
+        echo "$line"
+      done
+    fi
   fi
 
   echo ""
@@ -159,6 +194,54 @@ cmd_update() {
   cmd_sync
 }
 
+cmd_uninstall() {
+  echo ""
+  echo "  This will remove:"
+  echo "    • CLI symlink at $BIN_TARGET"
+  echo "    • ClawFlows section from AGENTS.md"
+  echo "    • Scheduler cron job"
+  echo ""
+  echo "  Your enabled workflows in $ENABLED_DIR/ will NOT be deleted."
+  echo "  The repo at $CLAWFLOWS_DIR/ will NOT be deleted."
+  echo ""
+  printf "  Are you sure? [y/N] "
+  read -r confirm
+  if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
+    echo "  Cancelled."
+    return
+  fi
+
+  # Remove symlink
+  if [ -L "$BIN_TARGET" ]; then
+    rm -f "$BIN_TARGET"
+    echo "  Removed $BIN_TARGET"
+  fi
+
+  # Remove AGENTS.md block
+  if [ -f "$AGENTS_MD" ] && grep -qF "$START_MARKER" "$AGENTS_MD"; then
+    local tmpfile
+    tmpfile="$(mktemp)"
+    awk -v start="$START_MARKER" -v end="$END_MARKER" '
+      $0 == start { skip=1; next }
+      $0 == end   { skip=0; next }
+      !skip       { print }
+    ' "$AGENTS_MD" > "$tmpfile"
+    mv "$tmpfile" "$AGENTS_MD"
+    echo "  Removed ClawFlows section from AGENTS.md"
+  fi
+
+  # Remove scheduler cron
+  if command -v openclaw >/dev/null 2>&1; then
+    openclaw cron remove --name "clawflows-scheduler" </dev/null >/dev/null 2>&1 || true
+    echo "  Removed scheduler cron"
+  fi
+
+  echo ""
+  echo "  Done. To fully remove, also run:"
+  echo "    rm -rf $CLAWFLOWS_DIR"
+  echo ""
+}
+
 cmd_sync() {
   local block
   block="$(_build_block)"
@@ -168,10 +251,8 @@ cmd_sync() {
   fi
 
   if grep -qF "$START_MARKER" "$AGENTS_MD"; then
-    # Replace existing block between markers (inclusive)
     _replace_block "$block"
   else
-    # Append block to end of file
     printf "\n%s\n" "$block" >> "$AGENTS_MD"
   fi
 
@@ -196,7 +277,6 @@ _build_block() {
   lines+=("- **Create new:** See \`$CLAWFLOWS_DIR/docs/creating-workflows.md\`")
   lines+=("")
 
-  # Collect enabled workflows
   local has_enabled=false
   local entries=()
   for dir in "$ENABLED_DIR"/*/; do
@@ -245,13 +325,15 @@ _replace_block() {
 
 # ── Main ────────────────────────────────────────────────────────────────────
 
-[ $# -ge 1 ] || usage
+[ $# -ge 1 ] || { cmd_help; exit 0; }
 
 case "$1" in
-  list)    cmd_list ;;
-  enable)  [ $# -ge 2 ] || die "usage: clawflows enable <name>"; cmd_enable "$2" ;;
-  disable) [ $# -ge 2 ] || die "usage: clawflows disable <name>"; cmd_disable "$2" ;;
-  update)  cmd_update ;;
-  sync)    cmd_sync ;;
-  *)       usage ;;
+  list)      cmd_list "${2:-all}" ;;
+  enable)    [ $# -ge 2 ] || die "usage: clawflows enable <name>"; cmd_enable "$2" ;;
+  disable)   [ $# -ge 2 ] || die "usage: clawflows disable <name>"; cmd_disable "$2" ;;
+  update)    cmd_update ;;
+  uninstall) cmd_uninstall ;;
+  sync)      cmd_sync ;;
+  help|--help|-h) cmd_help ;;
+  *)         cmd_help ;;
 esac
