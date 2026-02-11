@@ -141,9 +141,38 @@ That's it.
 | 🔕 [process-notifications](workflows/available/process-notifications/) | Audits macOS notification settings, identifies noisy apps, suggests silencing |
 | 🔖 [sync-bookmarks](workflows/available/sync-bookmarks/) | Checks bookmarks for dead links, removes duplicates, organizes by topic |
 
+## How to Use
+
+Once installed, just talk to your agent naturally:
+
+```
+"Run my morning briefing"
+"Check my calendar for conflicts"
+"Turn on sleep mode"
+"Process my email"
+```
+
+Or use the CLI to manage workflows directly:
+
+```bash
+# See what's available
+clawflows list
+
+# Enable a workflow
+clawflows enable send-morning-briefing
+
+# Disable one you don't need
+clawflows disable check-x
+
+# Get the latest workflows
+clawflows update
+```
+
+When you enable a workflow, your agent automatically knows about it — no restart needed.
+
 ## Scheduling
 
-Workflows run on autopilot from the schedule in the WORKFLOW.MD file - no manual trigger needed!
+Workflows run on autopilot from the schedule in the WORKFLOW.md file — no manual trigger needed!
 
 ```yaml
 schedule: "8am, 6pm"
@@ -163,9 +192,13 @@ Share yours with the community via pull request, or keep personal workflows priv
 | Command | What it does |
 |---------|-------------|
 | `clawflows list` | See all workflows and what's enabled |
+| `clawflows list enabled` | Show only enabled workflows |
+| `clawflows list available` | Show only available workflows |
 | `clawflows enable <name>` | Turn on a workflow |
 | `clawflows disable <name>` | Turn off a workflow |
-| `clawflows sync` | Refresh your agent's workflow list |
+| `clawflows update` | Pull the latest workflows from GitHub |
+| `clawflows sync` | Refresh your agent's workflow list in AGENTS.md |
+| `clawflows uninstall` | Remove clawflows and clean up |
 
 ## License
 
