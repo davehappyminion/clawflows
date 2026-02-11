@@ -12,6 +12,15 @@ Give your [OpenClaw](https://github.com/openclaw/openclaw) agent ⚡️ superpow
 - 🎯 **Prep for my meeting** — Attendees researched, history pulled, talking points written. Ready before you are.
 - 🔨 **Build something while I sleep** — Picks an idea, builds it overnight, hands you a finished project in the morning.
 
+## Get Started
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/install.sh | bash
+clawflows enable check-repos
+```
+
+That's it. Tell your agent to run it. Run `clawflows list` to see everything available.
+
 ## The Essentials Pack
 
 13 workflows that automate your entire day — from wake to sleep.
@@ -31,15 +40,6 @@ Give your [OpenClaw](https://github.com/openclaw/openclaw) agent ⚡️ superpow
 | 11 | 🧍 [build-standup](workflows/available/build-standup/) | 9am | Auto-generate standup from git + tasks |
 | 12 | 🌆 [send-daily-wrap](workflows/available/send-daily-wrap/) | 9pm | What you accomplished, what's pending, tomorrow preview |
 | 13 | 😴 [send-bedtime-reminder](workflows/available/send-bedtime-reminder/) | 10pm | Tomorrow's first event, sleep math, wind-down nudge |
-
-## Get Started
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/install.sh | bash
-clawflows enable check-repos
-```
-
-That's it. Tell your agent to run it. Run `clawflows list` to see everything available.
 
 ## All Workflows
 
