@@ -12,8 +12,6 @@ One install. Your agent learns to:
 - **"Prep for my meeting"** — Research every attendee, pull conversation history, and generate talking points. Ready before you join the call.
 - **"Build something while I sleep"** — Your agent picks an idea from a queue and builds a working project overnight. You wake up to a finished tool.
 
-These aren't prompts you hope work. They're tested runbooks your agent executes reliably, every time. No crossed fingers required.
-
 ## The Daily Rhythm
 
 13 workflows that automate your entire day — from wake to sleep.
