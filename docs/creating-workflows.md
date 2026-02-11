@@ -9,8 +9,6 @@ Each workflow is a folder with a `WORKFLOW.md` and optional scripts:
 ```
 my-workflow/
 ├── WORKFLOW.md          # Instructions (frontmatter + steps)
-├── config.example.env   # Example config (commit this)
-├── config.env           # Your config (gitignored)
 └── scripts/             # Optional automation scripts
     └── run.sh
 ```
@@ -101,30 +99,18 @@ Workflow names start with a verb. Pick from these six:
 
 ## Workflows with Scripts
 
-For workflows that automate hardware or external services, include a `scripts/run.sh`:
+For workflows that need shell commands, include a `scripts/run.sh`:
 
 ```bash
 #!/usr/bin/env bash
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-[ -f "$SCRIPT_DIR/../config.env" ] && source "$SCRIPT_DIR/../config.env"
+set -e
 
-echo "Activating Sleep Mode..."
+echo "Running workflow..."
 
 # Your commands here
-openhue set room "$ROOM" --off
-echo "Done: Lights off"
 
-echo "Sleep Mode active. Good night!"
+echo "Done!"
 ```
-
-Add a `config.example.env` with placeholder values so users know what to configure:
-
-```
-ROOM=Living room
-SPEAKER=Living Room Speaker
-```
-
-Users copy it to `config.env` (which is gitignored) and fill in their values. The script sources it automatically.
 
 ## Agent-Only Workflows
 
@@ -150,14 +136,14 @@ Report what you found.
 
 ## Adding Your Workflow
 
-### To the community (available/)
+### To the community
 
-1. Create your workflow folder in `available/`
+1. Create your workflow folder in `workflows/available/`
 2. Submit a pull request
 
-### For personal use (enabled/)
+### For personal use
 
-1. Create your workflow folder directly in `enabled/`
+1. Create your workflow folder in `workflows/enabled/`
 2. It's gitignored, so it stays local
 
 ## Tips

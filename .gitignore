@@ -1,4 +1,3 @@
-config.env
 workflows/enabled/*
 !workflows/enabled/.gitkeep
 system/runs/

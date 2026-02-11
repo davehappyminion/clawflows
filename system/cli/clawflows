@@ -81,12 +81,6 @@ cmd_enable() {
   fi
   cp -r "$AVAILABLE_DIR/$name" "$ENABLED_DIR/$name"
   echo "enabled: $name"
-
-  # If there's a config.example.env but no config.env, remind the user
-  if [ -f "$ENABLED_DIR/$name/config.example.env" ] && [ ! -f "$ENABLED_DIR/$name/config.env" ]; then
-    echo "  note: copy config.example.env to config.env and fill in your values"
-  fi
-
   cmd_sync
 }
 

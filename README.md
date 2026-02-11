@@ -101,18 +101,6 @@ That's it. Tell your agent to run it. Run `clawflows list` to see everything ava
 | 🔕 [process-notifications](workflows/available/process-notifications/) | Audits macOS notification settings, identifies noisy apps, suggests silencing |
 | 🔖 [sync-bookmarks](workflows/available/sync-bookmarks/) | Checks bookmarks for dead links, removes duplicates, organizes by topic |
 
-## Configuration
-
-Some workflows need setup — smart home devices, messaging tokens, API keys. After enabling:
-
-```bash
-cd ~/.clawflows/workflows/enabled/activate-sleep-mode
-cp config.example.env config.env
-# Edit config.env with your values
-```
-
-Workflows that need config will tell you when you enable them.
-
 ## Scheduling
 
 Workflows with a `schedule` field in their frontmatter run automatically. The installer sets up a cron that checks every 15 minutes.
