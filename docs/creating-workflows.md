@@ -23,6 +23,7 @@ The only required file is `WORKFLOW.md`. Scripts and config are optional — mos
 name: send-morning-briefing
 emoji: ☀️
 description: Daily morning briefing — gathers weather, calendar, priorities, and news into one summary.
+author: nikilster @nikil
 schedule: "7am"
 requires:
   - name: calendar
@@ -50,8 +51,23 @@ Send the briefing to the user's preferred channel.
 | `name` | Yes | Matches the folder name. Lowercase, hyphenated, verb-first. |
 | `emoji` | No | Single emoji for display. |
 | `description` | Yes | What it does — a plain description the agent can match on. |
+| `author` | No | Who made it. GitHub username and/or X handle, space-separated. |
 | `schedule` | No | When to run automatically. Omit for on-demand only. |
 | `requires` | No | Skills and tools needed. Each has a `name` and `description`. |
+
+### The `author` Field
+
+Credit yourself with your GitHub username, X handle, or both:
+
+```yaml
+author: nikilster              # GitHub only
+author: @nikil                 # X only
+author: nikilster @nikil       # Both
+```
+
+- No `@` → links to `github.com/username`
+- With `@` → links to `x.com/handle`
+- Space-separated if you want both
 
 ### Writing Good Descriptions
 
