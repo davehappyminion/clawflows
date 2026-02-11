@@ -32,21 +32,14 @@ One install. Your agent learns to:
 | 12 | 🌆 [send-daily-wrap](available/send-daily-wrap/) | 9pm | What you accomplished, what's pending, tomorrow preview |
 | 13 | 😴 [send-bedtime-reminder](available/send-bedtime-reminder/) | 10pm | Tomorrow's first event, sleep math, wind-down nudge |
 
-## Install
+## Get Started
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/install.sh | bash
-```
-
-Then enable your first workflow:
-
-```bash
 clawflows enable check-repos
 ```
 
-Tell your agent to run it — it scans every git repo on your machine for uncommitted changes, stale branches, and unpushed commits. No API keys, no config — just works.
-
-Run `clawflows list` to see all 33.
+That's it. Tell your agent to run it. Run `clawflows list` to see everything available.
 
 ## All Workflows
 
