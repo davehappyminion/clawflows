@@ -16,10 +16,9 @@ Give your [OpenClaw](https://github.com/openclaw/openclaw) agent ⚡️ superpow
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/install.sh | bash
-clawflows enable check-repos
 ```
 
-That's it. Tell your agent to run it. Run `clawflows list` to see everything available.
+That's it. Run `clawflows list` to see everything available.
 
 ## The Essentials Pack
 
