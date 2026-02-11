@@ -7,7 +7,7 @@ set -euo pipefail
 #   2. bash install.sh  (already cloned)
 
 REPO_URL="https://github.com/davehappyminion/clawflows.git"
-INSTALL_DIR="$HOME/.clawflows"
+INSTALL_DIR="$HOME/.openclaw/workspace/clawflows"
 BIN_DIR="$HOME/.local/bin"
 BIN_TARGET="$BIN_DIR/clawflows"
 
