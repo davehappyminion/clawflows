@@ -20,9 +20,9 @@ curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/syst
 
 That's it.
 
-## The Essentials Pack
+## The Essentials
 
-13 workflows that automate your entire day — from wake to sleep.
+13 workflows that automate your entire day
 
 | | Workflow | When | What it does |
 |---|----------|------|--------------|
