@@ -4,12 +4,17 @@ How to build your own ClawFlows workflow.
 
 ## Workflow Structure
 
-Each workflow is a folder with a `WORKFLOW.md` and optional scripts:
+Each workflow is a folder with a `WORKFLOW.md` and optional supporting files:
 
 ```
 my-workflow/
-└── WORKFLOW.md          # Instructions (frontmatter + steps)
+├── WORKFLOW.md          # Instructions (frontmatter + steps)
+├── config.env           # Optional: environment variables
+└── scripts/             # Optional: helper scripts
+    └── do-thing.sh
 ```
+
+The only required file is `WORKFLOW.md`. Scripts and config are optional — most workflows don't need them.
 
 ## WORKFLOW.md Format
 
@@ -128,6 +133,54 @@ Report what you found.
 
 1. Create your workflow folder in `workflows/enabled/`
 2. It's gitignored, so it stays local
+
+## Optional: Config Files
+
+If your workflow needs user-specific settings, add a `config.env`:
+
+```bash
+# config.env
+EMAIL=user@example.com
+SLACK_CHANNEL=#general
+```
+
+Reference it in your workflow:
+
+```markdown
+## 1. Load Config
+
+Source the config file:
+` ` `bash
+source config.env
+` ` `
+```
+
+The agent will prompt users to fill in their values when they enable the workflow.
+
+## Optional: Scripts
+
+For complex logic, add helper scripts in a `scripts/` folder:
+
+```
+my-workflow/
+├── WORKFLOW.md
+└── scripts/
+    ├── fetch-data.sh
+    └── process.py
+```
+
+Reference them in your workflow:
+
+```markdown
+## 2. Fetch Data
+
+Run the fetch script:
+` ` `bash
+./scripts/fetch-data.sh
+` ` `
+```
+
+Keep scripts simple and well-commented. The agent will execute them as instructed.
 
 ## Tips
 
