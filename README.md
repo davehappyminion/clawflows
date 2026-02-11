@@ -4,7 +4,7 @@
   <img src="docs/header.png" alt="ClawFlows" width="100%" />
 </p>
 
-Ready-to-use workflows for your [OpenClaw](https://github.com/openclaw/openclaw) agent. Install once, then:
+Give your [OpenClaw](https://github.com/openclaw/openclaw) agent superpowers in 10 seconds.
 
 - 🛏️ **Sleep mode** — Every light off, music stopped, thermostat down, bedroom fan on. One command. Five systems. Done.
 - 📧 **Check my email** — Junk unsubscribed, noise archived, important stuff summarized. Your inbox, handled.
