@@ -12,7 +12,7 @@ Give your [OpenClaw](https://github.com/openclaw/openclaw) agent ⚡️ superpow
 - 🎯 **Prep for my meeting** — Attendees researched, history pulled, talking points written. Ready before you are.
 - 🔨 **Build something while I sleep** — Picks an idea, builds it overnight, hands you a finished project in the morning.
 
-## The Daily Rhythm
+## The Essentials Pack
 
 13 workflows that automate your entire day — from wake to sleep.
 
