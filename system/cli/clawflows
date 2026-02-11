@@ -57,24 +57,36 @@ get_field() {
 # ── Commands ────────────────────────────────────────────────────────────────
 
 cmd_list() {
-  local name status found=false
+  local name emoji desc found=false
+  local enabled_names=()
+  local available_names=()
+  local enabled_lines=()
+  local available_lines=()
+
   for dir in "$AVAILABLE_DIR"/*/; do
     [ -d "$dir" ] || continue
     found=true
     name="$(basename "$dir")"
-    if [ -d "$ENABLED_DIR/$name" ]; then
-      status="enabled"
-    else
-      status="disabled"
-    fi
-    local desc=""
+    emoji=""
+    desc=""
     if [ -f "$dir/WORKFLOW.md" ]; then
+      emoji="$(get_field "$dir/WORKFLOW.md" emoji)"
       desc="$(get_field "$dir/WORKFLOW.md" description)"
     fi
-    if [ -n "$desc" ]; then
-      printf "  %-8s  %-35s  %s\n" "$status" "$name" "$desc"
+    local label="${emoji:+$emoji }$name"
+
+    if [ -d "$ENABLED_DIR/$name" ]; then
+      if [ -n "$desc" ]; then
+        enabled_lines+=("$(printf "    %-40s %s" "$label" "$desc")")
+      else
+        enabled_lines+=("    $label")
+      fi
     else
-      printf "  %-8s  %s\n" "$status" "$name"
+      if [ -n "$desc" ]; then
+        available_lines+=("$(printf "    %-40s %s" "$label" "$desc")")
+      else
+        available_lines+=("    $label")
+      fi
     fi
   done
 
@@ -87,11 +99,30 @@ cmd_list() {
     echo ""
     echo "  Workflows should be in: $AVAILABLE_DIR/"
     echo ""
-  else
-    echo ""
-    echo "  Enable a workflow:  clawflows enable <name>"
-    echo "  Disable a workflow: clawflows disable <name>"
+    return
   fi
+
+  if [ ${#enabled_lines[@]} -gt 0 ]; then
+    echo ""
+    echo "  Enabled (${#enabled_lines[@]})"
+    echo "  ─────────"
+    for line in "${enabled_lines[@]}"; do
+      echo "$line"
+    done
+  fi
+
+  if [ ${#available_lines[@]} -gt 0 ]; then
+    echo ""
+    echo "  Available (${#available_lines[@]})"
+    echo "  ───────────"
+    for line in "${available_lines[@]}"; do
+      echo "$line"
+    done
+  fi
+
+  echo ""
+  echo "  clawflows enable <name>    Turn on a workflow"
+  echo "  clawflows disable <name>   Turn off a workflow"
 }
 
 cmd_enable() {
