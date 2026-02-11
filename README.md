@@ -32,12 +32,6 @@ One install. Your agent learns to:
 | 12 | 🌆 [send-daily-wrap](available/send-daily-wrap/) | 9pm | What you accomplished, what's pending, tomorrow preview |
 | 13 | 😴 [send-bedtime-reminder](available/send-bedtime-reminder/) | 10pm | Tomorrow's first event, sleep math, wind-down nudge |
 
-```
-MORNING     ✨ inspiration → ☀️ briefing → 📅 calendar → ✅ tasks → 📰 news → 🧍 standup
-MIDDAY      🎯 meeting-prep → 📧 email → 🔔 follow-ups → 💬 messages → 🐦 X
-EVENING     🌆 daily-wrap → 😴 bedtime-reminder
-```
-
 Enable them all at once:
 ```bash
 clawflows enable send-morning-inspiration send-morning-briefing check-calendar triage-tasks send-news-digest build-meeting-prep process-email check-follow-ups check-messages check-x build-standup send-daily-wrap send-bedtime-reminder
