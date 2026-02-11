@@ -103,33 +103,28 @@ That's it. Tell your agent to run it. Run `clawflows list` to see everything ava
 
 ## Scheduling
 
-Workflows with a `schedule` field in their frontmatter run automatically. The installer sets up a cron that checks every 15 minutes.
+Workflows can run on autopilot. Add a schedule and they'll run themselves — no manual trigger needed.
 
 ```yaml
-# Example: runs at 7am and 6pm daily
 schedule: "8am, 6pm"
 ```
 
-The scheduler is flexible — it understands `"7am"`, `"every 2 hours"`, `"morning"`, etc.
+You can use plain English: `"7am"`, `"every 2 hours"`, `"morning"`, etc.
 
 ## Creating Your Own
 
-See [docs/creating-workflows.md](docs/creating-workflows.md) for the full guide — format, naming, scripts, and configuration.
+Want to build a custom workflow? See [docs/creating-workflows.md](docs/creating-workflows.md) for the full guide.
 
-Community workflows go in `workflows/available/` via pull request. Personal workflows go in `workflows/enabled/` (it's gitignored).
+Share yours with the community via pull request, or keep personal workflows private in `workflows/enabled/` (it's gitignored).
 
-Workflows follow the [Agent Skills](https://agentskills.io) format, so they work with Claude Code, OpenClaw, and any agent that supports the spec.
-
-## CLI Reference
+## CLI
 
 | Command | What it does |
 |---------|-------------|
-| `clawflows list` | Show all workflows with enabled/disabled status |
-| `clawflows enable <name>` | Enable a workflow and update AGENTS.md |
-| `clawflows disable <name>` | Disable a workflow and update AGENTS.md |
-| `clawflows sync` | Regenerate the ClawFlows section in AGENTS.md |
-
-When you enable a workflow, the CLI updates your agent's `AGENTS.md` so it discovers workflows automatically at startup. Set `AGENTS_MD` to override the default path (`~/.openclaw/workspace/AGENTS.md`).
+| `clawflows list` | See all workflows and what's enabled |
+| `clawflows enable <name>` | Turn on a workflow |
+| `clawflows disable <name>` | Turn off a workflow |
+| `clawflows sync` | Refresh your agent's workflow list |
 
 ## License
 
