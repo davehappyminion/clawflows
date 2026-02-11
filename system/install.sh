@@ -92,14 +92,14 @@ if command -v openclaw >/dev/null 2>&1; then
   info "Setting up scheduler (runs every 15 min)"
 
   # Remove existing scheduler if present
-  openclaw cron remove --name "clawflows-scheduler" </dev/null 2>/dev/null || true
+  openclaw cron remove --name "clawflows-scheduler" </dev/null >/dev/null 2>&1 || true
 
   openclaw cron add \
     --name "clawflows-scheduler" \
     --cron "*/15 * * * *" \
     --session isolated \
     --message "Read and execute $INSTALL_DIR/system/scheduler.md" \
-    --no-deliver </dev/null
+    --no-deliver </dev/null >/dev/null 2>&1
 
   ok "Scheduler cron added"
 else
