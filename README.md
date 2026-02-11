@@ -4,7 +4,7 @@
   <img src="assets/header.png" alt="ClawFlows" width="100%" />
 </p>
 
-33 ready-to-use workflows for [OpenClaw](https://github.com/openclaw/openclaw). One install, and your agent learns to:
+One install. Your agent learns to:
 
 - **"Sleep mode"** — Turn off every light, stop the music, drop the thermostat, flip on the bedroom fan. One command, five systems, zero fumbling with apps.
 - **"Check my email"** — Auto-unsubscribe from junk, archive the noise, and get a clean summary of what actually needs your attention.
