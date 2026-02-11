@@ -1,6 +1,6 @@
 ---
 name: summarize-podcasts
-emoji: "\U0001F3A7"
+emoji: 🎧
 description: Transcribe a podcast episode and deliver key takeaways with timestamps for the interesting parts. Paste a URL or provide an audio file.
 ---
 

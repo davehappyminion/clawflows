@@ -1,6 +1,6 @@
 ---
 name: backup-photos
-emoji: "\U0001F4F7"
+emoji: 📷
 description: Organize and deduplicate photos from Desktop, Downloads, and common locations. Sort by date, separate screenshots from real photos, identify duplicates. Always asks before deleting.
 ---
 

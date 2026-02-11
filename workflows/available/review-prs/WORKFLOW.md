@@ -1,6 +1,6 @@
 ---
 name: review-prs
-emoji: "\U0001F4CB"
+emoji: 📋
 description: Daily PR hygiene — scans open PRs across GitHub repos for stale reviews, new comments, merge-ready approvals, and CI failures.
 schedule: "9am"
 ---

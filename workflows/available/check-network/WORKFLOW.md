@@ -1,6 +1,6 @@
 ---
 name: check-network
-emoji: "\U0001F310"
+emoji: 🌐
 description: Home network scan — discovers connected devices, checks internet speed, verifies DNS and VPN status, and flags unknown or new devices.
 schedule: "8am"
 ---
