@@ -102,7 +102,7 @@ That's it.
 
 ## Scheduling
 
-Workflows can run on autopilot. Add a schedule and they'll run themselves — no manual trigger needed.
+Workflows run on autopilot from the schedule in the WORKFLOW.MD file - no manual trigger needed!
 
 ```yaml
 schedule: "8am, 6pm"
@@ -110,9 +110,10 @@ schedule: "8am, 6pm"
 
 You can use plain English: `"7am"`, `"every 2 hours"`, `"morning"`, etc.
 
+
 ## Creating Your Own
 
-Want to build a custom workflow? See [docs/creating-workflows.md](docs/creating-workflows.md) for the full guide.
+Build your custom workflow! See [docs/creating-workflows.md](Creating Workflows) for the full guide.
 
 Share yours with the community via pull request, or keep personal workflows private in `workflows/enabled/` (it's gitignored).
 
