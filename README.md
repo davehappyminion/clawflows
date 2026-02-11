@@ -12,13 +12,13 @@ Give your [OpenClaw](https://github.com/openclaw/openclaw) agent ⚡️ superpow
 - 🎯 **Prep for my meeting** — Attendees researched, history pulled, talking points written. Ready before you are.
 - 🔨 **Build something while I sleep** — Picks an idea, builds it overnight, hands you a finished project in the morning.
 
-## Get Started
+## Get Setup In 10 Seconds
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/install.sh | bash
 ```
 
-That's it. Run `clawflows list` to see everything available.
+That's it.
 
 ## The Essentials Pack
 
