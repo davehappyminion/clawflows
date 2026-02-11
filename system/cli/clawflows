@@ -25,6 +25,7 @@ Commands:
   list                Show available workflows and their status
   enable <name>       Enable a workflow (copies from available/ to enabled/)
   disable <name>      Disable a workflow (removes from enabled/)
+  update              Pull the latest workflows from GitHub
   sync                Regenerate the ClawFlows section in AGENTS.md
 
 Environment:
@@ -113,6 +114,17 @@ cmd_disable() {
   fi
   rm -rf "$ENABLED_DIR/$name"
   echo "disabled: $name"
+  cmd_sync
+}
+
+cmd_update() {
+  echo "Updating clawflows..."
+  if git -C "$CLAWFLOWS_DIR" pull --ff-only --quiet 2>/dev/null; then
+    echo "Updated to latest version."
+  else
+    echo "Could not update (offline or local changes). Try: git -C $CLAWFLOWS_DIR pull"
+    return 1
+  fi
   cmd_sync
 }
 
@@ -208,6 +220,7 @@ case "$1" in
   list)    cmd_list ;;
   enable)  [ $# -ge 2 ] || die "usage: clawflows enable <name>"; cmd_enable "$2" ;;
   disable) [ $# -ge 2 ] || die "usage: clawflows disable <name>"; cmd_disable "$2" ;;
+  update)  cmd_update ;;
   sync)    cmd_sync ;;
   *)       usage ;;
 esac
