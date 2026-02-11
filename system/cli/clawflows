@@ -51,9 +51,10 @@ get_field() {
 # ── Commands ────────────────────────────────────────────────────────────────
 
 cmd_list() {
-  local name status
+  local name status found=false
   for dir in "$AVAILABLE_DIR"/*/; do
     [ -d "$dir" ] || continue
+    found=true
     name="$(basename "$dir")"
     if [ -d "$ENABLED_DIR/$name" ]; then
       status="enabled"
@@ -70,6 +71,21 @@ cmd_list() {
       printf "  %-8s  %s\n" "$status" "$name"
     fi
   done
+
+  if ! $found; then
+    echo ""
+    echo "  No workflows found."
+    echo ""
+    echo "  Make sure clawflows is installed correctly:"
+    echo "    curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/install.sh | bash"
+    echo ""
+    echo "  Workflows should be in: $AVAILABLE_DIR/"
+    echo ""
+  else
+    echo ""
+    echo "  Enable a workflow:  clawflows enable <name>"
+    echo "  Disable a workflow: clawflows disable <name>"
+  fi
 }
 
 cmd_enable() {
