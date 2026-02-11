@@ -4,13 +4,13 @@
   <img src="docs/header.png" alt="ClawFlows" width="100%" />
 </p>
 
-One install. Your agent learns to:
+Ready-to-use workflows for your [OpenClaw](https://github.com/openclaw/openclaw) agent. Install once, then:
 
-- **"Sleep mode"** — Turn off every light, stop the music, drop the thermostat, flip on the bedroom fan. One command, five systems, zero fumbling with apps.
-- **"Check my email"** — Auto-unsubscribe from junk, archive the noise, and get a clean summary of what actually needs your attention.
-- **"Morning briefing"** — Wake up to today's weather, your calendar, and anything urgent — delivered before you open your eyes.
-- **"Prep for my meeting"** — Research every attendee, pull conversation history, and generate talking points. Ready before you join the call.
-- **"Build something while I sleep"** — Your agent picks an idea from a queue and builds a working project overnight. You wake up to a finished tool.
+- **"Sleep mode"** — Every light off, music stopped, thermostat down, bedroom fan on. One command. Five systems. Done.
+- **"Check my email"** — Junk unsubscribed, noise archived, important stuff summarized. Your inbox, handled.
+- **"Morning briefing"** — Weather, calendar, priorities, and fires — delivered before you open your eyes.
+- **"Prep for my meeting"** — Attendees researched, history pulled, talking points written. Ready before you are.
+- **"Build something while I sleep"** — Picks an idea, builds it overnight, hands you a finished project in the morning.
 
 ## The Daily Rhythm
 
