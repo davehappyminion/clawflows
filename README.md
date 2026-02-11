@@ -4,35 +4,19 @@
   <img src="assets/header.png" alt="ClawFlows" width="100%" />
 </p>
 
-33 ready-to-use workflows for [OpenClaw](https://github.com/openclaw/openclaw). Say "sleep mode" and every light turns off, the music stops, the thermostat drops, and your bedroom fan kicks on. Say "check my email" and junk gets archived, mailing lists get unsubscribed, and you get a summary of what actually matters. These aren't prompts you hope work — they're tested runbooks your agent executes reliably, every time.
+33 ready-to-use workflows for [OpenClaw](https://github.com/openclaw/openclaw). One install, and your agent learns to:
 
-## Install
+- **"Sleep mode"** — Turn off every light, stop the music, drop the thermostat, flip on the bedroom fan. One command, five systems, zero fumbling with apps.
+- **"Check my email"** — Auto-unsubscribe from junk, archive the noise, and get a clean summary of what actually needs your attention.
+- **"Morning briefing"** — Wake up to today's weather, your calendar, and anything urgent — delivered before you open your eyes.
+- **"Prep for my meeting"** — Research every attendee, pull conversation history, and generate talking points. Ready before you join the call.
+- **"Build something while I sleep"** — Your agent picks an idea from a queue and builds a working project overnight. You wake up to a finished tool.
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/install.sh | bash
-```
-
-## Your First Workflow
-
-Pick something that needs zero config:
-
-```bash
-clawflows enable check-repos
-```
-
-Then tell your agent:
-
-```
-Run the check-repos workflow
-```
-
-It scans every git repo on your machine for uncommitted changes, stale branches, and unpushed commits. No API keys, no setup — just works.
-
-Run `clawflows list` to see all 33.
+These aren't prompts you hope work. They're tested runbooks your agent executes reliably, every time. No crossed fingers required.
 
 ## The Daily Rhythm
 
-13 workflows that automate your entire day — from the moment you wake up to the moment you fall asleep.
+13 workflows that automate your entire day — from wake to sleep.
 
 | | Workflow | When | What it does |
 |---|----------|------|--------------|
@@ -60,6 +44,22 @@ Enable them all at once:
 ```bash
 clawflows enable send-morning-inspiration send-morning-briefing check-calendar triage-tasks send-news-digest build-meeting-prep process-email check-follow-ups check-messages check-x build-standup send-daily-wrap send-bedtime-reminder
 ```
+
+## Install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/install.sh | bash
+```
+
+Then enable your first workflow:
+
+```bash
+clawflows enable check-repos
+```
+
+Tell your agent to run it — it scans every git repo on your machine for uncommitted changes, stale branches, and unpushed commits. No API keys, no config — just works.
+
+Run `clawflows list` to see all 33.
 
 ## All Workflows
 
