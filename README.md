@@ -13,13 +13,25 @@ Some examples:
 - 🎯 **Prep for my meeting** — Attendees researched, history pulled, talking points written. Ready before you are.
 - 🔨 **Build something while I sleep** — Picks an idea, builds it overnight, hands you a finished project in the morning.
 
-## Get Setup In 10 Seconds
+## Get Started
+
+### Option 1: Let your agent do it
+
+Send this message to your OpenClaw agent:
+
+```
+Install ClawFlows by following https://raw.githubusercontent.com/davehappyminion/clawflows/main/setup/agents.md
+```
+
+Your agent will install everything and ask which workflows you want to enable.
+
+### Option 2: Manual install
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/install.sh | bash
 ```
 
-That's it.
+Then enable workflows with `clawflows enable <name>`.
 
 ## The Essentials
 
