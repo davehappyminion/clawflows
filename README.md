@@ -113,7 +113,7 @@ You can use plain English: `"7am"`, `"every 2 hours"`, `"morning"`, etc.
 
 ## Creating Your Own
 
-Build your custom workflow! See [docs/creating-workflows.md](Creating Workflows) for the full guide.
+Build your custom workflow! See [Creating Workflows](docs/creating-workflows.md) for the full guide.
 
 Share yours with the community via pull request, or keep personal workflows private in `workflows/enabled/` (it's gitignored).
 
