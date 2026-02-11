@@ -2,6 +2,7 @@
 name: send-morning-briefing
 emoji: ☀️
 description: Daily morning briefing — gathers weather, calendar, priorities, and urgent items, then delivers a comprehensive summary to start your day.
+author: @davehappyminion
 schedule: "7am"
 ---
 

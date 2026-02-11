@@ -2,6 +2,7 @@
 name: check-dependencies
 emoji: 📦
 description: Weekly supply chain hygiene — scans projects for outdated dependencies, known CVEs, and available updates across npm, pip, cargo, and brew.
+author: @davehappyminion
 schedule: "monday 8am"
 ---
 

@@ -2,6 +2,7 @@
 name: activate-night-mode
 emoji: 🌙
 description: Wind-down mode — dims lights to a warm color, turns off bright switches, and plays sleep music.
+author: @davehappyminion
 ---
 
 # Night Mode

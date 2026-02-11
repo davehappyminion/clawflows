@@ -2,6 +2,7 @@
 name: send-bedtime-reminder
 emoji: 😴
 description: Bedtime reminder — a friendly nudge with tomorrow's schedule, sleep calculation, and wind-down suggestions.
+author: @davehappyminion
 schedule: "10pm"
 ---
 

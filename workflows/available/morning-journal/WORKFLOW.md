@@ -2,6 +2,7 @@
 name: morning-journal
 emoji: 📝
 description: Guided daily journaling — asks 3-5 reflection questions, stores entries in dated markdown files, and surfaces patterns over time.
+author: @davehappyminion
 schedule: "7:30am"
 ---
 

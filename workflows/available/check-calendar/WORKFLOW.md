@@ -2,6 +2,7 @@
 name: check-calendar
 emoji: 📅
 description: Calendar review — scans the next 48 hours for events, detects conflicts, calculates travel time, and generates prep notes for each meeting.
+author: @davehappyminion
 schedule: "8am, 6pm"
 ---
 

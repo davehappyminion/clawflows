@@ -2,6 +2,7 @@
 name: send-weekly-digest
 emoji: 📋
 description: Weekly digest — compiles a week-in-review summary and delivers it via messaging.
+author: @davehappyminion
 ---
 
 # Weekly Digest

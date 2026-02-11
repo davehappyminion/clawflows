@@ -2,6 +2,7 @@
 name: find-deals
 emoji: 🏷️
 description: Deal finder — monitors price drops on wishlist items, checks deal sites and retailer emails, and alerts when something hits the target price.
+author: @davehappyminion
 schedule: "10am"
 ---
 

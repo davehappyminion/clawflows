@@ -2,6 +2,7 @@
 name: curate-reading-list
 emoji: 📚
 description: Scan Hacker News, Reddit, RSS feeds, and newsletters for articles matching your interests. Deduplicate, rank, and deliver a clean reading list every morning.
+author: @davehappyminion
 schedule: "8am"
 ---
 

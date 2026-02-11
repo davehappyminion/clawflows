@@ -2,6 +2,7 @@
 name: process-contacts
 emoji: 📇
 description: Contacts cleanup — deduplicates contacts, flags entries with missing fields, and identifies stale contacts.
+author: @davehappyminion
 ---
 
 # Process Contacts

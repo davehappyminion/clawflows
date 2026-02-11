@@ -2,6 +2,7 @@
 name: plan-meals
 emoji: 🍽️
 description: Weekly meal planner — generates a 7-day meal plan based on dietary preferences, seasonal ingredients, and calendar busyness, then outputs a grocery list.
+author: @davehappyminion
 ---
 
 # Plan Meals

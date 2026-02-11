@@ -2,6 +2,7 @@
 name: send-birthday-reminders
 emoji: 🎂
 description: Birthday and anniversary reminder system — scans contacts and calendar for upcoming celebrations, sends reminders 3 days early with gift ideas and message templates.
+author: @davehappyminion
 schedule: "8am"
 ---
 

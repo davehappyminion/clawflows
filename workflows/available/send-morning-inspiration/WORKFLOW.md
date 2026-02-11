@@ -2,6 +2,7 @@
 name: send-morning-inspiration
 emoji: ✨
 description: Morning inspiration — delivers an uplifting quote to start the day, optionally themed to your goals or current challenges.
+author: @davehappyminion
 schedule: "7am"
 ---
 

@@ -2,6 +2,7 @@
 name: check-messages
 emoji: 💬
 description: Unified message triage — checks Slack, Discord, Telegram, WhatsApp, and other messaging platforms for what needs your attention.
+author: @davehappyminion
 schedule: "9am, 12pm, 3pm, 6pm"
 ---
 

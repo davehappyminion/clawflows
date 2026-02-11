@@ -2,6 +2,7 @@
 name: track-habits
 emoji: 📊
 description: Daily habit tracker — logs exercise, water, reading, meditation, and sleep, then delivers a weekly scorecard with streaks, trends, and encouragement.
+author: @davehappyminion
 schedule: "9pm"
 ---
 

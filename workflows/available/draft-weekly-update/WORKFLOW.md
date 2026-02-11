@@ -2,6 +2,7 @@
 name: draft-weekly-update
 emoji: 📝
 description: Weekly update drafter — compiles the week's work from git commits, completed tasks, and meetings into a polished manager-ready email, formatted and ready to send.
+author: @davehappyminion
 schedule: "friday 4pm"
 ---
 

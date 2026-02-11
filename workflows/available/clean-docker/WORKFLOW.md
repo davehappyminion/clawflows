@@ -2,6 +2,7 @@
 name: clean-docker
 emoji: 🐳
 description: Docker cleanup — prunes dangling images, stopped containers, unused volumes and networks. Shows disk savings. Always asks before deleting.
+author: @davehappyminion
 ---
 
 # Clean Docker

@@ -2,6 +2,7 @@
 name: track-packages
 emoji: 📦
 description: Package tracker — pulls tracking info from order confirmation emails, builds a consolidated status board, and alerts when deliveries are arriving today or running late.
+author: @davehappyminion
 schedule: "8am, 5pm"
 ---
 
