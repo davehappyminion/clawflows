@@ -89,19 +89,18 @@ fi
 # ── 5. Set up scheduler cron ─────────────────────────────────────────────────
 
 if command -v openclaw >/dev/null 2>&1; then
-  info "Setting up scheduler (runs every 15 min)"
-
-  # Remove existing scheduler if present
-  openclaw cron remove --name "clawflows-scheduler" </dev/null >/dev/null 2>&1 || true
-
-  openclaw cron add \
-    --name "clawflows-scheduler" \
-    --cron "*/15 * * * *" \
-    --session isolated \
-    --message "Read and execute $INSTALL_DIR/system/scheduler.md" \
-    --no-deliver </dev/null >/dev/null 2>&1
-
-  ok "Scheduler cron added"
+  if openclaw cron list </dev/null 2>/dev/null | grep -q "clawflows-scheduler"; then
+    ok "Scheduler already set up"
+  else
+    info "Setting up scheduler (runs every 15 min)"
+    openclaw cron add \
+      --name "clawflows-scheduler" \
+      --cron "*/15 * * * *" \
+      --session isolated \
+      --message "Read and execute $INSTALL_DIR/system/scheduler.md" \
+      --no-deliver </dev/null >/dev/null 2>&1
+    ok "Scheduler cron added"
+  fi
 else
   warn "openclaw not found — skipping scheduler setup"
   warn "Run 'openclaw cron add' manually to enable scheduled workflows"
