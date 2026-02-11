@@ -8,9 +8,7 @@ Each workflow is a folder with a `WORKFLOW.md` and optional scripts:
 
 ```
 my-workflow/
-├── WORKFLOW.md          # Instructions (frontmatter + steps)
-└── scripts/             # Optional automation scripts
-    └── run.sh
+└── WORKFLOW.md          # Instructions (frontmatter + steps)
 ```
 
 ## WORKFLOW.md Format
@@ -97,24 +95,9 @@ Workflow names start with a verb. Pick from these six:
 | **send** | Deliver output to someone | `send-morning-briefing`, `send-report` |
 | **sync** | Reconcile data between systems | `sync-dotfiles`, `sync-calendar` |
 
-## Workflows with Scripts
+## Workflow Content
 
-For workflows that need shell commands, include a `scripts/run.sh`:
-
-```bash
-#!/usr/bin/env bash
-set -e
-
-echo "Running workflow..."
-
-# Your commands here
-
-echo "Done!"
-```
-
-## Agent-Only Workflows
-
-For workflows that don't need scripts — where the agent follows instructions directly — just include a `WORKFLOW.md` with numbered steps and embedded commands:
+Write clear, numbered steps the agent can follow:
 
 ```markdown
 ## 1. Fetch Data

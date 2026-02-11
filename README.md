@@ -35,7 +35,7 @@ Ready-to-use workflows for your [OpenClaw](https://github.com/openclaw/openclaw)
 ## Get Started
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/openclaw/clawflows/main/system/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/install.sh | bash
 clawflows enable check-repos
 ```
 

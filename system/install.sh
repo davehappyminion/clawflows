@@ -6,7 +6,7 @@ set -euo pipefail
 #   1. curl | bash  (clones the repo)
 #   2. bash install.sh  (already cloned)
 
-REPO_URL="https://github.com/openclaw/clawflows.git"
+REPO_URL="https://github.com/davehappyminion/clawflows.git"
 INSTALL_DIR="$HOME/.clawflows"
 BIN_DIR="$HOME/.local/bin"
 BIN_TARGET="$BIN_DIR/clawflows"
