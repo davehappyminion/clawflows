@@ -6,7 +6,7 @@ set -euo pipefail
 #   1. curl | bash  (clones the repo)
 #   2. bash install.sh  (already cloned)
 
-REPO_URL="https://github.com/davehappyminion/clawflows.git"
+REPO_URL="https://github.com/openclaw/clawflows.git"
 INSTALL_DIR="$HOME/.clawflows"
 BIN_DIR="$HOME/.local/bin"
 BIN_TARGET="$BIN_DIR/clawflows"
@@ -38,7 +38,13 @@ else
   ok "Cloned"
 fi
 
-# ── 2. Symlink the CLI ──────────────────────────────────────────────────────
+# ── 2. Create directories ───────────────────────────────────────────────────
+
+mkdir -p "$INSTALL_DIR/workflows/enabled"
+mkdir -p "$INSTALL_DIR/system/runs"
+ok "Created directories"
+
+# ── 3. Symlink the CLI ──────────────────────────────────────────────────────
 
 mkdir -p "$BIN_DIR"
 
@@ -46,10 +52,10 @@ if [ -L "$BIN_TARGET" ] || [ -e "$BIN_TARGET" ]; then
   rm -f "$BIN_TARGET"
 fi
 
-ln -s "$INSTALL_DIR/bin/clawflows" "$BIN_TARGET"
+ln -s "$INSTALL_DIR/system/cli/clawflows" "$BIN_TARGET"
 ok "Linked clawflows → $BIN_TARGET"
 
-# ── 3. Ensure ~/.local/bin is in PATH ────────────────────────────────────────
+# ── 4. Ensure ~/.local/bin is in PATH ────────────────────────────────────────
 
 path_ok=false
 case ":${PATH}:" in
@@ -80,7 +86,28 @@ else
   ok "$BIN_DIR is already in PATH"
 fi
 
-# ── 4. Initial sync ─────────────────────────────────────────────────────────
+# ── 5. Set up scheduler cron ─────────────────────────────────────────────────
+
+if command -v openclaw >/dev/null 2>&1; then
+  info "Setting up scheduler (runs every 15 min)"
+
+  # Remove existing scheduler if present
+  openclaw cron remove --name "clawflows-scheduler" 2>/dev/null || true
+
+  openclaw cron add \
+    --name "clawflows-scheduler" \
+    --cron "*/15 * * * *" \
+    --session isolated \
+    --message "Read and execute $INSTALL_DIR/system/scheduler.md" \
+    --no-deliver
+
+  ok "Scheduler cron added"
+else
+  warn "openclaw not found — skipping scheduler setup"
+  warn "Run 'openclaw cron add' manually to enable scheduled workflows"
+fi
+
+# ── 6. Initial sync ─────────────────────────────────────────────────────────
 
 AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
 
@@ -92,7 +119,7 @@ else
   info "Skipping AGENTS.md sync (file not found at $AGENTS_MD)"
 fi
 
-# ── 5. Done ──────────────────────────────────────────────────────────────────
+# ── 7. Done ──────────────────────────────────────────────────────────────────
 
 echo ""
 echo "  Done! Get started:"

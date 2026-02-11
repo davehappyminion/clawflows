@@ -2,10 +2,10 @@
 set -euo pipefail
 
 # ── Config ──────────────────────────────────────────────────────────────────
-CLAWFLOWS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+CLAWFLOWS_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
-AVAILABLE_DIR="$CLAWFLOWS_DIR/available"
-ENABLED_DIR="$CLAWFLOWS_DIR/enabled"
+AVAILABLE_DIR="$CLAWFLOWS_DIR/workflows/available"
+ENABLED_DIR="$CLAWFLOWS_DIR/workflows/enabled"
 
 START_MARKER="<!-- clawflows:start -->"
 END_MARKER="<!-- clawflows:end -->"
@@ -134,7 +134,7 @@ _build_block() {
   lines+=("- **List:** \`clawflows list\`")
   lines+=("- **Enable:** \`clawflows enable <name>\` (then edit \`config.env\` if needed)")
   lines+=("- **Disable:** \`clawflows disable <name>\`")
-  lines+=("- **Browse available:** \`ls $CLAWFLOWS_DIR/available/\`")
+  lines+=("- **Browse available:** \`ls $CLAWFLOWS_DIR/workflows/available/\`")
   lines+=("- **Create new:** See \`$CLAWFLOWS_DIR/docs/creating-workflows.md\`")
   lines+=("")
 
@@ -149,7 +149,7 @@ _build_block() {
     wf_file="$dir/WORKFLOW.md"
     [ -f "$wf_file" ] || continue
     desc="$(get_field "$wf_file" description)"
-    entries+=("- $name: $desc → follow $CLAWFLOWS_DIR/enabled/$name/WORKFLOW.md")
+    entries+=("- $name: $desc → follow $CLAWFLOWS_DIR/workflows/enabled/$name/WORKFLOW.md")
     has_enabled=true
   done
 
