@@ -2,7 +2,12 @@
 set -euo pipefail
 
 # ── Config ──────────────────────────────────────────────────────────────────
-CLAWFLOWS_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+# Resolve symlinks so this works when called via ~/.local/bin/clawflows
+SELF="$0"
+if [ -L "$SELF" ]; then
+  SELF="$(readlink "$SELF")"
+fi
+CLAWFLOWS_DIR="$(cd "$(dirname "$SELF")/../.." && pwd)"
 AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
 AVAILABLE_DIR="$CLAWFLOWS_DIR/workflows/available"
 ENABLED_DIR="$CLAWFLOWS_DIR/workflows/enabled"
