@@ -22,7 +22,7 @@ Some examples:
 Send this message to your OpenClaw agent:
 
 ```
-Install ClawFlows by following https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/AGENT.md
+Install ClawFlows by following https://raw.githubusercontent.com/davehappyminion/clawflows/stem/AGENT.md
 ```
 
 Your agent will install everything and ask which workflows you want to enable.
@@ -37,7 +37,7 @@ Then enable workflows with `clawflows enable <name>`.
 
 <br>
 
-## 🙌 The Essentials
+## 🙌 Starter Pack: The Essentials
 
 | | Workflow | When | What it does |
 |---|----------|------|--------------|
