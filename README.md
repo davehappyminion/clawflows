@@ -20,7 +20,7 @@ Some examples:
 Send this message to your OpenClaw agent:
 
 ```
-Install ClawFlows by following https://raw.githubusercontent.com/davehappyminion/clawflows/main/setup/agents.md
+Install ClawFlows by following https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/AGENT.md
 ```
 
 Your agent will install everything and ask which workflows you want to enable.
@@ -35,23 +35,12 @@ Then enable workflows with `clawflows enable <name>`.
 
 ## The Essentials
 
-13 workflows that automate your entire day
-
 | | Workflow | When | What it does |
 |---|----------|------|--------------|
 | 1 | ✨ [send-morning-inspiration](workflows/available/send-morning-inspiration/) | 7am | Inspirational quote themed to your goals |
 | 2 | ☀️ [send-morning-briefing](workflows/available/send-morning-briefing/) | 7am | Weather, calendar, priorities, overnight alerts |
-| 3 | 📅 [check-calendar](workflows/available/check-calendar/) | Morning + evening | 48-hour radar with conflicts and prep notes |
-| 4 | ✅ [triage-tasks](workflows/available/triage-tasks/) | Morning | What's due, what's overdue, top 3 priorities |
-| 5 | 📰 [send-news-digest](workflows/available/send-news-digest/) | Morning or evening | Curated news on topics you care about |
-| 6 | 🎯 [build-meeting-prep](workflows/available/build-meeting-prep/) | Before calls | Attendee context, history, talking points |
-| 7 | 📧 [process-email](workflows/available/process-email/) | 2-3x/day | Auto-unsubscribe, archive junk, summarize important |
-| 8 | 🔔 [check-follow-ups](workflows/available/check-follow-ups/) | Daily | Unanswered emails, promises you made, balls about to drop |
-| 9 | 💬 [check-messages](workflows/available/check-messages/) | Ongoing | Unified Slack, Discord, Telegram, WhatsApp triage |
-| 10 | 🐦 [check-x](workflows/available/check-x/) | 1-2x/day | Mentions, DMs, engagement, content |
-| 11 | 🧍 [build-standup](workflows/available/build-standup/) | 9am | Auto-generate standup from git + tasks |
-| 12 | 🌆 [send-daily-wrap](workflows/available/send-daily-wrap/) | 9pm | What you accomplished, what's pending, tomorrow preview |
-| 13 | 😴 [send-bedtime-reminder](workflows/available/send-bedtime-reminder/) | 10pm | Tomorrow's first event, sleep math, wind-down nudge |
+| 3 | 📧 [process-email](workflows/available/process-email/) | 2-3x/day | Auto-unsubscribe, archive junk, summarize important |
+| 4 | 📅 [check-calendar](workflows/available/check-calendar/) | Morning + evening | 48-hour radar with conflicts and prep notes |
 
 ## All Workflows
 
