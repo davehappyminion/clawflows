@@ -120,3 +120,86 @@ Summarize what was set up:
 - Tell them `clawflows list` shows everything available if they want more later
 
 That's it. They're ready to go.
+
+---
+
+# ClawFlows — Agent Reference
+
+Everything below is for ongoing use after installation. Refer to this whenever your human asks about workflows.
+
+## CLI Commands
+
+```bash
+# See all workflows (enabled + available)
+clawflows list
+
+# See only what's currently enabled
+clawflows list enabled
+
+# See what's available but not yet enabled
+clawflows list available
+
+# Turn on a workflow
+clawflows enable <name>
+
+# Turn off a workflow
+clawflows disable <name>
+
+# Pull the latest workflows from GitHub (new workflows, updates)
+clawflows update
+
+# Refresh the workflow list in AGENTS.md after manual changes
+clawflows sync
+
+# Remove clawflows entirely (symlink, AGENTS.md block, scheduler)
+clawflows uninstall
+
+# Show help
+clawflows help
+```
+
+## Running a Workflow
+
+When the user asks you to run a workflow:
+
+1. Check if it's enabled: `clawflows list enabled`
+2. If not enabled, enable it first: `clawflows enable <name>`
+3. Read the workflow instructions: `~/.openclaw/workspace/clawflows/workflows/enabled/<name>/WORKFLOW.md`
+4. Follow the WORKFLOW.md step by step
+
+## What Users Might Say → What To Do
+
+| What they say | What you do |
+|---------------|-------------|
+| "Run my morning briefing" | Run the `send-morning-briefing` workflow |
+| "Check my email" | Run the `process-email` workflow |
+| "What workflows do I have?" | Run `clawflows list enabled` |
+| "What else is available?" | Run `clawflows list available` |
+| "Turn on sleep mode" | Run the `activate-sleep-mode` workflow |
+| "Enable the news digest" | Run `clawflows enable send-news-digest` |
+| "Disable the X checker" | Run `clawflows disable check-x` |
+| "Check my calendar" | Run the `check-calendar` workflow |
+| "Prep for my next meeting" | Run the `build-meeting-prep` workflow |
+| "Get new workflows" | Run `clawflows update` |
+| "What can you automate?" | Run `clawflows list available` and summarize the categories |
+| "Process my downloads" | Run the `process-downloads` workflow |
+| "How's my disk space?" | Run the `check-disk` workflow |
+| "Uninstall clawflows" | Run `clawflows uninstall` (confirm with user first) |
+
+If the user asks for something that sounds like a workflow but you're not sure which one, run `clawflows list` and find the best match.
+
+## Workflow Locations
+
+- **All workflows:** `~/.openclaw/workspace/clawflows/workflows/available/`
+- **Enabled workflows:** `~/.openclaw/workspace/clawflows/workflows/enabled/`
+- **Each workflow has a `WORKFLOW.md`** — this is the file you read and follow when running it
+
+## Scheduled vs On-Demand
+
+- Workflows with a `schedule` field in their WORKFLOW.md frontmatter run automatically (e.g., `schedule: "7am"`)
+- Workflows without a schedule are on-demand only — the user has to ask you to run them
+- The user can always trigger any workflow manually regardless of schedule — just say "run [name]"
+
+## Getting New Workflows
+
+Run `clawflows update` to pull the latest from GitHub. This fetches new workflows added to the repo. After updating, run `clawflows list available` to see what's new and offer to enable any that match the user's interests.
