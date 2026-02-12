@@ -8,7 +8,7 @@ Give your [OpenClaw](https://github.com/openclaw/openclaw) agent ⚡️ superpow
 
 Some examples:
 - 🛏️ **Sleep mode** — Every light off, music stopped, thermostat down, bedroom fan on. One command. Five systems. Done.
-- 📧 **Check my email** — Junk unsubscribed, noise archived, important stuff summarized. Your inbox, handled.
+- 📧 **Process my email** — Junk unsubscribed, noise archived, important stuff summarized. Your inbox, handled.
 - ☀️ **Morning briefing** — Weather, calendar, priorities, and fires — delivered before you open your eyes.
 - 🎯 **Prep for my meeting** — Attendees researched, history pulled, talking points written. Ready before you are.
 - 🔨 **Build something while I sleep** — Picks an idea, builds it overnight, hands you a finished project in the morning.
