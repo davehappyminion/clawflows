@@ -97,6 +97,7 @@ Then enable workflows with `clawflows enable <name>`.
 | 📅 [check-calendar](workflows/available/check-calendar/) | 48-hour radar with conflict detection, travel time, and prep notes |
 | ✅ [triage-tasks](workflows/available/triage-tasks/) | Morning task review — what's due, overdue, and your top 3 priorities |
 | 🎯 [build-meeting-prep](workflows/available/build-meeting-prep/) | Prep doc with attendee research, history, and talking points |
+| 🔍 [prep-next-meeting](workflows/available/prep-next-meeting/) | Auto-researches external attendees for meetings in the next hour |
 | 💼 [prep-interview](workflows/available/prep-interview/) | Company research, interviewer profiles, and practice questions — full prep packet |
 | 🧍 [build-standup](workflows/available/build-standup/) | Auto-generates daily standup from git commits and completed tasks |
 | 📝 [draft-weekly-update](workflows/available/draft-weekly-update/) | Polished manager-ready weekly update from git, tasks, and meetings |
