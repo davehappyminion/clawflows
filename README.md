@@ -22,7 +22,7 @@ Some examples:
 Send this message to your OpenClaw agent:
 
 ```
-Install ClawFlows by following https://raw.githubusercontent.com/davehappyminion/clawflows/stem/AGENT.md
+Set up ClawFlows for me: https://raw.githubusercontent.com/davehappyminion/clawflows/stem/AGENT.md
 ```
 
 Your agent will install everything and ask which workflows you want to enable.
