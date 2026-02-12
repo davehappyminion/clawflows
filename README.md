@@ -13,7 +13,7 @@ Some examples:
 - 🎯 **Prep for my meeting** — Attendees researched, history pulled, talking points written. Ready before you are.
 - 🔨 **Build something while I sleep** — Picks an idea, builds it overnight, hands you a finished project in the morning.
 
-## Get Started
+## 🚀 Get Started In 10 Seconds
 
 ### Option 1: Let your agent do it
 
@@ -33,7 +33,7 @@ curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/syst
 
 Then enable workflows with `clawflows enable <name>`.
 
-## The Essentials
+## 🙌 The Essentials
 
 | | Workflow | When | What it does |
 |---|----------|------|--------------|
@@ -42,7 +42,7 @@ Then enable workflows with `clawflows enable <name>`.
 | 3 | 📧 [process-email](workflows/available/process-email/) | 2-3x/day | Auto-unsubscribe, archive junk, summarize important |
 | 4 | 📅 [check-calendar](workflows/available/check-calendar/) | Morning + evening | 48-hour radar with conflicts and prep notes |
 
-## All Workflows
+## 🧞‍♂️ All Workflows
 
 ### 🏠 Smart Home
 
