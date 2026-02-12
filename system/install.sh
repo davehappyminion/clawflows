@@ -11,6 +11,14 @@ INSTALL_DIR="$HOME/.openclaw/workspace/clawflows"
 BIN_DIR="$HOME/.local/bin"
 BIN_TARGET="$BIN_DIR/clawflows"
 
+# ── Flags ─────────────────────────────────────────────────────────────────
+NO_ESSENTIALS=false
+for arg in "$@"; do
+  case "$arg" in
+    --no-essentials) NO_ESSENTIALS=true ;;
+  esac
+done
+
 # ── Colors ─────────────────────────────────────────────────────────────────
 BOLD='\033[1m'
 DIM='\033[2m'
@@ -142,34 +150,36 @@ if [ -d "$INSTALL_DIR/workflows/available" ]; then
   workflow_count=$(ls -d "$INSTALL_DIR/workflows/available"/*/ 2>/dev/null | wc -l | tr -d ' ')
 fi
 
-# ── 8. Enable essentials ───────────────────────────────────────────────────────
+# ── 8. Enable essentials (skip when agent handles it via --no-essentials) ─────
 
-ESSENTIALS=(send-morning-inspiration send-morning-briefing process-email check-calendar)
+if ! $NO_ESSENTIALS; then
+  ESSENTIALS=(send-morning-inspiration send-morning-briefing process-email check-calendar)
 
-echo ""
-printf "  ${BOLD}The Essentials Pack${RESET}\n"
-echo ""
-printf "  We strongly recommend enabling these 4 workflows to start:\n"
-echo ""
-printf "    ✨ ${BOLD}send-morning-inspiration${RESET}   Uplifting quote to start your day\n"
-printf "    ☀️  ${BOLD}send-morning-briefing${RESET}     Weather, calendar, priorities at 7am\n"
-printf "    📧 ${BOLD}process-email${RESET}              Inbox triage — unsubscribe junk, surface important\n"
-printf "    📅 ${BOLD}check-calendar${RESET}             48-hour radar with conflict detection\n"
-echo ""
-printf "  ${DIM}You can disable any of these anytime with: clawflows disable <name>${RESET}\n"
-echo ""
-printf "  Enable the essentials? [Y/n] "
-read -r essentials_confirm </dev/tty 2>/dev/null || essentials_confirm="y"
+  echo ""
+  printf "  ${BOLD}The Essentials Pack${RESET}\n"
+  echo ""
+  printf "  We strongly recommend enabling these 4 workflows to start:\n"
+  echo ""
+  printf "    ✨ ${BOLD}send-morning-inspiration${RESET}   Uplifting quote to start your day\n"
+  printf "    ☀️  ${BOLD}send-morning-briefing${RESET}     Weather, calendar, priorities at 7am\n"
+  printf "    📧 ${BOLD}process-email${RESET}              Inbox triage — unsubscribe junk, surface important\n"
+  printf "    📅 ${BOLD}check-calendar${RESET}             48-hour radar with conflict detection\n"
+  echo ""
+  printf "  ${DIM}You can disable any of these anytime with: clawflows disable <name>${RESET}\n"
+  echo ""
+  printf "  Enable the essentials? [Y/n] "
+  read -r essentials_confirm </dev/tty 2>/dev/null || essentials_confirm="y"
 
-if [ "$essentials_confirm" != "n" ] && [ "$essentials_confirm" != "N" ]; then
-  for wf in "${ESSENTIALS[@]}"; do
-    if [ -d "$INSTALL_DIR/workflows/available/$wf" ]; then
-      "$BIN_TARGET" enable "$wf" >/dev/null 2>/dev/null
-    fi
-  done
-  ok "Essentials enabled"
-else
-  info "Skipped — you can enable them later with clawflows enable <name>"
+  if [ "$essentials_confirm" != "n" ] && [ "$essentials_confirm" != "N" ]; then
+    for wf in "${ESSENTIALS[@]}"; do
+      if [ -d "$INSTALL_DIR/workflows/available/$wf" ]; then
+        "$BIN_TARGET" enable "$wf" >/dev/null 2>/dev/null
+      fi
+    done
+    ok "Essentials enabled"
+  else
+    info "Skipped — you can enable them later with clawflows enable <name>"
+  fi
 fi
 
 # ── 9. Done ──────────────────────────────────────────────────────────────────

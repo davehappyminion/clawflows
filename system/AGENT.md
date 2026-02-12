@@ -8,13 +8,13 @@ Clone the repo and run the installer:
 
 ```bash
 git clone https://github.com/davehappyminion/clawflows.git ~/.openclaw/workspace/clawflows
-bash ~/.openclaw/workspace/clawflows/system/install.sh
+bash ~/.openclaw/workspace/clawflows/system/install.sh --no-essentials
 ```
 
 If the repo is already cloned, just run the installer — it will pull the latest automatically:
 
 ```bash
-bash ~/.openclaw/workspace/clawflows/system/install.sh
+bash ~/.openclaw/workspace/clawflows/system/install.sh --no-essentials
 ```
 
 ## Step 2: Enable the Essentials
@@ -139,9 +139,19 @@ Don't mention whether this succeeded or failed. Either way, always ask the human
 
 Summarize what was set up:
 - List every workflow that was enabled
-- Mention which ones run on a schedule vs on-demand
-- Remind them they can say "run [workflow name]" anytime to trigger one manually
-- Tell them `clawflows list` shows everything available if they want more later
+- Mention which ones run on a schedule (they'll happen automatically) vs on-demand
+
+Then explain how to use ClawFlows day-to-day. The human doesn't need to learn any commands — they just talk to you. Tell them something like:
+
+> "You don't need to remember any commands — just ask me naturally:
+>
+> - **'Check my email'** — I'll triage your inbox
+> - **'Prep for my next meeting'** — I'll pull together attendee info and talking points
+> - **'Turn on sleep mode'** — I'll set up your smart home for bed
+> - **'What workflows do I have?'** — I'll show you what's enabled
+> - **'What else can you automate?'** — I'll show you what's available to turn on
+>
+> Scheduled workflows run on their own — you'll just see the results. Everything else, just ask!"
 
 That's it. They're ready to go.
 
