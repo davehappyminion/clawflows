@@ -267,32 +267,45 @@ _build_block() {
   lines+=("$START_MARKER")
   lines+=("## ClawFlows")
   lines+=("")
-  lines+=("Community workflows from \`$CLAWFLOWS_DIR/\`. Manage with the \`clawflows\` CLI.")
+  lines+=("Workflows from \`$CLAWFLOWS_DIR/\`. When the user asks you to do something that matches an enabled workflow, read its WORKFLOW.md and follow the steps.")
   lines+=("")
-  lines+=("### Managing Workflows")
-  lines+=("- **List:** \`clawflows list\`")
-  lines+=("- **Enable:** \`clawflows enable <name>\` (then edit \`config.env\` if needed)")
-  lines+=("- **Disable:** \`clawflows disable <name>\`")
-  lines+=("- **Browse available:** \`ls $CLAWFLOWS_DIR/workflows/available/\`")
-  lines+=("- **Create new:** See \`$CLAWFLOWS_DIR/docs/creating-workflows.md\`")
+  lines+=("### Running a Workflow")
+  lines+=("1. Read the WORKFLOW.md file listed next to the workflow below")
+  lines+=("2. Follow the steps in the file exactly")
+  lines+=("3. If the workflow isn't enabled yet, run \`clawflows enable <name>\` first")
+  lines+=("")
+  lines+=("### CLI Commands")
+  lines+=("- \`clawflows list\` — see all workflows (enabled + available)")
+  lines+=("- \`clawflows list enabled\` — see only what's turned on")
+  lines+=("- \`clawflows list available\` — see what else is available")
+  lines+=("- \`clawflows enable <name>\` — turn on a workflow")
+  lines+=("- \`clawflows disable <name>\` — turn off a workflow")
+  lines+=("- \`clawflows update\` — pull the latest workflows from GitHub")
+  lines+=("- \`clawflows sync\` — refresh this list after manual changes")
   lines+=("")
 
   local has_enabled=false
   local entries=()
   for dir in "$ENABLED_DIR"/*/; do
     [ -d "$dir" ] || continue
-    local name desc wf_file
+    local name desc schedule wf_file
     name="$(basename "$dir")"
     [ "$name" = ".gitkeep" ] && continue
     wf_file="$dir/WORKFLOW.md"
     [ -f "$wf_file" ] || continue
     desc="$(get_field "$wf_file" description)"
-    entries+=("- $name: $desc → follow $CLAWFLOWS_DIR/workflows/enabled/$name/WORKFLOW.md")
+    schedule="$(get_field "$wf_file" schedule)"
+    if [ -n "$schedule" ]; then
+      entries+=("- **$name** ($schedule): $desc → \`$CLAWFLOWS_DIR/workflows/enabled/$name/WORKFLOW.md\`")
+    else
+      entries+=("- **$name** (on-demand): $desc → \`$CLAWFLOWS_DIR/workflows/enabled/$name/WORKFLOW.md\`")
+    fi
     has_enabled=true
   done
 
   if $has_enabled; then
     lines+=("### Enabled Workflows")
+    lines+=("When the user asks for any of these, read the WORKFLOW.md file and follow it.")
     for entry in "${entries[@]}"; do
       lines+=("$entry")
     done
