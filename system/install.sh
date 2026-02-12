@@ -28,9 +28,17 @@ err()   { printf "  ${RED}✗${RESET} %s\n" "$1" >&2; exit 1; }
 
 # ── Header ─────────────────────────────────────────────────────────────────
 
-echo ""
-printf "  ${CYAN}${BOLD}⚡️ ClawFlows${RESET}\n"
-printf "  ${DIM}Superpowers for your OpenClaw agent${RESET}\n"
+printf "${CYAN}"
+cat << 'LOGO'
+
+   ________                ________
+  / ____/ /__ __    __    / __/ /__ _    _____
+ / /   / / _ `/ |/|/ /   / _// / _ \ |/|/ (_-<
+/_/___/_/\_,_/|__,__/   /_/ /_/\___/__,__/___/
+
+LOGO
+printf "${RESET}"
+printf "  ${BOLD}⚡️ Superpowers for your OpenClaw agent${RESET}\n"
 printf "  ${DIM}github.com/davehappyminion/clawflows${RESET}\n"
 echo ""
 
