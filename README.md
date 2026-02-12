@@ -37,14 +37,14 @@ Then enable workflows with `clawflows enable <name>`.
 
 <br>
 
-## 🙌 Starter Pack: The Essentials
+## The Essentials
 
-| | Workflow | When | What it does |
-|---|----------|------|--------------|
-| 1 | ✨ [send-morning-inspiration](workflows/available/send-morning-inspiration/) | 7am | Inspirational quote themed to your goals |
-| 2 | ☀️ [send-morning-briefing](workflows/available/send-morning-briefing/) | 7am | Weather, calendar, priorities, overnight alerts |
-| 3 | 📧 [process-email](workflows/available/process-email/) | 2-3x/day | Auto-unsubscribe, archive junk, summarize important |
-| 4 | 📅 [check-calendar](workflows/available/check-calendar/) | Morning + evening | 48-hour radar with conflicts and prep notes |
+| Workflow | When | What it does |
+|----------|------|--------------|
+| ✨ [send-morning-inspiration](workflows/available/send-morning-inspiration/) | 7am | Inspirational quote themed to your goals |
+| ☀️ [send-morning-briefing](workflows/available/send-morning-briefing/) | 7am | Weather, calendar, priorities, overnight alerts |
+| 📧 [process-email](workflows/available/process-email/) | 2-3x/day | Auto-unsubscribe, archive junk, summarize important |
+| 📅 [check-calendar](workflows/available/check-calendar/) | Morning + evening | 48-hour radar with conflicts and prep notes |
 
 <br>
 
