@@ -13,6 +13,7 @@ Some examples:
 - 🎯 **Prep for my meeting** — Attendees researched, history pulled, talking points written. Ready before you are.
 - 🔨 **Build something while I sleep** — Picks an idea, builds it overnight, hands you a finished project in the morning.
 
+
 ## 🚀 Get Started In 10 Seconds
 
 ### Option 1: Let your agent do it
@@ -33,6 +34,7 @@ curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/syst
 
 Then enable workflows with `clawflows enable <name>`.
 
+
 ## 🙌 The Essentials
 
 | | Workflow | When | What it does |
@@ -41,6 +43,7 @@ Then enable workflows with `clawflows enable <name>`.
 | 2 | ☀️ [send-morning-briefing](workflows/available/send-morning-briefing/) | 7am | Weather, calendar, priorities, overnight alerts |
 | 3 | 📧 [process-email](workflows/available/process-email/) | 2-3x/day | Auto-unsubscribe, archive junk, summarize important |
 | 4 | 📅 [check-calendar](workflows/available/check-calendar/) | Morning + evening | 48-hour radar with conflicts and prep notes |
+
 
 ## 🧞‍♂️ All Workflows
 
@@ -142,6 +145,7 @@ Then enable workflows with `clawflows enable <name>`.
 | 🔕 [process-notifications](workflows/available/process-notifications/) | Audits macOS notification settings, identifies noisy apps, suggests silencing |
 | 🔖 [sync-bookmarks](workflows/available/sync-bookmarks/) | Checks bookmarks for dead links, removes duplicates, organizes by topic |
 
+
 ## How to Use
 
 Once installed, just talk to your agent naturally:
@@ -171,6 +175,7 @@ clawflows update
 
 When you enable a workflow, your agent automatically knows about it — no restart needed.
 
+
 ## Scheduling
 
 Workflows run on autopilot from the schedule in the WORKFLOW.md file — no manual trigger needed!
@@ -182,11 +187,13 @@ schedule: "8am, 6pm"
 You can use plain English: `"7am"`, `"every 2 hours"`, `"morning"`, etc.
 
 
+
 ## Creating Your Own
 
 Build your custom workflow! See [Creating Workflows](docs/creating-workflows.md) for the full guide.
 
 Share yours with the community via pull request, or keep personal workflows private in `workflows/enabled/` (it's gitignored).
+
 
 ## CLI
 
@@ -200,6 +207,7 @@ Share yours with the community via pull request, or keep personal workflows priv
 | `clawflows update` | Pull the latest workflows from GitHub |
 | `clawflows sync` | Refresh your agent's workflow list in AGENTS.md |
 | `clawflows uninstall` | Remove clawflows and clean up |
+
 
 ## License
 
