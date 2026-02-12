@@ -13,6 +13,7 @@ Some examples:
 - 🎯 **Prep for my meeting** — Attendees researched, history pulled, talking points written. Ready before you are.
 - 🔨 **Build something while I sleep** — Picks an idea, builds it overnight, hands you a finished project in the morning.
 
+<br>
 
 ## 🚀 Get Started In 10 Seconds
 
@@ -34,6 +35,7 @@ curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/syst
 
 Then enable workflows with `clawflows enable <name>`.
 
+<br>
 
 ## 🙌 The Essentials
 
@@ -44,6 +46,7 @@ Then enable workflows with `clawflows enable <name>`.
 | 3 | 📧 [process-email](workflows/available/process-email/) | 2-3x/day | Auto-unsubscribe, archive junk, summarize important |
 | 4 | 📅 [check-calendar](workflows/available/check-calendar/) | Morning + evening | 48-hour radar with conflicts and prep notes |
 
+<br>
 
 ## 🧞‍♂️ All Workflows
 
@@ -145,6 +148,7 @@ Then enable workflows with `clawflows enable <name>`.
 | 🔕 [process-notifications](workflows/available/process-notifications/) | Audits macOS notification settings, identifies noisy apps, suggests silencing |
 | 🔖 [sync-bookmarks](workflows/available/sync-bookmarks/) | Checks bookmarks for dead links, removes duplicates, organizes by topic |
 
+<br>
 
 ## How to Use
 
@@ -175,6 +179,7 @@ clawflows update
 
 When you enable a workflow, your agent automatically knows about it — no restart needed.
 
+<br>
 
 ## Scheduling
 
@@ -186,7 +191,7 @@ schedule: "8am, 6pm"
 
 You can use plain English: `"7am"`, `"every 2 hours"`, `"morning"`, etc.
 
-
+<br>
 
 ## Creating Your Own
 
@@ -194,6 +199,7 @@ Build your custom workflow! See [Creating Workflows](docs/creating-workflows.md)
 
 Share yours with the community via pull request, or keep personal workflows private in `workflows/enabled/` (it's gitignored).
 
+<br>
 
 ## CLI
 
@@ -208,6 +214,7 @@ Share yours with the community via pull request, or keep personal workflows priv
 | `clawflows sync` | Refresh your agent's workflow list in AGENTS.md |
 | `clawflows uninstall` | Remove clawflows and clean up |
 
+<br>
 
 ## License
 
