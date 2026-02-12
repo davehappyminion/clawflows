@@ -4,19 +4,17 @@ You're installing ClawFlows for your human. Follow these steps exactly.
 
 ## Step 1: Install
 
-Run these commands:
+Clone the repo and run the installer:
 
 ```bash
 git clone https://github.com/davehappyminion/clawflows.git ~/.openclaw/workspace/clawflows
-mkdir -p ~/.local/bin
-ln -sf ~/.openclaw/workspace/clawflows/system/cli/clawflows ~/.local/bin/clawflows
-clawflows sync
+bash ~/.openclaw/workspace/clawflows/system/install.sh
 ```
 
-If the repo is already cloned, pull the latest instead:
+If the repo is already cloned, just run the installer — it will pull the latest automatically:
 
 ```bash
-git -C ~/.openclaw/workspace/clawflows pull
+bash ~/.openclaw/workspace/clawflows/system/install.sh
 ```
 
 ## Step 2: Onboard
