@@ -31,10 +31,10 @@ err()   { printf "  ${RED}✗${RESET} %s\n" "$1" >&2; exit 1; }
 printf "${CYAN}"
 cat << 'LOGO'
 
-    ___  __                ________
-   / _ \/ /__ __    __    / __/ /__ _    _____
-  / ___/ / _ `/ |/|/ /   / _// / _ \ |/|/ (_-<
- /_/  /_/\_,_/|__,__/   /_/ /_/\___/__,__/___/
+   ________                ________
+  / ____/ /__ __    __    / __/ /__ _    _____
+ / /   / / _ `/ |/|/ /   / _// / _ \ |/|/ (_-<
+/_/___/_/\_,_/|__,__/   /_/ /_/\___/__,__/___/
 
 LOGO
 printf "${RESET}"
@@ -128,7 +128,7 @@ fi
 AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
 
 if [ -f "$AGENTS_MD" ]; then
-  "$BIN_TARGET" sync 2>/dev/null
+  "$BIN_TARGET" sync >/dev/null 2>&1
   ok "Agent synced"
 else
   info "No AGENTS.md found — skipping sync"
@@ -158,12 +158,12 @@ echo ""
 printf "  ${DIM}You can disable any of these anytime with: clawflows disable <name>${RESET}\n"
 echo ""
 printf "  Enable the essentials? [Y/n] "
-read -r essentials_confirm </dev/null 2>/dev/null || essentials_confirm="y"
+read -r essentials_confirm </dev/tty 2>/dev/null || essentials_confirm="y"
 
 if [ "$essentials_confirm" != "n" ] && [ "$essentials_confirm" != "N" ]; then
   for wf in "${ESSENTIALS[@]}"; do
     if [ -d "$INSTALL_DIR/workflows/available/$wf" ]; then
-      "$BIN_TARGET" enable "$wf" >/dev/null 2>&1
+      "$BIN_TARGET" enable "$wf" >/dev/null 2>/dev/null
     fi
   done
   ok "Essentials enabled"
@@ -174,7 +174,7 @@ fi
 # ── 9. Done ──────────────────────────────────────────────────────────────────
 
 echo ""
-printf "  ${GREEN}${BOLD}Done!${RESET} ${BOLD}$workflow_count workflows${RESET} ready to go.\n"
+printf "  ${GREEN}${BOLD}Done!${RESET} ${BOLD}$workflow_count workflows${RESET} available.\n"
 echo ""
 printf "  ${BOLD}Next steps:${RESET}\n"
 echo ""
