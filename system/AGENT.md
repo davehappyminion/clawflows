@@ -173,6 +173,12 @@ clawflows list enabled
 # See what's available but not yet enabled
 clawflows list available
 
+# Create a new custom workflow (interactive wizard for humans)
+clawflows create
+
+# Create a workflow from JSON (for agents)
+clawflows create --from-json '{"name": "...", "summary": "...", "description": "..."}'
+
 # Turn on a workflow
 clawflows enable <name>
 
@@ -219,8 +225,11 @@ When the user asks you to run a workflow:
 | "Process my downloads" | Run the `process-downloads` workflow |
 | "How's my disk space?" | Run the `check-disk` workflow |
 | "Uninstall clawflows" | Run `clawflows uninstall` (confirm with user first) |
+| "Make me a workflow that..." | Create a custom workflow (see Creating Custom Workflows) |
+| "I want an automation for..." | Create a custom workflow (see Creating Custom Workflows) |
+| "Can you build a workflow to..." | Create a custom workflow (see Creating Custom Workflows) |
 
-If the user asks for something that sounds like a workflow but you're not sure which one, run `clawflows list` and find the best match.
+If the user asks for something that sounds like a workflow but you're not sure which one, run `clawflows list` and find the best match. If no existing workflow fits, offer to create a custom one.
 
 ## Workflow Locations
 
@@ -237,3 +246,71 @@ If the user asks for something that sounds like a workflow but you're not sure w
 ## Getting New Workflows
 
 Run `clawflows update` to pull the latest from GitHub. This fetches new workflows added to the repo. After updating, run `clawflows list available` to see what's new and offer to enable any that match the user's interests.
+
+## Creating Custom Workflows
+
+When a user wants a custom workflow that doesn't exist, you can create one for them.
+
+### Interactive Approach
+
+Walk the user through these questions:
+
+1. **What should it be called?** (verb-first: check-, send-, build-, process-, sync-, activate-, track-)
+2. **What does it do?** (one-line summary)
+3. **When should it run?** (e.g., "9am", "9am, 5pm", or on-demand only)
+4. **What exactly should happen?** (the full description)
+
+### Creating the Workflow
+
+Once you have the details, use the CLI:
+
+```bash
+clawflows create --from-json '{
+  "name": "check-water-intake",
+  "emoji": "💧",
+  "summary": "Track daily water intake with reminders",
+  "schedule": "9am, 12pm, 3pm, 6pm",
+  "author": "@username",
+  "description": "Remind me to drink water throughout the day. Track how many glasses I have had and show progress toward 8 glasses. Keep it encouraging."
+}'
+```
+
+### JSON Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Workflow name (lowercase, hyphenated, verb-first) |
+| `emoji` | No | Single emoji (default: 🔧) |
+| `summary` | Yes | One-line description for the frontmatter |
+| `schedule` | No | When to run (e.g., "9am", "9am, 5pm") — omit for on-demand |
+| `author` | No | GitHub username and/or @twitter handle |
+| `description` | Yes | Full description of what the workflow should do |
+
+### Example Conversation
+
+```
+User: "I want a workflow that reminds me to stretch every 2 hours"
+
+Agent: "I'll create that for you. A few quick questions:
+
+1. Should it just remind you, or also track when you actually stretch?
+2. What hours — all day, or just work hours like 9am-6pm?
+3. How should I remind you — just a message, or something specific?"
+
+User: "Just remind me, work hours only, simple message is fine"
+
+Agent: "Got it. Creating 'remind-to-stretch'..."
+
+[Creates workflow with clawflows create --from-json]
+
+Agent: "Done! I've created 'remind-to-stretch' — it'll ping you at
+9am, 11am, 1pm, 3pm, and 5pm to take a stretch break.
+Want me to tweak anything?"
+```
+
+### After Creating
+
+- The workflow is automatically enabled (created in `workflows/enabled/`)
+- AGENTS.md is updated so you know about it
+- The user can edit the WORKFLOW.md file to refine it
+- If they want to share it, they can copy it to `workflows/available/` and submit a PR

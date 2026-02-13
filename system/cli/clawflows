@@ -30,6 +30,10 @@ cmd_help() {
     list enabled         Show only enabled workflows
     list available       Show only available workflows
 
+  Creating
+    create               Create a new workflow (interactive wizard)
+    create --from-json   Create from JSON (for agents)
+
   Managing
     enable <name>        Turn on a workflow
     disable <name>       Turn off a workflow
@@ -43,6 +47,7 @@ cmd_help() {
     help, --help, -h     Show this help
 
   Examples
+    clawflows create                        Create a new custom workflow
     clawflows list                          See everything
     clawflows enable send-morning-briefing  Turn on morning briefings
     clawflows disable check-x               Turn off X/Twitter workflow
@@ -100,6 +105,216 @@ _workflow_line() {
 }
 
 # ── Commands ────────────────────────────────────────────────────────────────
+
+# Create workflow from JSON (for agent/programmatic use)
+# Expected JSON: {"name": "...", "emoji": "...", "summary": "...", "schedule": "...", "author": "...", "description": "..."}
+_create_from_json() {
+  local json="$1"
+
+  if [ -z "$json" ]; then
+    # Read from stdin if no argument
+    json="$(cat)"
+  fi
+
+  if [ -z "$json" ]; then
+    die "No JSON provided. Usage: clawflows create --from-json '{...}' or pipe JSON to stdin"
+  fi
+
+  # Parse JSON fields using grep/sed (portable, no jq dependency)
+  local name emoji summary schedule author description
+
+  name="$(echo "$json" | grep -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
+  emoji="$(echo "$json" | grep -o '"emoji"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
+  summary="$(echo "$json" | grep -o '"summary"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
+  schedule="$(echo "$json" | grep -o '"schedule"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
+  author="$(echo "$json" | grep -o '"author"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
+  description="$(echo "$json" | grep -o '"description"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
+
+  # Validate required fields
+  [ -n "$name" ] || die "Missing required field: name"
+  [ -n "$summary" ] || die "Missing required field: summary"
+  [ -n "$description" ] || die "Missing required field: description"
+
+  # Defaults
+  emoji="${emoji:-🔧}"
+
+  # Check if already exists
+  if [ -d "$ENABLED_DIR/$name" ] || [ -d "$AVAILABLE_DIR/$name" ]; then
+    die "Workflow '$name' already exists"
+  fi
+
+  # Build the WORKFLOW.md content
+  local workflow_content="---
+name: $name
+emoji: $emoji
+description: $summary"
+
+  if [ -n "$schedule" ]; then
+    workflow_content="$workflow_content
+schedule: \"$schedule\""
+  fi
+
+  if [ -n "$author" ]; then
+    workflow_content="$workflow_content
+author: $author"
+  fi
+
+  # Title case the name for the heading
+  local title
+  title="$(echo "${name//-/ }" | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')"
+
+  workflow_content="$workflow_content
+---
+
+# $title
+
+$description
+"
+
+  # Create the workflow directory and file
+  local workflow_dir="$ENABLED_DIR/$name"
+  mkdir -p "$workflow_dir"
+  printf '%s' "$workflow_content" > "$workflow_dir/WORKFLOW.md"
+
+  echo "✓ Created $workflow_dir/WORKFLOW.md"
+
+  # Sync AGENTS.md
+  cmd_sync
+}
+
+cmd_create() {
+  # Check for --from-json flag (for agent/programmatic use)
+  if [ "${1:-}" = "--from-json" ]; then
+    _create_from_json "${2:-}"
+    return
+  fi
+
+  echo ""
+  echo "  ⚡️ Create a new workflow"
+  echo ""
+
+  # 1. Name
+  local name=""
+  while [ -z "$name" ]; do
+    printf "  Name (e.g., check-water-intake): "
+    read -r name
+    # Validate: lowercase, hyphenated, starts with verb
+    if [ -n "$name" ]; then
+      # Convert to lowercase and replace spaces with hyphens
+      name="$(echo "$name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
+      # Check if starts with valid verb
+      if ! echo "$name" | grep -qE '^(activate|process|check|build|send|sync|track|draft|review|plan|prep|curate|summarize|backup|clean|rotate|find)-'; then
+        echo "  ⚠️  Name should start with a verb (check-, send-, build-, process-, sync-, activate-, track-, etc.)"
+        printf "  Continue anyway? [y/N] "
+        read -r confirm
+        if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
+          name=""
+          continue
+        fi
+      fi
+      # Check if already exists
+      if [ -d "$ENABLED_DIR/$name" ] || [ -d "$AVAILABLE_DIR/$name" ]; then
+        echo "  ⚠️  Workflow '$name' already exists"
+        name=""
+        continue
+      fi
+    fi
+  done
+
+  # 2. Emoji
+  printf "  Emoji (e.g., 💧): "
+  read -r emoji
+  emoji="${emoji:-🔧}"
+
+  # 3. Summary (one line)
+  local summary=""
+  while [ -z "$summary" ]; do
+    printf "  One-line summary: "
+    read -r summary
+  done
+
+  # 4. Schedule
+  echo ""
+  echo "  When should it run?"
+  echo "    Examples: \"9am\", \"9am, 5pm\", \"8am, 12pm, 4pm, 8pm\""
+  echo "    Leave blank for on-demand only"
+  printf "  Schedule: "
+  read -r schedule
+
+  # 5. Author
+  echo ""
+  echo "  Author (optional)"
+  echo "    GitHub username, @twitter, or both: \"nikilster @nikil\""
+  printf "  Author: "
+  read -r author
+
+  # 6. Description (multiline)
+  echo ""
+  echo "  Describe what this workflow does."
+  echo "  What should the agent do when running it? Be specific."
+  echo "  (Enter a blank line when done)"
+  echo ""
+  local description=""
+  local line
+  while IFS= read -r line; do
+    [ -z "$line" ] && break
+    if [ -z "$description" ]; then
+      description="$line"
+    else
+      description="$description"$'\n'"$line"
+    fi
+  done
+
+  # Build the WORKFLOW.md content
+  local workflow_content="---
+name: $name
+emoji: $emoji
+description: $summary"
+
+  if [ -n "$schedule" ]; then
+    workflow_content="$workflow_content
+schedule: \"$schedule\""
+  fi
+
+  if [ -n "$author" ]; then
+    workflow_content="$workflow_content
+author: $author"
+  fi
+
+  # Title case the name for the heading
+  local title
+  title="$(echo "${name//-/ }" | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')"
+
+  workflow_content="$workflow_content
+---
+
+# $title
+
+$description
+"
+
+  # Create the workflow directory and file
+  local workflow_dir="$ENABLED_DIR/$name"
+  mkdir -p "$workflow_dir"
+  printf '%s' "$workflow_content" > "$workflow_dir/WORKFLOW.md"
+
+  echo ""
+  echo "  ✓ Created $workflow_dir/WORKFLOW.md"
+  echo ""
+
+  # Show what was created
+  echo "  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "$workflow_content" | sed 's/^/  /'
+  echo "  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo ""
+
+  # Sync AGENTS.md
+  cmd_sync
+
+  echo ""
+  echo "  Your workflow is ready! Ask your agent to run it or edit the file to refine."
+  echo ""
+}
 
 cmd_list() {
   local filter="${1:-all}"
@@ -342,6 +557,7 @@ _replace_block() {
 
 case "$1" in
   list)      cmd_list "${2:-all}" ;;
+  create)    cmd_create "${2:-}" "${3:-}" ;;
   enable)    [ $# -ge 2 ] || die "usage: clawflows enable <name>"; cmd_enable "$2" ;;
   disable)   [ $# -ge 2 ] || die "usage: clawflows disable <name>"; cmd_disable "$2" ;;
   update)    cmd_update ;;
