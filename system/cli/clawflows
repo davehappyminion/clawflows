@@ -320,26 +320,34 @@ $description
 
 cmd_list() {
   local filter="${1:-all}"
-  local name found=false
+  local name dir found=false
   local enabled_lines=()
   local available_lines=()
+  local seen_names=""
 
-  # Collect all available workflows (custom takes priority)
-  declare -A all_workflows
-  for dir in "$COMMUNITY_DIR"/*/; do
-    [ -d "$dir" ] || continue
-    name="$(basename "$dir")"
-    all_workflows["$name"]="$dir"
-  done
+  # Collect workflows from custom/ first (takes priority), then community/
   for dir in "$CUSTOM_DIR"/*/; do
     [ -d "$dir" ] || continue
     name="$(basename "$dir")"
-    all_workflows["$name"]="$dir"
+    [ "$name" = ".gitkeep" ] && continue
+    seen_names="$seen_names $name "
+    found=true
+
+    if [ -L "$ENABLED_DIR/$name" ] || [ -d "$ENABLED_DIR/$name" ]; then
+      enabled_lines+=("$(_workflow_line "$dir")")
+    else
+      available_lines+=("$(_workflow_line "$dir")")
+    fi
   done
 
-  for name in "${!all_workflows[@]}"; do
+  for dir in "$COMMUNITY_DIR"/*/; do
+    [ -d "$dir" ] || continue
+    name="$(basename "$dir")"
+    # Skip if already seen in custom/
+    case "$seen_names" in
+      *" $name "*) continue ;;
+    esac
     found=true
-    dir="${all_workflows[$name]}"
 
     if [ -L "$ENABLED_DIR/$name" ] || [ -d "$ENABLED_DIR/$name" ]; then
       enabled_lines+=("$(_workflow_line "$dir")")
