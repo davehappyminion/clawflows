@@ -647,7 +647,7 @@ cmd_run() {
   # Run via openclaw if available
   if command -v openclaw >/dev/null 2>&1; then
     echo "Running $name..."
-    openclaw --message "Run the $name workflow by following $wf_file"
+    openclaw agent -m "Run the $name workflow by following $wf_file"
   else
     echo ""
     echo "  To run this workflow, tell your agent:"
@@ -656,7 +656,7 @@ cmd_run() {
     echo ""
     echo "  Or if using openclaw CLI:"
     echo ""
-    echo "    openclaw --message \"Run the $name workflow by following $wf_file\""
+    echo "    openclaw agent -m \"Run the $name workflow by following $wf_file\""
     echo ""
   fi
 }
