@@ -504,6 +504,9 @@ cmd_uninstall() {
   echo "  Done. To fully remove, also run:"
   echo "    rm -rf $CLAWFLOWS_DIR"
   echo ""
+  echo "  ⚠️  Warning: This will delete any custom workflows you created."
+  echo "     Back up $CUSTOM_DIR/ first if you want to keep them."
+  echo ""
 }
 
 cmd_sync() {
