@@ -189,7 +189,8 @@ if command -v gh >/dev/null 2>&1; then
 fi
 
 echo ""
-printf "  ${YELLOW}⭐ Star the repo to keep track of updates:${RESET}\n"
+printf "  ${YELLOW}⭐ Star the repo to stay up to date with the latest workflows!${RESET}\n"
+printf "  ${DIM}(Dave Happy Minion worked really hard on this — it would mean a lot to him 🍌)${RESET}\n"
 printf "    ${CYAN}https://github.com/davehappyminion/clawflows${RESET}\n"
 echo ""
 
