@@ -649,7 +649,7 @@ cmd_run() {
   if command -v openclaw >/dev/null 2>&1; then
     echo "Running $name..."
     echo ""
-    openclaw agent --local -m "Run the $name workflow by following $wf_file"
+    openclaw agent --agent main -m "Run the $name workflow by following $wf_file"
   else
     echo ""
     echo "  ✓ Workflow ready: $name"
