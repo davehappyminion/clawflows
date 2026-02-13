@@ -255,63 +255,55 @@ Run `clawflows update` to pull the latest from GitHub. This fetches new workflow
 
 ## Creating Custom Workflows
 
-When a user wants a custom workflow that doesn't exist, you can create one for them.
+When a user wants a custom workflow that doesn't exist, create one for them using `clawflows create --from-json`.
 
-### Interactive Approach
+### Ask These Questions
 
-Walk the user through these questions:
+1. **What should it do?** — Get the core idea
+2. **When should it run?** — Scheduled (e.g., "9am", "9am, 5pm") or only when they ask (on-demand)?
+3. **Anything specific?** — Details about how it should work
 
-1. **What should it be called?** (verb-first: check-, send-, build-, process-, sync-, activate-, track-)
-2. **What does it do?** (one-line summary)
-3. **When should it run?** (e.g., "9am", "9am, 5pm", or on-demand only)
-4. **What exactly should happen?** (the full description)
+That's it. You pick the name and emoji based on what they describe.
 
-### Creating the Workflow
-
-Once you have the details, use the CLI:
+### Then Create It
 
 ```bash
 clawflows create --from-json '{
-  "name": "check-water-intake",
-  "emoji": "💧",
-  "summary": "Track daily water intake with reminders",
-  "schedule": "9am, 12pm, 3pm, 6pm",
-  "author": "@username",
-  "description": "Remind me to drink water throughout the day. Track how many glasses I have had and show progress toward 8 glasses. Keep it encouraging."
+  "name": "remind-to-stretch",
+  "emoji": "🧘",
+  "summary": "Stretch reminders during work hours",
+  "schedule": "9am, 11am, 1pm, 3pm, 5pm",
+  "description": "Send me a friendly reminder to stretch and take a quick break from the desk."
 }'
 ```
 
 ### JSON Fields
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `name` | Yes | Workflow name (lowercase, hyphenated, verb-first) |
-| `emoji` | No | Single emoji (default: 🔧) |
-| `summary` | Yes | One-line description for the frontmatter |
-| `schedule` | No | When to run (e.g., "9am", "9am, 5pm") — omit for on-demand |
-| `author` | No | GitHub username and/or @twitter handle |
-| `description` | Yes | Full description of what the workflow should do |
+| Field | Required | Example |
+|-------|----------|---------|
+| `name` | Yes | `remind-to-stretch` (you pick this — lowercase, hyphenated) |
+| `emoji` | No | `🧘` (you pick this — default: 🔧) |
+| `summary` | Yes | One-line description |
+| `schedule` | No | `"9am"` or `"9am, 5pm"` — omit for on-demand |
+| `description` | Yes | What the workflow should do |
 
-### Example Conversation
+### Example
 
 ```
-User: "I want a workflow that reminds me to stretch every 2 hours"
+User: "make me a workflow to remind me to stretch"
 
-Agent: "I'll create that for you. A few quick questions:
+Agent: "On it! Should this run on a schedule (like every few hours during
+work) or only when you ask?"
 
-1. Should it just remind you, or also track when you actually stretch?
-2. What hours — all day, or just work hours like 9am-6pm?
-3. How should I remind you — just a message, or something specific?"
+User: "every 2 hours while I'm working"
 
-User: "Just remind me, work hours only, simple message is fine"
+Agent: "Got it — I'll set it for 9am, 11am, 1pm, 3pm, and 5pm."
 
-Agent: "Got it. Creating 'remind-to-stretch'..."
+[Runs: clawflows create --from-json '{"name": "remind-to-stretch", ...}']
 
-[Creates workflow with clawflows create --from-json]
+Agent: "Done! Created 'remind-to-stretch' — runs 5 times during work hours.
 
-Agent: "Done! I've created 'remind-to-stretch' — it'll ping you at
-9am, 11am, 1pm, 3pm, and 5pm to take a stretch break.
-Want me to tweak anything?"
+To edit: ~/.openclaw/workspace/clawflows/workflows/custom/remind-to-stretch/WORKFLOW.md"
 ```
 
 ### After Creating
