@@ -644,21 +644,17 @@ cmd_run() {
 
   [ -f "$wf_file" ] || die "WORKFLOW.md not found at $wf_file"
 
-  # Run via openclaw if available
-  if command -v openclaw >/dev/null 2>&1; then
-    echo "Running $name..."
-    openclaw agent -m "Run the $name workflow by following $wf_file"
-  else
-    echo ""
-    echo "  To run this workflow, tell your agent:"
-    echo ""
-    echo "    Run the $name workflow"
-    echo ""
-    echo "  Or if using openclaw CLI:"
-    echo ""
-    echo "    openclaw agent -m \"Run the $name workflow by following $wf_file\""
-    echo ""
-  fi
+  echo ""
+  echo "  ✓ Workflow ready: $name"
+  echo ""
+  echo "  To run it, tell your agent:"
+  echo ""
+  echo "    Run $name"
+  echo ""
+  echo "  Or via CLI:"
+  echo ""
+  echo "    openclaw agent --local -m \"Run the $name workflow\""
+  echo ""
 }
 
 # ── Main ────────────────────────────────────────────────────────────────────
