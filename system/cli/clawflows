@@ -194,6 +194,14 @@ $description
 
   # Auto-enable it
   cmd_enable "$name"
+
+  # Show how to use it
+  echo ""
+  echo "To run: ask your agent \"Run $name\""
+  if [ -n "$schedule" ]; then
+    echo "Scheduled: $schedule"
+  fi
+  echo "To edit: $workflow_dir/WORKFLOW.md"
 }
 
 cmd_create() {
@@ -313,8 +321,12 @@ $description
   cmd_enable "$name"
 
   echo ""
-  echo "  Your workflow is ready! Ask your agent to run it."
+  echo "  Your workflow is ready!"
   echo ""
+  echo "  To run:  ask your agent \"Run $name\""
+  if [ -n "$schedule" ]; then
+    echo "  Scheduled: $schedule"
+  fi
   echo "  To edit: $workflow_dir/WORKFLOW.md"
   echo ""
 }
