@@ -35,6 +35,9 @@ cmd_help() {
     create               Create a new custom workflow (interactive)
     create --from-json   Create from JSON (for agents)
 
+  Running
+    run <name>           Run a workflow now (invokes your agent)
+
   Managing
     enable <name>        Turn on a workflow (symlinks to enabled/)
     disable <name>       Turn off a workflow (removes symlink)
@@ -49,6 +52,7 @@ cmd_help() {
     help, --help, -h     Show this help
 
   Examples
+    clawflows run send-morning-briefing     Run a workflow right now
     clawflows create                        Create a new custom workflow
     clawflows list                          See everything
     clawflows enable send-morning-briefing  Turn on morning briefings
