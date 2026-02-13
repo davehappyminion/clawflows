@@ -621,6 +621,46 @@ _replace_block() {
   rm -f "$blockfile"
 }
 
+cmd_run() {
+  local name="$1"
+  local wf_file
+
+  # Find the workflow
+  if [ -L "$ENABLED_DIR/$name" ] || [ -d "$ENABLED_DIR/$name" ]; then
+    wf_file="$ENABLED_DIR/$name/WORKFLOW.md"
+  elif [ -d "$CUSTOM_DIR/$name" ]; then
+    # Auto-enable if in custom but not enabled
+    echo "Enabling $name..."
+    cmd_enable "$name"
+    wf_file="$ENABLED_DIR/$name/WORKFLOW.md"
+  elif [ -d "$COMMUNITY_DIR/$name" ]; then
+    # Auto-enable if in community but not enabled
+    echo "Enabling $name..."
+    cmd_enable "$name"
+    wf_file="$ENABLED_DIR/$name/WORKFLOW.md"
+  else
+    die "workflow '$name' not found"
+  fi
+
+  [ -f "$wf_file" ] || die "WORKFLOW.md not found at $wf_file"
+
+  # Run via openclaw if available
+  if command -v openclaw >/dev/null 2>&1; then
+    echo "Running $name..."
+    openclaw --message "Run the $name workflow by following $wf_file"
+  else
+    echo ""
+    echo "  To run this workflow, tell your agent:"
+    echo ""
+    echo "    Run the $name workflow"
+    echo ""
+    echo "  Or if using openclaw CLI:"
+    echo ""
+    echo "    openclaw --message \"Run the $name workflow by following $wf_file\""
+    echo ""
+  fi
+}
+
 # ── Main ────────────────────────────────────────────────────────────────────
 
 [ $# -ge 1 ] || { cmd_help; exit 0; }
@@ -628,6 +668,7 @@ _replace_block() {
 case "$1" in
   list)      cmd_list "${2:-all}" ;;
   create)    cmd_create "${2:-}" "${3:-}" ;;
+  run)       [ $# -ge 2 ] || die "usage: clawflows run <name>"; cmd_run "$2" ;;
   enable)    [ $# -ge 2 ] || die "usage: clawflows enable <name>"; cmd_enable "$2" ;;
   disable)   [ $# -ge 2 ] || die "usage: clawflows disable <name>"; cmd_disable "$2" ;;
   customize) [ $# -ge 2 ] || die "usage: clawflows customize <name>"; cmd_customize "$2" ;;
