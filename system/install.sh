@@ -182,7 +182,18 @@ if ! $NO_ESSENTIALS; then
   fi
 fi
 
-# ── 9. Done ──────────────────────────────────────────────────────────────────
+# ── 9. Star the repo ─────────────────────────────────────────────────────────
+
+if command -v gh >/dev/null 2>&1; then
+  gh repo star davehappyminion/clawflows --yes >/dev/null 2>&1 && ok "Starred the repo" || true
+fi
+
+echo ""
+printf "  ${YELLOW}⭐ Star the repo to keep track of updates:${RESET}\n"
+printf "    ${CYAN}https://github.com/davehappyminion/clawflows${RESET}\n"
+echo ""
+
+# ── 10. Done ─────────────────────────────────────────────────────────────────
 
 echo ""
 printf "  ${GREEN}${BOLD}Done!${RESET} ${BOLD}$workflow_count workflows${RESET} available.\n"
