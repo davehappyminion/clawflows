@@ -136,14 +136,14 @@ _create_from_json() {
     die "No JSON provided. Usage: clawflows create --from-json '{...}' or pipe JSON to stdin"
   fi
 
-  # Parse JSON fields
+  # Parse JSON fields (|| true for optional fields that may not exist)
   local name emoji summary schedule author description
-  name="$(echo "$json" | grep -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
-  emoji="$(echo "$json" | grep -o '"emoji"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
-  summary="$(echo "$json" | grep -o '"summary"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
-  schedule="$(echo "$json" | grep -o '"schedule"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
-  author="$(echo "$json" | grep -o '"author"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
-  description="$(echo "$json" | grep -o '"description"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
+  name="$(echo "$json" | grep -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1 || true)"
+  emoji="$(echo "$json" | grep -o '"emoji"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1 || true)"
+  summary="$(echo "$json" | grep -o '"summary"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1 || true)"
+  schedule="$(echo "$json" | grep -o '"schedule"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1 || true)"
+  author="$(echo "$json" | grep -o '"author"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1 || true)"
+  description="$(echo "$json" | grep -o '"description"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1 || true)"
 
   # Validate required fields
   [ -n "$name" ] || die "Missing required field: name"
@@ -523,7 +523,8 @@ cmd_sync() {
   block="$(_build_block)"
 
   if [ ! -f "$AGENTS_MD" ]; then
-    die "AGENTS.md not found at $AGENTS_MD"
+    echo "note: AGENTS.md not found at $AGENTS_MD (skipping sync)"
+    return 0
   fi
 
   if grep -qF "$START_MARKER" "$AGENTS_MD"; then
