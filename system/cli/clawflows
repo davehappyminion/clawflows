@@ -309,7 +309,9 @@ $description
   cmd_enable "$name"
 
   echo ""
-  echo "  Your workflow is ready! Ask your agent to run it or edit the file to refine."
+  echo "  Your workflow is ready! Ask your agent to run it."
+  echo ""
+  echo "  To edit: $workflow_dir/WORKFLOW.md"
   echo ""
 }
 
