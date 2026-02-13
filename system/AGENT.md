@@ -182,8 +182,11 @@ clawflows create --from-json '{"name": "...", "summary": "...", "description": "
 # Turn on a workflow
 clawflows enable <name>
 
-# Turn off a workflow
+# Turn off a workflow (removes symlink, data stays safe)
 clawflows disable <name>
+
+# Copy a community workflow to custom/ for editing
+clawflows customize <name>
 
 # Pull the latest workflows from GitHub (new workflows, updates)
 clawflows update
@@ -233,9 +236,12 @@ If the user asks for something that sounds like a workflow but you're not sure w
 
 ## Workflow Locations
 
-- **All workflows:** `~/.openclaw/workspace/clawflows/workflows/available/`
-- **Enabled workflows:** `~/.openclaw/workspace/clawflows/workflows/enabled/`
+- **Community workflows:** `~/.openclaw/workspace/clawflows/workflows/available/community/`
+- **Custom workflows:** `~/.openclaw/workspace/clawflows/workflows/available/custom/`
+- **Enabled workflows:** `~/.openclaw/workspace/clawflows/workflows/enabled/` (symlinks)
 - **Each workflow has a `WORKFLOW.md`** — this is the file you read and follow when running it
+
+When you enable a workflow, a symlink is created in `enabled/` pointing to the source in `community/` or `custom/`. Disabling removes the symlink — no data is deleted.
 
 ## Scheduled vs On-Demand
 
@@ -310,7 +316,7 @@ Want me to tweak anything?"
 
 ### After Creating
 
-- The workflow is automatically enabled (created in `workflows/enabled/`)
+- The workflow is created in `workflows/available/custom/` and automatically enabled
 - AGENTS.md is updated so you know about it
-- The user can edit the WORKFLOW.md file to refine it
-- If they want to share it, they can copy it to `workflows/available/` and submit a PR
+- The user can edit the WORKFLOW.md file to refine it — custom workflows are safe from updates
+- If they want to share it, they can copy it to `workflows/available/community/` and submit a PR

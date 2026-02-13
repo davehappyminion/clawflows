@@ -9,7 +9,8 @@ if [ -L "$SELF" ]; then
 fi
 CLAWFLOWS_DIR="$(cd "$(dirname "$SELF")/../.." && pwd)"
 AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
-AVAILABLE_DIR="$CLAWFLOWS_DIR/workflows/available"
+COMMUNITY_DIR="$CLAWFLOWS_DIR/workflows/available/community"
+CUSTOM_DIR="$CLAWFLOWS_DIR/workflows/available/custom"
 ENABLED_DIR="$CLAWFLOWS_DIR/workflows/enabled"
 BIN_TARGET="$HOME/.local/bin/clawflows"
 
@@ -31,12 +32,13 @@ cmd_help() {
     list available       Show only available workflows
 
   Creating
-    create               Create a new workflow (interactive wizard)
+    create               Create a new custom workflow (interactive)
     create --from-json   Create from JSON (for agents)
 
   Managing
-    enable <name>        Turn on a workflow
-    disable <name>       Turn off a workflow
+    enable <name>        Turn on a workflow (symlinks to enabled/)
+    disable <name>       Turn off a workflow (removes symlink)
+    customize <name>     Copy a community workflow to custom/ for editing
 
   Maintenance
     update               Pull the latest workflows from GitHub
@@ -50,19 +52,21 @@ cmd_help() {
     clawflows create                        Create a new custom workflow
     clawflows list                          See everything
     clawflows enable send-morning-briefing  Turn on morning briefings
+    clawflows customize send-morning-briefing  Make your own version
     clawflows disable check-x               Turn off X/Twitter workflow
-    clawflows update                        Get new workflows
+    clawflows update                        Get new community workflows
 
   How it works
     Workflows live in ~/.openclaw/workspace/clawflows/workflows/
-    • available/  — all workflows from the repo
-    • enabled/    — the ones you've turned on (copied from available)
+    • available/community/  — from the repo (updated via git)
+    • available/custom/     — your own workflows (gitignored)
+    • enabled/              — symlinks to active workflows
 
-    When you enable or disable a workflow, your agent's AGENTS.md is
-    updated automatically so it knows what's available.
+    When you enable a workflow, a symlink is created. Disable removes
+    the symlink — your custom workflows are never deleted.
 
-    Scheduled workflows run automatically via the clawflows-scheduler
-    cron job (set up during install, checks every 15 min).
+    Use 'customize' to copy a community workflow to custom/ so you
+    can edit it without losing changes on update.
 
 EOF
 }
@@ -83,6 +87,16 @@ get_field() {
     }
     in_fm >= 2 { exit }
   ' "$file"
+}
+
+# Find workflow source: custom/ takes priority over community/
+_find_workflow() {
+  local name="$1"
+  if [ -d "$CUSTOM_DIR/$name" ]; then
+    echo "$CUSTOM_DIR/$name"
+  elif [ -d "$COMMUNITY_DIR/$name" ]; then
+    echo "$COMMUNITY_DIR/$name"
+  fi
 }
 
 # Build a line for a workflow: emoji + name + description
@@ -107,12 +121,10 @@ _workflow_line() {
 # ── Commands ────────────────────────────────────────────────────────────────
 
 # Create workflow from JSON (for agent/programmatic use)
-# Expected JSON: {"name": "...", "emoji": "...", "summary": "...", "schedule": "...", "author": "...", "description": "..."}
 _create_from_json() {
   local json="$1"
 
   if [ -z "$json" ]; then
-    # Read from stdin if no argument
     json="$(cat)"
   fi
 
@@ -120,9 +132,8 @@ _create_from_json() {
     die "No JSON provided. Usage: clawflows create --from-json '{...}' or pipe JSON to stdin"
   fi
 
-  # Parse JSON fields using grep/sed (portable, no jq dependency)
+  # Parse JSON fields
   local name emoji summary schedule author description
-
   name="$(echo "$json" | grep -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
   emoji="$(echo "$json" | grep -o '"emoji"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
   summary="$(echo "$json" | grep -o '"summary"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1)"
@@ -139,7 +150,7 @@ _create_from_json() {
   emoji="${emoji:-🔧}"
 
   # Check if already exists
-  if [ -d "$ENABLED_DIR/$name" ] || [ -d "$AVAILABLE_DIR/$name" ]; then
+  if [ -d "$CUSTOM_DIR/$name" ] || [ -d "$COMMUNITY_DIR/$name" ]; then
     die "Workflow '$name' already exists"
   fi
 
@@ -159,7 +170,6 @@ schedule: \"$schedule\""
 author: $author"
   fi
 
-  # Title case the name for the heading
   local title
   title="$(echo "${name//-/ }" | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')"
 
@@ -171,19 +181,18 @@ author: $author"
 $description
 "
 
-  # Create the workflow directory and file
-  local workflow_dir="$ENABLED_DIR/$name"
+  # Create in custom/ directory
+  local workflow_dir="$CUSTOM_DIR/$name"
   mkdir -p "$workflow_dir"
   printf '%s' "$workflow_content" > "$workflow_dir/WORKFLOW.md"
 
   echo "✓ Created $workflow_dir/WORKFLOW.md"
 
-  # Sync AGENTS.md
-  cmd_sync
+  # Auto-enable it
+  cmd_enable "$name"
 }
 
 cmd_create() {
-  # Check for --from-json flag (for agent/programmatic use)
   if [ "${1:-}" = "--from-json" ]; then
     _create_from_json "${2:-}"
     return
@@ -198,13 +207,10 @@ cmd_create() {
   while [ -z "$name" ]; do
     printf "  Name (e.g., check-water-intake): "
     read -r name
-    # Validate: lowercase, hyphenated, starts with verb
     if [ -n "$name" ]; then
-      # Convert to lowercase and replace spaces with hyphens
       name="$(echo "$name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
-      # Check if starts with valid verb
       if ! echo "$name" | grep -qE '^(activate|process|check|build|send|sync|track|draft|review|plan|prep|curate|summarize|backup|clean|rotate|find)-'; then
-        echo "  ⚠️  Name should start with a verb (check-, send-, build-, process-, sync-, activate-, track-, etc.)"
+        echo "  ⚠️  Name should start with a verb (check-, send-, build-, process-, etc.)"
         printf "  Continue anyway? [y/N] "
         read -r confirm
         if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
@@ -212,8 +218,7 @@ cmd_create() {
           continue
         fi
       fi
-      # Check if already exists
-      if [ -d "$ENABLED_DIR/$name" ] || [ -d "$AVAILABLE_DIR/$name" ]; then
+      if [ -d "$CUSTOM_DIR/$name" ] || [ -d "$COMMUNITY_DIR/$name" ]; then
         echo "  ⚠️  Workflow '$name' already exists"
         name=""
         continue
@@ -226,7 +231,7 @@ cmd_create() {
   read -r emoji
   emoji="${emoji:-🔧}"
 
-  # 3. Summary (one line)
+  # 3. Summary
   local summary=""
   while [ -z "$summary" ]; do
     printf "  One-line summary: "
@@ -248,7 +253,7 @@ cmd_create() {
   printf "  Author: "
   read -r author
 
-  # 6. Description (multiline)
+  # 6. Description
   echo ""
   echo "  Describe what this workflow does."
   echo "  What should the agent do when running it? Be specific."
@@ -265,7 +270,7 @@ cmd_create() {
     fi
   done
 
-  # Build the WORKFLOW.md content
+  # Build content
   local workflow_content="---
 name: $name
 emoji: $emoji
@@ -281,7 +286,6 @@ schedule: \"$schedule\""
 author: $author"
   fi
 
-  # Title case the name for the heading
   local title
   title="$(echo "${name//-/ }" | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')"
 
@@ -293,23 +297,21 @@ author: $author"
 $description
 "
 
-  # Create the workflow directory and file
-  local workflow_dir="$ENABLED_DIR/$name"
+  # Create in custom/ directory
+  local workflow_dir="$CUSTOM_DIR/$name"
   mkdir -p "$workflow_dir"
   printf '%s' "$workflow_content" > "$workflow_dir/WORKFLOW.md"
 
   echo ""
   echo "  ✓ Created $workflow_dir/WORKFLOW.md"
   echo ""
-
-  # Show what was created
   echo "  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   echo "$workflow_content" | sed 's/^/  /'
   echo "  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   echo ""
 
-  # Sync AGENTS.md
-  cmd_sync
+  # Auto-enable
+  cmd_enable "$name"
 
   echo ""
   echo "  Your workflow is ready! Ask your agent to run it or edit the file to refine."
@@ -322,12 +324,24 @@ cmd_list() {
   local enabled_lines=()
   local available_lines=()
 
-  for dir in "$AVAILABLE_DIR"/*/; do
+  # Collect all available workflows (custom takes priority)
+  declare -A all_workflows
+  for dir in "$COMMUNITY_DIR"/*/; do
     [ -d "$dir" ] || continue
-    found=true
     name="$(basename "$dir")"
+    all_workflows["$name"]="$dir"
+  done
+  for dir in "$CUSTOM_DIR"/*/; do
+    [ -d "$dir" ] || continue
+    name="$(basename "$dir")"
+    all_workflows["$name"]="$dir"
+  done
 
-    if [ -d "$ENABLED_DIR/$name" ]; then
+  for name in "${!all_workflows[@]}"; do
+    found=true
+    dir="${all_workflows[$name]}"
+
+    if [ -L "$ENABLED_DIR/$name" ] || [ -d "$ENABLED_DIR/$name" ]; then
       enabled_lines+=("$(_workflow_line "$dir")")
     else
       available_lines+=("$(_workflow_line "$dir")")
@@ -377,25 +391,63 @@ cmd_list() {
 
 cmd_enable() {
   local name="$1"
-  [ -d "$AVAILABLE_DIR/$name" ] || die "workflow '$name' not found in available/"
-  if [ -d "$ENABLED_DIR/$name" ]; then
+  local source_dir
+  source_dir="$(_find_workflow "$name")"
+
+  [ -n "$source_dir" ] || die "workflow '$name' not found"
+
+  if [ -L "$ENABLED_DIR/$name" ] || [ -d "$ENABLED_DIR/$name" ]; then
     echo "already enabled: $name"
     return
   fi
-  cp -r "$AVAILABLE_DIR/$name" "$ENABLED_DIR/$name"
+
+  # Create symlink
+  ln -s "$source_dir" "$ENABLED_DIR/$name"
   echo "enabled: $name"
   cmd_sync
 }
 
 cmd_disable() {
   local name="$1"
-  if [ ! -d "$ENABLED_DIR/$name" ]; then
+  if [ ! -L "$ENABLED_DIR/$name" ] && [ ! -d "$ENABLED_DIR/$name" ]; then
     echo "not enabled: $name"
     return
   fi
+
+  # Remove symlink (or directory if somehow it's not a symlink)
   rm -rf "$ENABLED_DIR/$name"
   echo "disabled: $name"
   cmd_sync
+}
+
+cmd_customize() {
+  local name="$1"
+
+  # Must exist in community/
+  if [ ! -d "$COMMUNITY_DIR/$name" ]; then
+    die "workflow '$name' not found in community/"
+  fi
+
+  # Already customized?
+  if [ -d "$CUSTOM_DIR/$name" ]; then
+    echo "already customized: $name (exists in custom/)"
+    return
+  fi
+
+  # Copy to custom/
+  cp -r "$COMMUNITY_DIR/$name" "$CUSTOM_DIR/$name"
+  echo "copied to custom/: $name"
+
+  # If it was enabled, update the symlink to point to custom/
+  if [ -L "$ENABLED_DIR/$name" ]; then
+    rm "$ENABLED_DIR/$name"
+    ln -s "$CUSTOM_DIR/$name" "$ENABLED_DIR/$name"
+    echo "updated symlink to custom version"
+  fi
+
+  echo ""
+  echo "  Edit: $CUSTOM_DIR/$name/WORKFLOW.md"
+  echo "  Your changes won't be overwritten by updates."
 }
 
 cmd_update() {
@@ -416,7 +468,7 @@ cmd_uninstall() {
   echo "    • ClawFlows section from AGENTS.md"
   echo "    • Scheduler cron job"
   echo ""
-  echo "  Your enabled workflows in $ENABLED_DIR/ will NOT be deleted."
+  echo "  Your custom workflows in $CUSTOM_DIR/ will NOT be deleted."
   echo "  The repo at $CLAWFLOWS_DIR/ will NOT be deleted."
   echo ""
   printf "  Are you sure? [y/N] "
@@ -426,13 +478,11 @@ cmd_uninstall() {
     return
   fi
 
-  # Remove symlink
   if [ -L "$BIN_TARGET" ]; then
     rm -f "$BIN_TARGET"
     echo "  Removed $BIN_TARGET"
   fi
 
-  # Remove AGENTS.md block
   if [ -f "$AGENTS_MD" ] && grep -qF "$START_MARKER" "$AGENTS_MD"; then
     local tmpfile
     tmpfile="$(mktemp)"
@@ -445,7 +495,6 @@ cmd_uninstall() {
     echo "  Removed ClawFlows section from AGENTS.md"
   fi
 
-  # Remove scheduler cron
   if command -v openclaw >/dev/null 2>&1; then
     openclaw cron remove --name "clawflows-scheduler" </dev/null >/dev/null 2>&1 || true
     echo "  Removed scheduler cron"
@@ -490,30 +539,39 @@ _build_block() {
   lines+=("3. If the workflow isn't enabled yet, run \`clawflows enable <name>\` first")
   lines+=("")
   lines+=("### CLI Commands")
-  lines+=("- \`clawflows list\` — see all workflows (enabled + available)")
-  lines+=("- \`clawflows list enabled\` — see only what's turned on")
-  lines+=("- \`clawflows list available\` — see what else is available")
+  lines+=("- \`clawflows list\` — see all workflows")
   lines+=("- \`clawflows enable <name>\` — turn on a workflow")
   lines+=("- \`clawflows disable <name>\` — turn off a workflow")
-  lines+=("- \`clawflows update\` — pull the latest workflows from GitHub")
-  lines+=("- \`clawflows sync\` — refresh this list after manual changes")
+  lines+=("- \`clawflows create\` — create a new custom workflow")
+  lines+=("- \`clawflows customize <name>\` — copy a community workflow to edit")
+  lines+=("- \`clawflows update\` — pull the latest community workflows")
   lines+=("")
 
   local has_enabled=false
   local entries=()
-  for dir in "$ENABLED_DIR"/*/; do
-    [ -d "$dir" ] || continue
-    local name desc schedule wf_file
-    name="$(basename "$dir")"
+  for link in "$ENABLED_DIR"/*/; do
+    [ -d "$link" ] || continue
+    local name desc schedule wf_file target_dir
+    name="$(basename "$link")"
     [ "$name" = ".gitkeep" ] && continue
-    wf_file="$dir/WORKFLOW.md"
+
+    # Resolve symlink to get actual path
+    if [ -L "$link" ]; then
+      target_dir="$(readlink "$link")"
+    else
+      target_dir="$link"
+    fi
+
+    wf_file="$target_dir/WORKFLOW.md"
+    [ -f "$wf_file" ] || wf_file="$link/WORKFLOW.md"
     [ -f "$wf_file" ] || continue
+
     desc="$(get_field "$wf_file" description)"
     schedule="$(get_field "$wf_file" schedule)"
     if [ -n "$schedule" ]; then
-      entries+=("- **$name** ($schedule): $desc → \`$CLAWFLOWS_DIR/workflows/enabled/$name/WORKFLOW.md\`")
+      entries+=("- **$name** ($schedule): $desc → \`$wf_file\`")
     else
-      entries+=("- **$name** (on-demand): $desc → \`$CLAWFLOWS_DIR/workflows/enabled/$name/WORKFLOW.md\`")
+      entries+=("- **$name** (on-demand): $desc → \`$wf_file\`")
     fi
     has_enabled=true
   done
@@ -560,6 +618,7 @@ case "$1" in
   create)    cmd_create "${2:-}" "${3:-}" ;;
   enable)    [ $# -ge 2 ] || die "usage: clawflows enable <name>"; cmd_enable "$2" ;;
   disable)   [ $# -ge 2 ] || die "usage: clawflows disable <name>"; cmd_disable "$2" ;;
+  customize) [ $# -ge 2 ] || die "usage: clawflows customize <name>"; cmd_customize "$2" ;;
   update)    cmd_update ;;
   uninstall) cmd_uninstall ;;
   sync)      cmd_sync ;;
