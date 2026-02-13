@@ -209,14 +209,9 @@ cmd_create() {
     read -r name
     if [ -n "$name" ]; then
       name="$(echo "$name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
+      # Suggest a verb-prefixed name if they didn't use one
       if ! echo "$name" | grep -qE '^(activate|process|check|build|send|sync|track|draft|review|plan|prep|curate|summarize|backup|clean|rotate|find)-'; then
-        echo "  ⚠️  Name should start with a verb (check-, send-, build-, process-, etc.)"
-        printf "  Continue anyway? [y/N] "
-        read -r confirm
-        if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
-          name=""
-          continue
-        fi
+        echo "  💡 Tip: names usually start with a verb like check-$name or track-$name"
       fi
       if [ -d "$CUSTOM_DIR/$name" ] || [ -d "$COMMUNITY_DIR/$name" ]; then
         echo "  ⚠️  Workflow '$name' already exists"
@@ -248,9 +243,9 @@ cmd_create() {
 
   # 5. Author
   echo ""
-  echo "  Author (optional)"
+  echo "  Your name (optional, for credit)"
   echo "    GitHub username, @twitter, or both: \"nikilster @nikil\""
-  printf "  Author: "
+  printf "  You: "
   read -r author
 
   # 6. Description
