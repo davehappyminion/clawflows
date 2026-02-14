@@ -1,0 +1,165 @@
+# ClawFlows
+
+Bash CLI for OpenClaw workflow automation. Users enable pre-built or custom workflows that their AI agent can run on-demand or on a schedule.
+
+## Directory Structure
+
+```
+clawflows/
+├── system/
+│   ├── cli/clawflows          # Main CLI (936 lines bash) - ALL LOGIC HERE
+│   ├── install.sh             # Installer script
+│   ├── AGENT.md               # Agent reference guide
+│   ├── scheduler.md           # Scheduler instructions
+│   └── runs/                  # Execution history (gitignored)
+├── workflows/
+│   ├── available/
+│   │   ├── community/         # 54 read-only workflows from GitHub
+│   │   └── custom/            # User-created workflows (gitignored)
+│   └── enabled/               # Symlinks to active workflows (gitignored)
+└── docs/
+    └── creating-workflows.md  # Workflow creation guide
+```
+
+## Key Architecture Decisions
+
+### Symlink-Based Activation
+- `enable` creates symlink: `enabled/name → available/community/name` or `available/custom/name`
+- `disable` removes symlink only (never deletes files)
+- Custom workflows override community by name
+
+### What's Gitignored
+- `workflows/enabled/*` — user's active workflows
+- `workflows/available/custom/*` — user's custom workflows
+- `system/runs/` — execution history
+
+### AGENTS.md Sync
+CLI maintains a block in `~/.openclaw/workspace/AGENTS.md` between markers:
+```
+<!-- clawflows:start -->
+...auto-generated workflow list...
+<!-- clawflows:end -->
+```
+Called automatically on enable/disable/create/update.
+
+## Code Conventions
+
+### Function Naming
+```bash
+cmd_enable()        # CLI command handlers (public)
+cmd_backup()
+_find_workflow()    # Helper functions (private, underscore prefix)
+_build_block()
+die()               # Utilities
+get_field()
+```
+
+### Error Handling
+```bash
+die() { echo "error: $1" >&2; exit 1; }
+
+# Usage
+[ -n "$name" ] || die "workflow '$name' not found"
+```
+
+### Adding a New Command
+1. Create `cmd_newcommand()` function
+2. Add case in main router at bottom of file:
+   ```bash
+   case "$1" in
+     ...
+     newcommand) cmd_newcommand "${2:-}" ;;
+     ...
+   esac
+   ```
+3. Add to `cmd_help()` text
+4. Add to `_build_block()` CLI Commands section (for AGENTS.md)
+
+### Workflow Lookup
+Always use `_find_workflow()` — checks custom/ before community/:
+```bash
+source_dir="$(_find_workflow "$name")"
+[ -n "$source_dir" ] || die "workflow '$name' not found"
+```
+
+## Gotchas & Things to Avoid
+
+### Bash Compatibility
+- **No associative arrays** — macOS ships bash 3.2
+- Use `|| true` for arithmetic that might be zero: `((count++)) || true`
+
+### JSON Parsing
+No external parser. Uses grep/sed with `|| true` for optional fields:
+```bash
+name="$(echo "$json" | grep -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1 || true)"
+```
+
+### Symlink Resolution
+CLI must work when symlinked to `~/.local/bin/clawflows`:
+```bash
+SELF="$0"
+if [ -L "$SELF" ]; then
+  SELF="$(readlink "$SELF")"
+fi
+CLAWFLOWS_DIR="$(cd "$(dirname "$SELF")/../.." && pwd)"
+```
+
+### Never Do
+- Modify `workflows/available/community/` directly (gets overwritten on update)
+- Use bash 4+ features (associative arrays, `${var,,}` lowercasing)
+- Delete files via symlink path (delete the symlink itself)
+- Skip `cmd_sync` after enable/disable/create
+
+## Workflow Format
+
+```yaml
+---
+name: workflow-name
+emoji: 📅
+description: One-line summary
+schedule: "7am, 5pm"        # Optional, omit for on-demand
+author: @handle             # Optional
+---
+
+# Workflow Title
+
+Instructions for the agent...
+```
+
+Extract fields with:
+```bash
+emoji="$(get_field "$wf_file" emoji)"
+schedule="$(get_field "$wf_file" schedule)"
+```
+
+## Testing
+
+No automated tests. Manual verification:
+```bash
+# Test a command
+/path/to/system/cli/clawflows backup
+/path/to/system/cli/clawflows restore latest
+```
+
+Bash strict mode (`set -euo pipefail`) catches most errors immediately.
+
+## Environment Variables
+
+```bash
+AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
+BACKUP_DIR="${BACKUP_DIR:-$HOME/.openclaw/workspace/clawflows-backups}"
+EDITOR="${EDITOR:-}"  # Falls back to code, vim, nano, vi
+```
+
+## Common Tasks
+
+### Find where a command is implemented
+All in `system/cli/clawflows`. Search for `cmd_commandname()`.
+
+### Add a new workflow field
+1. Add to `get_field()` usage where needed
+2. Update `_create_from_json()` if it should be creatable via JSON
+3. Update `docs/creating-workflows.md`
+
+### Change what gets backed up
+Modify `cmd_backup()` — it creates a tar.gz with `custom/` and `enabled-workflows.txt`.
