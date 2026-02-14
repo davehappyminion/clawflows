@@ -41,7 +41,8 @@ cmd_help() {
   Managing
     enable <name>        Turn on a workflow (symlinks to enabled/)
     disable <name>       Turn off a workflow (removes symlink)
-    customize <name>     Copy a community workflow to custom/ for editing
+    edit <name>          Copy a community workflow to custom/ for editing
+    open <name>          Open a workflow in your editor
 
   Maintenance
     update               Pull the latest workflows from GitHub
@@ -56,7 +57,8 @@ cmd_help() {
     clawflows create                        Create a new custom workflow
     clawflows list                          See everything
     clawflows enable send-morning-briefing  Turn on morning briefings
-    clawflows customize send-morning-briefing  Make your own version
+    clawflows edit send-morning-briefing    Make your own version
+    clawflows open send-morning-briefing    Open in your editor
     clawflows disable check-x               Turn off X/Twitter workflow
     clawflows update                        Get new community workflows
 
@@ -69,8 +71,9 @@ cmd_help() {
     When you enable a workflow, a symlink is created. Disable removes
     the symlink — your custom workflows are never deleted.
 
-    Use 'customize' to copy a community workflow to custom/ so you
-    can edit it without losing changes on update.
+    Use 'edit' to copy a community workflow to custom/ so you
+    can modify it without losing changes on update. Use 'open' to
+    open any workflow in your editor.
 
 EOF
 }
@@ -441,34 +444,78 @@ cmd_disable() {
   cmd_sync
 }
 
-cmd_customize() {
+cmd_edit() {
   local name="$1"
 
-  # Must exist in community/
-  if [ ! -d "$COMMUNITY_DIR/$name" ]; then
-    die "workflow '$name' not found in community/"
-  fi
-
-  # Already customized?
+  # Already in custom? Just show the path
   if [ -d "$CUSTOM_DIR/$name" ]; then
-    echo "already customized: $name (exists in custom/)"
+    echo "workflow is in custom/: $name"
+    echo ""
+    echo "  Edit: $CUSTOM_DIR/$name/WORKFLOW.md"
     return
   fi
 
-  # Copy to custom/
-  cp -r "$COMMUNITY_DIR/$name" "$CUSTOM_DIR/$name"
-  echo "copied to custom/: $name"
+  # In community? Copy to custom
+  if [ -d "$COMMUNITY_DIR/$name" ]; then
+    cp -r "$COMMUNITY_DIR/$name" "$CUSTOM_DIR/$name"
+    echo "copied to custom/: $name"
 
-  # If it was enabled, update the symlink to point to custom/
-  if [ -L "$ENABLED_DIR/$name" ]; then
-    rm "$ENABLED_DIR/$name"
-    ln -s "$CUSTOM_DIR/$name" "$ENABLED_DIR/$name"
-    echo "updated symlink to custom version"
+    # If it was enabled, update the symlink to point to custom/
+    if [ -L "$ENABLED_DIR/$name" ]; then
+      rm "$ENABLED_DIR/$name"
+      ln -s "$CUSTOM_DIR/$name" "$ENABLED_DIR/$name"
+      echo "updated symlink to custom version"
+    fi
+
+    echo ""
+    echo "  Edit: $CUSTOM_DIR/$name/WORKFLOW.md"
+    echo "  Your changes won't be overwritten by updates."
+    return
   fi
 
-  echo ""
-  echo "  Edit: $CUSTOM_DIR/$name/WORKFLOW.md"
-  echo "  Your changes won't be overwritten by updates."
+  die "workflow '$name' not found"
+}
+
+cmd_open() {
+  local name="$1"
+  local wf_file=""
+
+  # Find the workflow file (custom takes priority)
+  if [ -d "$CUSTOM_DIR/$name" ]; then
+    wf_file="$CUSTOM_DIR/$name/WORKFLOW.md"
+  elif [ -d "$COMMUNITY_DIR/$name" ]; then
+    # It's a community workflow - suggest editing first
+    echo "note: '$name' is a community workflow"
+    echo "      Changes will be lost on update. Run 'clawflows edit $name' first to make it editable."
+    echo ""
+    wf_file="$COMMUNITY_DIR/$name/WORKFLOW.md"
+  else
+    die "workflow '$name' not found"
+  fi
+
+  [ -f "$wf_file" ] || die "WORKFLOW.md not found at $wf_file"
+
+  # Find an editor
+  local editor="${EDITOR:-}"
+  if [ -z "$editor" ]; then
+    # Try common editors
+    for e in code vim nano vi; do
+      if command -v "$e" >/dev/null 2>&1; then
+        editor="$e"
+        break
+      fi
+    done
+  fi
+
+  if [ -z "$editor" ]; then
+    echo "No editor found. Set \$EDITOR or install vim/nano."
+    echo ""
+    echo "  File: $wf_file"
+    return 1
+  fi
+
+  echo "Opening $wf_file..."
+  $editor "$wf_file"
 }
 
 cmd_update() {
@@ -568,7 +615,8 @@ _build_block() {
   lines+=("- \`clawflows enable <name>\` — turn on a workflow")
   lines+=("- \`clawflows disable <name>\` — turn off a workflow")
   lines+=("- \`clawflows create\` — create a new custom workflow")
-  lines+=("- \`clawflows customize <name>\` — copy a community workflow to edit")
+  lines+=("- \`clawflows edit <name>\` — copy a community workflow to custom/ for editing")
+  lines+=("- \`clawflows open <name>\` — open a workflow in your editor")
   lines+=("- \`clawflows update\` — pull the latest community workflows")
   lines+=("")
 
@@ -683,7 +731,8 @@ case "$1" in
   run)       [ $# -ge 2 ] || die "usage: clawflows run <name>"; cmd_run "$2" ;;
   enable)    [ $# -ge 2 ] || die "usage: clawflows enable <name>"; cmd_enable "$2" ;;
   disable)   [ $# -ge 2 ] || die "usage: clawflows disable <name>"; cmd_disable "$2" ;;
-  customize) [ $# -ge 2 ] || die "usage: clawflows customize <name>"; cmd_customize "$2" ;;
+  edit)      [ $# -ge 2 ] || die "usage: clawflows edit <name>"; cmd_edit "$2" ;;
+  open)      [ $# -ge 2 ] || die "usage: clawflows open <name>"; cmd_open "$2" ;;
   update)    cmd_update ;;
   uninstall) cmd_uninstall ;;
   sync)      cmd_sync ;;

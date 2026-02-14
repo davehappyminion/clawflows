@@ -186,7 +186,10 @@ clawflows enable <name>
 clawflows disable <name>
 
 # Copy a community workflow to custom/ for editing
-clawflows customize <name>
+clawflows edit <name>
+
+# Open a workflow in the user's editor
+clawflows open <name>
 
 # Pull the latest workflows from GitHub (new workflows, updates)
 clawflows update
