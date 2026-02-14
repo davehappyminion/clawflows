@@ -9,6 +9,7 @@ if [ -L "$SELF" ]; then
 fi
 CLAWFLOWS_DIR="$(cd "$(dirname "$SELF")/../.." && pwd)"
 AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
+BACKUP_DIR="${BACKUP_DIR:-$HOME/.openclaw/workspace/clawflows-backups}"
 COMMUNITY_DIR="$CLAWFLOWS_DIR/workflows/available/community"
 CUSTOM_DIR="$CLAWFLOWS_DIR/workflows/available/custom"
 ENABLED_DIR="$CLAWFLOWS_DIR/workflows/enabled"
@@ -43,6 +44,10 @@ cmd_help() {
     disable <name>       Turn off a workflow (removes symlink)
     edit <name>          Copy a community workflow to custom/ for editing
     open <name>          Open a workflow in your editor
+
+  Backup
+    backup               Back up custom workflows and enabled list
+    restore              Restore from a backup
 
   Maintenance
     update               Pull the latest workflows from GitHub
@@ -617,6 +622,8 @@ _build_block() {
   lines+=("- \`clawflows create\` — create a new custom workflow")
   lines+=("- \`clawflows edit <name>\` — copy a community workflow to custom/ for editing")
   lines+=("- \`clawflows open <name>\` — open a workflow in your editor")
+  lines+=("- \`clawflows backup\` — back up custom workflows and enabled list")
+  lines+=("- \`clawflows restore\` — restore from a backup")
   lines+=("- \`clawflows update\` — pull the latest community workflows")
   lines+=("")
 
@@ -682,6 +689,192 @@ _replace_block() {
   rm -f "$blockfile"
 }
 
+cmd_backup() {
+  local filename="${1:-}"
+  local timestamp
+  timestamp="$(date +%Y-%m-%d-%H%M%S)"
+
+  if [ -z "$filename" ]; then
+    filename="clawflows-$timestamp.tar.gz"
+  elif [[ "$filename" != *.tar.gz ]]; then
+    filename="$filename.tar.gz"
+  fi
+
+  mkdir -p "$BACKUP_DIR"
+
+  local tmpdir
+  tmpdir="$(mktemp -d)"
+
+  # Copy custom workflows
+  if [ -d "$CUSTOM_DIR" ] && [ "$(ls -A "$CUSTOM_DIR" 2>/dev/null | grep -v '.gitkeep')" ]; then
+    mkdir -p "$tmpdir/custom"
+    for wf in "$CUSTOM_DIR"/*/; do
+      [ -d "$wf" ] || continue
+      local name="$(basename "$wf")"
+      [ "$name" = ".gitkeep" ] && continue
+      cp -r "$wf" "$tmpdir/custom/"
+    done
+  else
+    mkdir -p "$tmpdir/custom"
+  fi
+
+  # Save enabled workflows list
+  : > "$tmpdir/enabled-workflows.txt"
+  for link in "$ENABLED_DIR"/*/; do
+    [ -d "$link" ] || continue
+    local name="$(basename "$link")"
+    [ "$name" = ".gitkeep" ] && continue
+    echo "$name" >> "$tmpdir/enabled-workflows.txt"
+  done
+
+  # Create archive
+  tar -czf "$BACKUP_DIR/$filename" -C "$tmpdir" .
+  rm -rf "$tmpdir"
+
+  # Count what we backed up
+  local custom_count=0
+  for wf in "$CUSTOM_DIR"/*/; do
+    [ -d "$wf" ] || continue
+    [ "$(basename "$wf")" = ".gitkeep" ] && continue
+    ((custom_count++)) || true
+  done
+
+  local enabled_count=0
+  for link in "$ENABLED_DIR"/*/; do
+    [ -d "$link" ] || continue
+    [ "$(basename "$link")" = ".gitkeep" ] && continue
+    ((enabled_count++)) || true
+  done
+
+  echo ""
+  echo "  Backup created"
+  echo ""
+  echo "    Custom workflows: $custom_count"
+  echo "    Enabled workflows: $enabled_count"
+  echo ""
+  echo "    $BACKUP_DIR/$filename"
+  echo ""
+}
+
+cmd_restore() {
+  local file="${1:-}"
+
+  # List available backups if none specified
+  if [ -z "$file" ]; then
+    if [ ! -d "$BACKUP_DIR" ] || [ -z "$(ls -A "$BACKUP_DIR" 2>/dev/null)" ]; then
+      echo ""
+      echo "  No backups found in $BACKUP_DIR"
+      echo "  Run 'clawflows backup' to create one."
+      echo ""
+      return 1
+    fi
+
+    echo ""
+    echo "  Available backups:"
+    echo ""
+    local i=1
+    local backups=()
+    # Sort newest first (reverse alphabetical since filenames have timestamps)
+    for f in $(ls -r "$BACKUP_DIR"/*.tar.gz 2>/dev/null); do
+      [ -f "$f" ] || continue
+      backups+=("$f")
+      local name="$(basename "$f")"
+      if [ $i -eq 1 ]; then
+        echo "    $i. $name (latest)"
+      else
+        echo "    $i. $name"
+      fi
+      ((i++))
+    done
+
+    if [ ${#backups[@]} -eq 0 ]; then
+      echo "  No backups found."
+      echo ""
+      return 1
+    fi
+
+    echo ""
+    printf "  Restore which backup? [1]: "
+    read -r choice
+    choice="${choice:-1}"
+
+    if [[ ! "$choice" =~ ^[0-9]+$ ]] || [ "$choice" -lt 1 ] || [ "$choice" -gt ${#backups[@]} ]; then
+      echo "  Cancelled."
+      return 1
+    fi
+
+    file="${backups[$((choice-1))]}"
+  fi
+
+  # Handle "latest"
+  if [ "$file" = "latest" ]; then
+    file="$(ls -r "$BACKUP_DIR"/*.tar.gz 2>/dev/null | head -1)"
+    [ -n "$file" ] || die "no backups found"
+  fi
+
+  # Resolve relative path
+  if [ ! -f "$file" ] && [ -f "$BACKUP_DIR/$file" ]; then
+    file="$BACKUP_DIR/$file"
+  fi
+
+  [ -f "$file" ] || die "backup not found: $file"
+
+  echo ""
+  echo "  Restoring from $(basename "$file")..."
+
+  local tmpdir
+  tmpdir="$(mktemp -d)"
+  tar -xzf "$file" -C "$tmpdir"
+
+  # Restore custom workflows
+  local restored=0
+  local skipped=0
+  if [ -d "$tmpdir/custom" ]; then
+    for wf in "$tmpdir/custom"/*/; do
+      [ -d "$wf" ] || continue
+      local name="$(basename "$wf")"
+      [ "$name" = ".gitkeep" ] && continue
+
+      if [ -d "$CUSTOM_DIR/$name" ]; then
+        ((skipped++)) || true
+      else
+        cp -r "$wf" "$CUSTOM_DIR/"
+        ((restored++)) || true
+      fi
+    done
+  fi
+
+  # Re-enable workflows
+  local enabled=0
+  if [ -f "$tmpdir/enabled-workflows.txt" ]; then
+    while IFS= read -r name || [ -n "$name" ]; do
+      [ -z "$name" ] && continue
+      if [ -L "$ENABLED_DIR/$name" ] || [ -d "$ENABLED_DIR/$name" ]; then
+        continue  # already enabled
+      fi
+      local source_dir
+      source_dir="$(_find_workflow "$name")"
+      if [ -n "$source_dir" ]; then
+        ln -s "$source_dir" "$ENABLED_DIR/$name"
+        ((enabled++)) || true
+      fi
+    done < "$tmpdir/enabled-workflows.txt"
+  fi
+
+  rm -rf "$tmpdir"
+
+  # Sync AGENTS.md if we enabled anything
+  if [ $enabled -gt 0 ]; then
+    cmd_sync >/dev/null 2>&1 || true
+  fi
+
+  echo ""
+  echo "  Restored $restored custom workflow(s)"
+  [ $skipped -gt 0 ] && echo "  Skipped $skipped (already exist)"
+  echo "  Enabled $enabled workflow(s)"
+  echo ""
+}
+
 cmd_run() {
   local name="$1"
   local wf_file
@@ -733,6 +926,8 @@ case "$1" in
   disable)   [ $# -ge 2 ] || die "usage: clawflows disable <name>"; cmd_disable "$2" ;;
   edit)      [ $# -ge 2 ] || die "usage: clawflows edit <name>"; cmd_edit "$2" ;;
   open)      [ $# -ge 2 ] || die "usage: clawflows open <name>"; cmd_open "$2" ;;
+  backup)    cmd_backup "${2:-}" ;;
+  restore)   cmd_restore "${2:-}" ;;
   update)    cmd_update ;;
   uninstall) cmd_uninstall ;;
   sync)      cmd_sync ;;
