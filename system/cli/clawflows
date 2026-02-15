@@ -13,6 +13,7 @@ BACKUP_DIR="${BACKUP_DIR:-$HOME/.openclaw/workspace/clawflows-backups}"
 COMMUNITY_DIR="$CLAWFLOWS_DIR/workflows/available/community"
 CUSTOM_DIR="$CLAWFLOWS_DIR/workflows/available/custom"
 ENABLED_DIR="$CLAWFLOWS_DIR/workflows/enabled"
+SUBMISSIONS_DIR="$CLAWFLOWS_DIR/community-submissions"
 BIN_TARGET="$HOME/.local/bin/clawflows"
 
 START_MARKER="<!-- clawflows:start -->"
@@ -44,6 +45,7 @@ cmd_help() {
     disable <name>       Turn off a workflow (removes symlink)
     edit <name>          Copy a community workflow to custom/ for editing
     open <name>          Open a workflow in your editor
+    submit <name>        Submit a custom workflow for community review
 
   Backup
     backup               Back up custom workflows and enabled list
@@ -51,7 +53,7 @@ cmd_help() {
 
   Maintenance
     update               Pull the latest workflows from GitHub
-    sync                 Refresh your agent's workflow list in AGENTS.md
+    sync-agent           Refresh your agent's workflow list in AGENTS.md
     uninstall            Remove clawflows and clean up
 
   Info
@@ -65,6 +67,7 @@ cmd_help() {
     clawflows edit send-morning-briefing    Make your own version
     clawflows open send-morning-briefing    Open in your editor
     clawflows disable check-x               Turn off X/Twitter workflow
+    clawflows submit my-workflow            Share your workflow with the community
     clawflows update                        Get new community workflows
 
   How it works
@@ -622,9 +625,18 @@ _build_block() {
   lines+=("- \`clawflows create\` — create a new custom workflow")
   lines+=("- \`clawflows edit <name>\` — copy a community workflow to custom/ for editing")
   lines+=("- \`clawflows open <name>\` — open a workflow in your editor")
+  lines+=("- \`clawflows submit <name>\` — submit a custom workflow for community review")
   lines+=("- \`clawflows backup\` — back up custom workflows and enabled list")
   lines+=("- \`clawflows restore\` — restore from a backup")
   lines+=("- \`clawflows update\` — pull the latest community workflows")
+  lines+=("- \`clawflows sync-agent\` — refresh your agent's workflow list in AGENTS.md")
+  lines+=("")
+  lines+=("### Sharing Workflows")
+  lines+=("When the user wants to share or submit a workflow to the community:")
+  lines+=("1. Create the workflow: \`clawflows create\`")
+  lines+=("2. Test it: \`clawflows run <name>\`")
+  lines+=("3. Submit it: \`clawflows submit <name>\`")
+  lines+=("4. Follow the PR instructions shown after submit")
   lines+=("")
 
   local has_enabled=false
@@ -875,6 +887,51 @@ cmd_restore() {
   echo ""
 }
 
+cmd_submit() {
+  local name="$1"
+
+  # Check if workflow exists in custom/
+  if [ ! -d "$CUSTOM_DIR/$name" ]; then
+    if [ -d "$COMMUNITY_DIR/$name" ]; then
+      die "workflow '$name' is already a community workflow"
+    fi
+    die "workflow '$name' not found in custom/. Create one with: clawflows create"
+  fi
+
+  local source_dir="$CUSTOM_DIR/$name"
+  local target_dir="$SUBMISSIONS_DIR/$name"
+
+  # Check if already submitted
+  if [ -d "$target_dir" ]; then
+    die "workflow '$name' has already been submitted. Check $target_dir"
+  fi
+
+  # Copy to submissions
+  mkdir -p "$SUBMISSIONS_DIR"
+  cp -r "$source_dir" "$target_dir"
+
+  echo ""
+  echo "  Workflow copied to community-submissions/"
+  echo ""
+  echo "  $target_dir/WORKFLOW.md"
+  echo ""
+  echo "  Next steps:"
+  echo "  ─────────────────────────────────────────"
+  echo "  1. Fork this repo (if you haven't already)"
+  echo "     https://github.com/davehappyminion/clawflows/fork"
+  echo ""
+  echo "  2. Commit and push your changes:"
+  echo "     git add community-submissions/$name"
+  echo "     git commit -m \"Add $name workflow\""
+  echo "     git push"
+  echo ""
+  echo "  3. Open a pull request:"
+  echo "     https://github.com/davehappyminion/clawflows/compare"
+  echo ""
+  echo "  Thanks for contributing!"
+  echo ""
+}
+
 cmd_run() {
   local name="$1"
   local wf_file
@@ -926,11 +983,12 @@ case "$1" in
   disable)   [ $# -ge 2 ] || die "usage: clawflows disable <name>"; cmd_disable "$2" ;;
   edit)      [ $# -ge 2 ] || die "usage: clawflows edit <name>"; cmd_edit "$2" ;;
   open)      [ $# -ge 2 ] || die "usage: clawflows open <name>"; cmd_open "$2" ;;
+  submit)    [ $# -ge 2 ] || die "usage: clawflows submit <name>"; cmd_submit "$2" ;;
   backup)    cmd_backup "${2:-}" ;;
   restore)   cmd_restore "${2:-}" ;;
   update)    cmd_update ;;
   uninstall) cmd_uninstall ;;
-  sync)      cmd_sync ;;
+  sync-agent) cmd_sync ;;
   help|--help|-h) cmd_help ;;
   *)         cmd_help ;;
 esac

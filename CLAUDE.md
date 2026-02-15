@@ -33,14 +33,21 @@ clawflows/
 - `workflows/available/custom/*` — user's custom workflows
 - `system/runs/` — execution history
 
-### AGENTS.md Sync
+### AGENTS.md Sync (Critical!)
 CLI maintains a block in `~/.openclaw/workspace/AGENTS.md` between markers:
 ```
 <!-- clawflows:start -->
 ...auto-generated workflow list...
 <!-- clawflows:end -->
 ```
-Called automatically on enable/disable/create/update.
+Called automatically on enable/disable/create/update. Manual refresh: `clawflows sync-agent`.
+
+**The agent only knows what's in AGENTS.md.** Whenever you change the system:
+- New CLI command → Add to `_build_block()` CLI Commands section
+- New capability/feature → Add a new section in `_build_block()`
+- Change how something works → Update the relevant section in `_build_block()`
+
+The `_build_block()` function (around line 608) generates what the agent sees. If it's not there, the agent won't know about it.
 
 ## Code Conventions
 
@@ -73,7 +80,7 @@ die() { echo "error: $1" >&2; exit 1; }
    esac
    ```
 3. Add to `cmd_help()` text
-4. Add to `_build_block()` CLI Commands section (for AGENTS.md)
+4. **IMPORTANT: Update `_build_block()`** — Add to CLI Commands section so the agent learns about it via AGENTS.md sync
 
 ### Workflow Lookup
 Always use `_find_workflow()` — checks custom/ before community/:
@@ -108,7 +115,7 @@ CLAWFLOWS_DIR="$(cd "$(dirname "$SELF")/../.." && pwd)"
 - Modify `workflows/available/community/` directly (gets overwritten on update)
 - Use bash 4+ features (associative arrays, `${var,,}` lowercasing)
 - Delete files via symlink path (delete the symlink itself)
-- Skip `cmd_sync` after enable/disable/create
+- Skip `cmd_sync` (agent-sync) after enable/disable/create
 
 ## Workflow Format
 

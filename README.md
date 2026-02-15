@@ -196,9 +196,30 @@ You can use plain English: `"7am"`, `"every 2 hours"`, `"morning"`, etc.
 
 ## Creating Your Own
 
-Build your custom workflow! See [Creating Workflows](docs/creating-workflows.md) for the full guide.
+Build your custom workflow:
 
-Share yours with the community via pull request, or keep personal workflows private in `workflows/enabled/` (it's gitignored).
+```bash
+clawflows create
+```
+
+This walks you through creating a new workflow. See [Creating Workflows](docs/creating-workflows.md) for the full guide.
+
+## Share With the Community
+
+Have a workflow others would love? Submit it!
+
+```bash
+# 1. Create and test your workflow
+clawflows create
+clawflows run your-workflow-name
+
+# 2. Submit it for review
+clawflows submit your-workflow-name
+
+# 3. Open a pull request (instructions shown after submit)
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 <br>
 
@@ -209,10 +230,15 @@ Share yours with the community via pull request, or keep personal workflows priv
 | `clawflows list` | See all workflows and what's enabled |
 | `clawflows list enabled` | Show only enabled workflows |
 | `clawflows list available` | Show only available workflows |
+| `clawflows create` | Create a new custom workflow |
+| `clawflows run <name>` | Run a workflow now |
 | `clawflows enable <name>` | Turn on a workflow |
 | `clawflows disable <name>` | Turn off a workflow |
+| `clawflows edit <name>` | Copy a community workflow to custom/ for editing |
+| `clawflows open <name>` | Open a workflow in your editor |
+| `clawflows submit <name>` | Submit a custom workflow for community review |
 | `clawflows update` | Pull the latest workflows from GitHub |
-| `clawflows sync` | Refresh your agent's workflow list in AGENTS.md |
+| `clawflows sync-agent` | Refresh your agent's workflow list in AGENTS.md |
 | `clawflows uninstall` | Remove clawflows and clean up |
 
 <br>
