@@ -45,6 +45,7 @@ cmd_help() {
     disable <name>       Turn off a workflow (removes symlink)
     edit <name>          Copy a community workflow to custom/ for editing
     open <name>          Open a workflow in your editor
+    validate <name>      Check a workflow has required fields
     submit <name>        Submit a custom workflow for community review
 
   Backup
@@ -67,6 +68,7 @@ cmd_help() {
     clawflows edit send-morning-briefing    Make your own version
     clawflows open send-morning-briefing    Open in your editor
     clawflows disable check-x               Turn off X/Twitter workflow
+    clawflows validate my-workflow          Check your workflow is valid
     clawflows submit my-workflow            Share your workflow with the community
     clawflows update                        Get new community workflows
 
@@ -625,6 +627,7 @@ _build_block() {
   lines+=("- \`clawflows create\` — create a new custom workflow")
   lines+=("- \`clawflows edit <name>\` — copy a community workflow to custom/ for editing")
   lines+=("- \`clawflows open <name>\` — open a workflow in your editor")
+  lines+=("- \`clawflows validate <name>\` — check a workflow has required fields")
   lines+=("- \`clawflows submit <name>\` — submit a custom workflow for community review")
   lines+=("- \`clawflows backup\` — back up custom workflows and enabled list")
   lines+=("- \`clawflows restore\` — restore from a backup")
@@ -887,6 +890,67 @@ cmd_restore() {
   echo ""
 }
 
+cmd_validate() {
+  local name="$1"
+  local wf_dir wf_file errors=0
+
+  # Find the workflow
+  wf_dir="$(_find_workflow "$name")"
+  [ -n "$wf_dir" ] || die "workflow '$name' not found"
+
+  wf_file="$wf_dir/WORKFLOW.md"
+  [ -f "$wf_file" ] || die "WORKFLOW.md not found at $wf_file"
+
+  echo ""
+  echo "  Validating $name..."
+  echo ""
+
+  # Check frontmatter exists
+  if ! head -1 "$wf_file" | grep -q '^---$'; then
+    echo "  ✗ Missing frontmatter (file must start with ---)"
+    errors=1
+  fi
+
+  # Check required fields
+  local field_name field_emoji field_desc
+  field_name="$(get_field "$wf_file" name)"
+  field_emoji="$(get_field "$wf_file" emoji)"
+  field_desc="$(get_field "$wf_file" description)"
+
+  if [ -z "$field_name" ]; then
+    echo "  ✗ Missing required field: name"
+    errors=1
+  else
+    echo "  ✓ name: $field_name"
+  fi
+
+  if [ -z "$field_emoji" ]; then
+    echo "  ✗ Missing required field: emoji"
+    errors=1
+  else
+    echo "  ✓ emoji: $field_emoji"
+  fi
+
+  if [ -z "$field_desc" ]; then
+    echo "  ✗ Missing required field: description"
+    errors=1
+  else
+    echo "  ✓ description: $field_desc"
+  fi
+
+  echo ""
+
+  if [ $errors -eq 0 ]; then
+    echo "  ✓ Workflow is valid!"
+    echo ""
+    return 0
+  else
+    echo "  ✗ Validation failed"
+    echo ""
+    return 1
+  fi
+}
+
 cmd_submit() {
   local name="$1"
 
@@ -896,6 +960,11 @@ cmd_submit() {
       die "workflow '$name' is already a community workflow"
     fi
     die "workflow '$name' not found in custom/. Create one with: clawflows create"
+  fi
+
+  # Validate before submitting
+  if ! cmd_validate "$name"; then
+    die "fix validation errors before submitting"
   fi
 
   local source_dir="$CUSTOM_DIR/$name"
@@ -983,6 +1052,7 @@ case "$1" in
   disable)   [ $# -ge 2 ] || die "usage: clawflows disable <name>"; cmd_disable "$2" ;;
   edit)      [ $# -ge 2 ] || die "usage: clawflows edit <name>"; cmd_edit "$2" ;;
   open)      [ $# -ge 2 ] || die "usage: clawflows open <name>"; cmd_open "$2" ;;
+  validate)  [ $# -ge 2 ] || die "usage: clawflows validate <name>"; cmd_validate "$2" ;;
   submit)    [ $# -ge 2 ] || die "usage: clawflows submit <name>"; cmd_submit "$2" ;;
   backup)    cmd_backup "${2:-}" ;;
   restore)   cmd_restore "${2:-}" ;;

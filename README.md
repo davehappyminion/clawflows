@@ -236,6 +236,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 | `clawflows disable <name>` | Turn off a workflow |
 | `clawflows edit <name>` | Copy a community workflow to custom/ for editing |
 | `clawflows open <name>` | Open a workflow in your editor |
+| `clawflows validate <name>` | Check a workflow has required fields |
 | `clawflows submit <name>` | Submit a custom workflow for community review |
 | `clawflows update` | Pull the latest workflows from GitHub |
 | `clawflows sync-agent` | Refresh your agent's workflow list in AGENTS.md |
