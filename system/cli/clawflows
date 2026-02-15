@@ -727,7 +727,8 @@ cmd_backup() {
       [ -d "$wf" ] || continue
       local name="$(basename "$wf")"
       [ "$name" = ".gitkeep" ] && continue
-      cp -r "$wf" "$tmpdir/custom/"
+      # Remove trailing slash to copy the directory itself, not just contents
+      cp -r "${wf%/}" "$tmpdir/custom/"
     done
   else
     mkdir -p "$tmpdir/custom"
@@ -853,7 +854,8 @@ cmd_restore() {
       if [ -d "$CUSTOM_DIR/$name" ]; then
         ((skipped++)) || true
       else
-        cp -r "$wf" "$CUSTOM_DIR/"
+        # Remove trailing slash to copy the directory itself, not just contents
+        cp -r "${wf%/}" "$CUSTOM_DIR/"
         ((restored++)) || true
       fi
     done
