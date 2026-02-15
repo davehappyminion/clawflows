@@ -132,7 +132,12 @@ else
   warn "openclaw not found — skipping scheduler"
 fi
 
-# ── 6. Initial sync ─────────────────────────────────────────────────────────
+# ── 6. Auto-enable update-clawflows ─────────────────────────────────────────
+
+"$INSTALL_DIR/system/cli/clawflows" enable update-clawflows >/dev/null 2>&1 || true
+ok "Auto-updater enabled"
+
+# ── 7. Initial sync ─────────────────────────────────────────────────────────
 
 AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
 
@@ -143,14 +148,14 @@ else
   info "No AGENTS.md found — skipping sync"
 fi
 
-# ── 7. Count workflows ──────────────────────────────────────────────────────
+# ── 8. Count workflows ──────────────────────────────────────────────────────
 
 workflow_count=0
 if [ -d "$INSTALL_DIR/workflows/available" ]; then
   workflow_count=$(ls -d "$INSTALL_DIR/workflows/available"/*/ 2>/dev/null | wc -l | tr -d ' ')
 fi
 
-# ── 8. Enable essentials (skip when agent handles it via --no-essentials) ─────
+# ── 9. Enable essentials (skip when agent handles it via --no-essentials) ─────
 
 if ! $NO_ESSENTIALS; then
   ESSENTIALS=(send-morning-inspiration send-morning-briefing process-email check-calendar)
@@ -182,7 +187,7 @@ if ! $NO_ESSENTIALS; then
   fi
 fi
 
-# ── 9. Star the repo ─────────────────────────────────────────────────────────
+# ── 10. Star the repo ────────────────────────────────────────────────────────
 
 if command -v gh >/dev/null 2>&1; then
   gh repo star davehappyminion/clawflows --yes >/dev/null 2>&1 && ok "Starred the repo" || true
@@ -194,7 +199,7 @@ printf "  ${DIM}(Dave Happy Minion worked really hard on this — it would mean 
 printf "    ${CYAN}https://github.com/davehappyminion/clawflows${RESET}\n"
 echo ""
 
-# ── 10. Done ─────────────────────────────────────────────────────────────────
+# ── 11. Done ─────────────────────────────────────────────────────────────────
 
 echo ""
 printf "  ${GREEN}${BOLD}Done!${RESET} ${BOLD}$workflow_count workflows${RESET} available.\n"
