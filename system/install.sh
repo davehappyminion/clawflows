@@ -117,12 +117,25 @@ fi
 
 # ── 5. Set up scheduler cron ─────────────────────────────────────────────────
 
+# Find openclaw — command -v may fail if ~/.local/bin isn't in this shell's PATH yet
+OPENCLAW=""
 if command -v openclaw >/dev/null 2>&1; then
-  if openclaw cron list </dev/null 2>/dev/null | grep -q "clawflows-scheduler"; then
+  OPENCLAW="openclaw"
+else
+  for try_path in "$BIN_DIR/openclaw" "/usr/local/bin/openclaw" "/opt/homebrew/bin/openclaw"; do
+    if [ -x "$try_path" ]; then
+      OPENCLAW="$try_path"
+      break
+    fi
+  done
+fi
+
+if [ -n "$OPENCLAW" ]; then
+  if "$OPENCLAW" cron list </dev/null 2>/dev/null | grep -q "clawflows-scheduler"; then
     ok "Scheduler already running"
   else
     info "Setting up auto-scheduler..."
-    openclaw cron add \
+    "$OPENCLAW" cron add \
       --name "clawflows-scheduler" \
       --cron "*/15 * * * *" \
       --session isolated \
