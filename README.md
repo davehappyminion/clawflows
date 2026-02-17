@@ -1,3 +1,5 @@
+> **Note:** This project hasn't launched yet! It's only public to make it easy to get feedback from a few people.
+
 # ⚡️ Claw Workflows - Superpowers For Your Agent
 
 <p align="center">
