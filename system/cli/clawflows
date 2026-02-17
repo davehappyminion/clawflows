@@ -8,8 +8,16 @@ if [ -L "$SELF" ]; then
   SELF="$(readlink "$SELF")"
 fi
 CLAWFLOWS_DIR="$(cd "$(dirname "$SELF")/../.." && pwd)"
-AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
-BACKUP_DIR="${BACKUP_DIR:-$HOME/.openclaw/workspace/clawflows-backups}"
+
+# Detect OpenClaw workspace (supports custom workspace directories)
+_oc_workspace=""
+if [ -f "$HOME/.openclaw/openclaw.json" ]; then
+  _oc_workspace="$(grep -o '"workspace"[[:space:]]*:[[:space:]]*"[^"]*"' "$HOME/.openclaw/openclaw.json" | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1 || true)"
+fi
+_oc_workspace="${_oc_workspace:-$HOME/.openclaw/workspace}"
+
+AGENTS_MD="${AGENTS_MD:-$_oc_workspace/AGENTS.md}"
+BACKUP_DIR="${BACKUP_DIR:-$_oc_workspace/clawflows-backups}"
 COMMUNITY_DIR="$CLAWFLOWS_DIR/workflows/available/community"
 CUSTOM_DIR="$CLAWFLOWS_DIR/workflows/available/custom"
 ENABLED_DIR="$CLAWFLOWS_DIR/workflows/enabled"

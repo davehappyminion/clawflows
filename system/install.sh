@@ -7,9 +7,17 @@ set -euo pipefail
 #   2. bash install.sh  (already cloned)
 
 REPO_URL="https://github.com/davehappyminion/clawflows.git"
-INSTALL_DIR="$HOME/.openclaw/workspace/clawflows"
 BIN_DIR="$HOME/.local/bin"
 BIN_TARGET="$BIN_DIR/clawflows"
+
+# Detect OpenClaw workspace (supports custom workspace directories)
+_oc_workspace=""
+if [ -f "$HOME/.openclaw/openclaw.json" ]; then
+  _oc_workspace="$(grep -o '"workspace"[[:space:]]*:[[:space:]]*"[^"]*"' "$HOME/.openclaw/openclaw.json" | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1 || true)"
+fi
+_oc_workspace="${_oc_workspace:-$HOME/.openclaw/workspace}"
+
+INSTALL_DIR="$_oc_workspace/clawflows"
 
 # ── Flags ─────────────────────────────────────────────────────────────────
 NO_ESSENTIALS=false
@@ -158,7 +166,7 @@ fi
 
 # ── 7. Initial sync ─────────────────────────────────────────────────────────
 
-AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
+AGENTS_MD="${AGENTS_MD:-$_oc_workspace/AGENTS.md}"
 
 if [ -f "$AGENTS_MD" ]; then
   "$BIN_TARGET" sync >/dev/null 2>&1
