@@ -49,6 +49,14 @@ Called automatically on enable/disable/create/update. Manual refresh: `clawflows
 
 The `_build_block()` function (around line 608) generates what the agent sees. If it's not there, the agent won't know about it.
 
+## Every Change Checklist
+
+Every change—no matter how small—requires all three:
+
+1. **Update the agent instructions** — If the change affects CLI behavior, commands, or install flow, update `system/AGENT.md` (the agent install/reference guide) and `_build_block()` in the CLI (the auto-synced AGENTS.md content). The agent only knows what these files tell it.
+2. **Write tests** — Add or update BATS tests in `tests/`. See the Testing section below for conventions. Use the existing `test_helper.bash` helpers. Every new command, flag, or behavior change needs test coverage.
+3. **Update `docs/updates.md`** — Add a fun, personality-filled entry about what changed. Write it like Dave the Happy Minion would—enthusiastic, playful, with banana references welcome. Keep it short (1-3 lines per entry).
+
 ## Code Conventions
 
 ### Function Naming
@@ -141,12 +149,22 @@ schedule="$(get_field "$wf_file" schedule)"
 
 ## Testing
 
-No automated tests. Manual verification:
+Tests use [BATS](https://github.com/bats-core/bats-core) (Bash Automated Testing System). BATS libraries are vendored in `tests/bats/`.
+
 ```bash
-# Test a command
-/path/to/system/cli/clawflows backup
-/path/to/system/cli/clawflows restore latest
+# Run all tests
+./tests/bats/bats-core/bin/bats tests/core/
+
+# Run a specific test file
+./tests/bats/bats-core/bin/bats tests/core/find_openclaw.bats
 ```
+
+### Writing Tests
+- Test files go in `tests/core/` with a `.bats` extension
+- Load the shared helper: `load '../test_helper'`
+- Call `setup_test_environment` in `setup()` and `teardown_test_environment` in `teardown()`
+- Use helpers from `tests/test_helper.bash`: `create_community_workflow`, `enable_workflow`, `run_clawflows`, `mock_openclaw`, `create_test_backup`, etc.
+- Use `assert_success`, `assert_failure`, `assert_output --partial`, `refute_output --partial` from bats-assert
 
 Bash strict mode (`set -euo pipefail`) catches most errors immediately.
 
