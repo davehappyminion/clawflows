@@ -198,6 +198,32 @@ Run the fetch script:
 
 Keep scripts simple and well-commented. The agent will execute them as instructed.
 
+## Keep Workflows Generic
+
+Write workflows so any user can enable them without editing. Never hardcode personal details — let the workflow discover them at runtime.
+
+**Don't hardcode:**
+- Names, locations, timezones
+- Employers, job titles, skills
+- Favorite apps or specific accounts
+
+**Instead:**
+- Say "the user" not a specific name
+- Check location/timezone at runtime from the system or calendar
+- Describe tasks generically — "summarize today's meetings" not "summarize Nikil's React standups"
+
+**Bad:**
+```
+Check the weather in San Francisco and brief Nikil on his frontend meetings.
+```
+
+**Good:**
+```
+Check the weather for the user's location and summarize today's calendar meetings.
+```
+
+If someone shares your workflow with a friend, it should just work.
+
 ## Tips
 
 - Keep it self-contained — someone reading just the `WORKFLOW.md` should be able to follow it

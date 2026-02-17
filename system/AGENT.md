@@ -341,6 +341,31 @@ Agent: "Done! Created 'remind-to-stretch' — runs 5 times during work hours.
 To edit: ~/.openclaw/workspace/clawflows/workflows/custom/remind-to-stretch/WORKFLOW.md"
 ```
 
+### Keep It Generic
+
+Write workflows so **any user** can use them without editing. Never hardcode personal details — let the workflow discover them at runtime.
+
+| Don't hardcode | Instead |
+|----------------|---------|
+| User's name | Say "the user" |
+| City / location | Check the user's location or calendar timezone at runtime |
+| Timezone | Detect from system or calendar |
+| Employer / job title | Omit, or ask at runtime if needed |
+| Specific skills / interests | Describe the task generically |
+| Favorite tools / apps | Use general terms ("their preferred app") |
+
+**Bad example:**
+```
+Check the weather in San Francisco for Nikil and summarize his React meetings.
+```
+
+**Good example:**
+```
+Check the weather for the user's location and summarize today's calendar meetings.
+```
+
+The goal: if someone shares this workflow with a friend, it should just work.
+
 ### After Creating
 
 - The workflow is created in `workflows/available/custom/` and automatically enabled

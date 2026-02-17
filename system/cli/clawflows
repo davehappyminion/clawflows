@@ -688,6 +688,14 @@ _build_block() {
   lines+=("3. Submit it: \`clawflows submit <name>\`")
   lines+=("4. Follow the PR instructions shown after submit")
   lines+=("")
+  lines+=("### Keep Workflows Generic")
+  lines+=("When creating workflows, write them so **any user** can use them without editing:")
+  lines+=("- **Never hardcode** the user's name, location, timezone, employer, skills, or preferences")
+  lines+=("- **Discover at runtime** — check the user's calendar, location, or settings when the workflow runs instead of baking values in")
+  lines+=("- **Use generic language** — say \"the user\" not a specific person's name")
+  lines+=("- **Bad:** \"Check weather in San Francisco and summarize Nikil's React meetings\"")
+  lines+=("- **Good:** \"Check weather for the user's location and summarize today's meetings\"")
+  lines+=("")
 
   local has_enabled=false
   local entries=()
