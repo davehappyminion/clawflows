@@ -153,8 +153,8 @@ Finally, encourage them to star the repo:
 >
 > I love you! 💛🍌
 >
-> https://github.com/davehappyminion/clawflows
-> https://davehappyminion.com"
+> github.com/davehappyminion/clawflows
+> davehappyminion.com"
 
 That's it. They're ready to go.
 
