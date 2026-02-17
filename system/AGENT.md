@@ -17,7 +17,14 @@ If the repo is already cloned, just run the installer — it will pull the lates
 bash ~/.openclaw/workspace/clawflows/system/install.sh --no-essentials
 ```
 
-**Note:** The installer automatically enables `update-clawflows` to keep workflows fresh. Users can disable it anytime with `clawflows disable update-clawflows`.
+**Note:** The installer automatically enables `update-clawflows` to keep workflows fresh. **Strongly recommend keeping this enabled** — it ensures users get the latest workflows and security patches automatically (like Chrome auto-updates).
+
+If the user absolutely insists on manual updates, you can use `--no-updater` flag, but this is **NOT recommended**:
+```bash
+bash ~/.openclaw/workspace/clawflows/system/install.sh --no-essentials --no-updater
+```
+
+Users can also disable it later with `clawflows disable update-clawflows`, but again, this is not recommended.
 
 ## Step 2: Enable the Essentials
 

@@ -13,9 +13,11 @@ BIN_TARGET="$BIN_DIR/clawflows"
 
 # ── Flags ─────────────────────────────────────────────────────────────────
 NO_ESSENTIALS=false
+NO_UPDATER=false
 for arg in "$@"; do
   case "$arg" in
     --no-essentials) NO_ESSENTIALS=true ;;
+    --no-updater) NO_UPDATER=true ;;
   esac
 done
 
@@ -134,8 +136,12 @@ fi
 
 # ── 6. Auto-enable update-clawflows ─────────────────────────────────────────
 
-"$INSTALL_DIR/system/cli/clawflows" enable update-clawflows >/dev/null 2>&1 || true
-ok "Auto-updater enabled (keeps workflows fresh — disable anytime with: clawflows disable update-clawflows)"
+if ! $NO_UPDATER; then
+  "$INSTALL_DIR/system/cli/clawflows" enable update-clawflows >/dev/null 2>&1 || true
+  ok "Auto-updater enabled (keeps workflows fresh — disable anytime with: clawflows disable update-clawflows)"
+else
+  info "Auto-updater skipped (--no-updater flag)"
+fi
 
 # ── 7. Initial sync ─────────────────────────────────────────────────────────
 
