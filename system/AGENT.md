@@ -26,7 +26,29 @@ bash ~/.openclaw/workspace/clawflows/system/install.sh --no-essentials --no-upda
 
 Users can also disable it later with `clawflows disable update-clawflows`, but again, this is not recommended.
 
-## Step 2: Enable the Essentials
+## Step 2: Check for Backups
+
+After installing, check if there are existing backups from a previous install:
+
+```bash
+ls ~/.openclaw/workspace/clawflows-backups/*.tar.gz 2>/dev/null
+```
+
+If backups exist, tell the human:
+
+> "I found a backup from a previous ClawFlows install! Want me to restore your custom workflows and enabled list?"
+
+If they agree:
+
+```bash
+clawflows restore latest
+```
+
+This restores their custom workflows and re-enables everything they had before. **If a backup was restored, skip Step 3 (Essentials)** — they already have their preferred setup. Jump straight to Step 4.
+
+If no backups exist or they decline, continue to Step 3.
+
+## Step 3: Enable the Essentials
 
 Strongly recommend enabling the 4 essential workflows. Tell the human something like:
 
@@ -48,9 +70,9 @@ clawflows enable process-email
 clawflows enable check-calendar
 ```
 
-If they decline, that's fine — move on to step 3.
+If they decline, that's fine — move on to step 4.
 
-## Step 3: Pick More Workflows
+## Step 4: Pick More Workflows
 
 Now help your human pick additional workflows. Ask them:
 
@@ -122,7 +144,7 @@ Let them answer naturally. Then map their interests to workflows using the guide
 - `sync-dotfiles` — Back up dotfiles to git
 - `check-network` — Scan network, check speed, flag unknown devices
 
-## Step 4: Enable
+## Step 5: Enable
 
 For each workflow the human wants, run:
 
@@ -132,7 +154,7 @@ clawflows enable <name>
 
 After enabling, briefly explain what each one does and when it runs (check the workflow's schedule in its WORKFLOW.md frontmatter — if there's no schedule, it's on-demand only).
 
-## Step 5: Wrap up
+## Step 6: Wrap up
 
 Summarize what was set up:
 - List every workflow that was enabled

@@ -155,7 +155,38 @@ else
   warn "openclaw not found — skipping scheduler"
 fi
 
-# ── 6. Auto-enable update-clawflows ─────────────────────────────────────────
+# ── 6. Check for existing backups ──────────────────────────────────────────
+
+BACKUP_DIR="${BACKUP_DIR:-$_oc_workspace/clawflows-backups}"
+RESTORED_BACKUP=false
+
+if [ -d "$BACKUP_DIR" ] && ls "$BACKUP_DIR"/*.tar.gz >/dev/null 2>&1; then
+  backup_count=$(ls -1 "$BACKUP_DIR"/*.tar.gz 2>/dev/null | wc -l | tr -d ' ')
+  latest_backup=$(ls -r "$BACKUP_DIR"/*.tar.gz 2>/dev/null | head -1)
+  latest_name=$(basename "$latest_backup")
+
+  echo ""
+  printf "  ${BOLD}Existing Backup Found${RESET}\n"
+  echo ""
+  if [ "$backup_count" -eq 1 ]; then
+    printf "  Found 1 backup: ${CYAN}%s${RESET}\n" "$latest_name"
+  else
+    printf "  Found %s backups — latest: ${CYAN}%s${RESET}\n" "$backup_count" "$latest_name"
+  fi
+  echo ""
+  printf "  Restore your custom workflows and enabled list? [Y/n] "
+  read -r restore_confirm </dev/tty 2>/dev/null || restore_confirm="y"
+
+  if [ "$restore_confirm" != "n" ] && [ "$restore_confirm" != "N" ]; then
+    "$BIN_TARGET" restore latest 2>/dev/null || true
+    RESTORED_BACKUP=true
+    ok "Backup restored"
+  else
+    info "Skipped — restore anytime with: clawflows restore"
+  fi
+fi
+
+# ── 7. Auto-enable update-clawflows ─────────────────────────────────────────
 
 if ! $NO_UPDATER; then
   "$INSTALL_DIR/system/cli/clawflows" enable update-clawflows >/dev/null 2>&1 || true
@@ -164,7 +195,7 @@ else
   info "Auto-updater skipped (--no-updater flag)"
 fi
 
-# ── 7. Initial sync ─────────────────────────────────────────────────────────
+# ── 8. Initial sync ─────────────────────────────────────────────────────────
 
 AGENTS_MD="${AGENTS_MD:-$_oc_workspace/AGENTS.md}"
 
@@ -175,16 +206,16 @@ else
   info "No AGENTS.md found — skipping sync"
 fi
 
-# ── 8. Count workflows ──────────────────────────────────────────────────────
+# ── 9. Count workflows ──────────────────────────────────────────────────────
 
 workflow_count=0
 if [ -d "$INSTALL_DIR/workflows/available" ]; then
   workflow_count=$(ls -d "$INSTALL_DIR/workflows/available"/*/ 2>/dev/null | wc -l | tr -d ' ')
 fi
 
-# ── 9. Enable essentials (skip when agent handles it via --no-essentials) ─────
+# ── 10. Enable essentials (skip when agent handles it via --no-essentials) ────
 
-if ! $NO_ESSENTIALS; then
+if ! $NO_ESSENTIALS && ! $RESTORED_BACKUP; then
   ESSENTIALS=(send-morning-inspiration send-morning-briefing process-email check-calendar)
 
   echo ""
@@ -221,7 +252,7 @@ printf "  ${DIM}Plus, you'll get notified when new workflows drop!${RESET}\n"
 printf "    ${CYAN}https://github.com/davehappyminion/clawflows${RESET}\n"
 echo ""
 
-# ── 11. Done ─────────────────────────────────────────────────────────────────
+# ── 11. Done ────────────────────────────────────────────────────────────────
 
 echo ""
 printf "  ${GREEN}${BOLD}Done!${RESET} ${BOLD}$workflow_count workflows${RESET} available.\n"
