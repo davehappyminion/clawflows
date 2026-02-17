@@ -80,8 +80,9 @@ END_MARKER="<!-- clawflows:end -->"
 EOF
 
     # Append the real CLI, skipping the config section
+    # Start from _find_openclaw (before Helpers) so tests get the openclaw lookup
     awk '
-        /^# ── Helpers/ { found=1 }
+        /^# ── Find openclaw/ { found=1 }
         found { print }
     ' "$REAL_CLI" >> "$TEST_CLI"
 
@@ -372,34 +373,51 @@ EOF
 # Mock Helpers
 # ============================================================================
 
-# mock_openclaw creates a fake openclaw command
+# mock_openclaw creates a fake openclaw command via the OPENCLAW_CMD env var.
+# This controls _find_openclaw() so hardcoded path fallbacks can't find a real openclaw.
 mock_openclaw() {
     local behavior="${1:-success}"  # success, fail, or missing
 
     if [[ "$behavior" == "missing" ]]; then
-        # Ensure openclaw is not in PATH
-        export PATH="${TEST_TMPDIR}/bin:${PATH}"
+        # OPENCLAW_CMD="" tells _find_openclaw to return empty (not found)
+        export OPENCLAW_CMD=""
         return
     fi
 
     mkdir -p "${TEST_TMPDIR}/bin"
 
+    local log_file="${TEST_TMPDIR}/openclaw.log"
+
     if [[ "$behavior" == "success" ]]; then
-        cat > "${TEST_TMPDIR}/bin/openclaw" << 'EOF'
+        cat > "${TEST_TMPDIR}/bin/openclaw" << EOF
 #!/bin/bash
-echo "Mock openclaw: $*"
+echo "\$*" >> "${log_file}"
+echo "Mock openclaw: \$*"
+exit 0
+EOF
+    elif [[ "$behavior" == "cron-exists" ]]; then
+        # Simulates scheduler already set up
+        cat > "${TEST_TMPDIR}/bin/openclaw" << EOF
+#!/bin/bash
+echo "\$*" >> "${log_file}"
+if [[ "\$1" == "cron" && "\$2" == "list" ]]; then
+    echo "clawflows-scheduler  */15 * * * *"
+else
+    echo "Mock openclaw: \$*"
+fi
 exit 0
 EOF
     else
-        cat > "${TEST_TMPDIR}/bin/openclaw" << 'EOF'
+        cat > "${TEST_TMPDIR}/bin/openclaw" << EOF
 #!/bin/bash
-echo "Mock openclaw failed: $*" >&2
+echo "\$*" >> "${log_file}"
+echo "Mock openclaw failed: \$*" >&2
 exit 1
 EOF
     fi
 
     chmod +x "${TEST_TMPDIR}/bin/openclaw"
-    export PATH="${TEST_TMPDIR}/bin:${PATH}"
+    export OPENCLAW_CMD="${TEST_TMPDIR}/bin/openclaw"
 }
 
 # mock_editor creates a fake editor that just touches the file

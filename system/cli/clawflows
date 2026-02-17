@@ -29,6 +29,11 @@ END_MARKER="<!-- clawflows:end -->"
 
 # ── Find openclaw (may not be in PATH when run from a non-interactive shell) ──
 _find_openclaw() {
+  # Allow override for testing
+  if [ "${OPENCLAW_CMD+set}" = "set" ]; then
+    echo "${OPENCLAW_CMD:-}"
+    return
+  fi
   if command -v openclaw >/dev/null 2>&1; then
     echo "openclaw"
     return
