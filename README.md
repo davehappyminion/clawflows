@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> **This project hasn't launched yet!** It's only public to make it easy to get feedback from a few people.
+> **This project hasn't launched yet!** If you stumbled here by accident, please close your eyes and slowly walk away. Nothing to see here. Just a minion and his bananas. We're only public to get feedback from a few people — you saw nothing. 🍌🙈
 
 # ⚡️ Claw Workflows - Superpowers For Your Agent
 
