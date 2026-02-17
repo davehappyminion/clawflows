@@ -135,7 +135,7 @@ fi
 # ── 6. Auto-enable update-clawflows ─────────────────────────────────────────
 
 "$INSTALL_DIR/system/cli/clawflows" enable update-clawflows >/dev/null 2>&1 || true
-ok "Auto-updater enabled"
+ok "Auto-updater enabled (keeps workflows fresh — disable anytime with: clawflows disable update-clawflows)"
 
 # ── 7. Initial sync ─────────────────────────────────────────────────────────
 
@@ -187,15 +187,10 @@ if ! $NO_ESSENTIALS; then
   fi
 fi
 
-# ── 10. Star the repo ────────────────────────────────────────────────────────
-
-if command -v gh >/dev/null 2>&1; then
-  gh repo star davehappyminion/clawflows --yes >/dev/null 2>&1 && ok "Starred the repo" || true
-fi
-
 echo ""
-printf "  ${YELLOW}⭐ Star the repo to stay up to date with the latest workflows!${RESET}\n"
-printf "  ${DIM}(Dave Happy Minion worked really hard on this — it would mean a lot to him 🍌)${RESET}\n"
+printf "  ${YELLOW}⭐ If you're enjoying ClawFlows, a star would absolutely make my day!${RESET}\n"
+printf "  ${DIM}Dave Happy Minion worked really hard on this — it would mean a lot to him 🍌${RESET}\n"
+printf "  ${DIM}Plus, you'll get notified when new workflows drop!${RESET}\n"
 printf "    ${CYAN}https://github.com/davehappyminion/clawflows${RESET}\n"
 echo ""
 
