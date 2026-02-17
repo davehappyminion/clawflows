@@ -8,8 +8,16 @@ if [ -L "$SELF" ]; then
   SELF="$(readlink "$SELF")"
 fi
 CLAWFLOWS_DIR="$(cd "$(dirname "$SELF")/../.." && pwd)"
-AGENTS_MD="${AGENTS_MD:-$HOME/.openclaw/workspace/AGENTS.md}"
-BACKUP_DIR="${BACKUP_DIR:-$HOME/.openclaw/workspace/clawflows-backups}"
+
+# Detect OpenClaw workspace (supports custom workspace directories)
+_oc_workspace=""
+if [ -f "$HOME/.openclaw/openclaw.json" ]; then
+  _oc_workspace="$(grep -o '"workspace"[[:space:]]*:[[:space:]]*"[^"]*"' "$HOME/.openclaw/openclaw.json" | sed 's/.*:.*"\([^"]*\)"/\1/' | head -1 || true)"
+fi
+_oc_workspace="${_oc_workspace:-$HOME/.openclaw/workspace}"
+
+AGENTS_MD="${AGENTS_MD:-$_oc_workspace/AGENTS.md}"
+BACKUP_DIR="${BACKUP_DIR:-$_oc_workspace/clawflows-backups}"
 COMMUNITY_DIR="$CLAWFLOWS_DIR/workflows/available/community"
 CUSTOM_DIR="$CLAWFLOWS_DIR/workflows/available/custom"
 ENABLED_DIR="$CLAWFLOWS_DIR/workflows/enabled"
@@ -18,6 +26,25 @@ BIN_TARGET="$HOME/.local/bin/clawflows"
 
 START_MARKER="<!-- clawflows:start -->"
 END_MARKER="<!-- clawflows:end -->"
+
+# ── Find openclaw (may not be in PATH when run from a non-interactive shell) ──
+_find_openclaw() {
+  # Allow override for testing
+  if [ "${OPENCLAW_CMD+set}" = "set" ]; then
+    echo "${OPENCLAW_CMD:-}"
+    return
+  fi
+  if command -v openclaw >/dev/null 2>&1; then
+    echo "openclaw"
+    return
+  fi
+  for try_path in "$HOME/.local/bin/openclaw" "/usr/local/bin/openclaw" "/opt/homebrew/bin/openclaw"; do
+    if [ -x "$try_path" ]; then
+      echo "$try_path"
+      return
+    fi
+  done
+}
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -438,6 +465,24 @@ cmd_enable() {
   # Create symlink
   ln -s "$source_dir" "$ENABLED_DIR/$name"
   echo "enabled: $name"
+
+  # If this workflow has a schedule, ensure the scheduler cron is set up
+  local schedule
+  schedule="$(get_field "$source_dir/WORKFLOW.md" schedule)"
+  if [ -n "$schedule" ]; then
+    local oc
+    oc="$(_find_openclaw)"
+    if [ -n "$oc" ] && ! "$oc" cron list </dev/null 2>/dev/null | grep -q "clawflows-scheduler"; then
+      "$oc" cron add \
+        --name "clawflows-scheduler" \
+        --cron "*/15 * * * *" \
+        --session isolated \
+        --message "Read and execute $CLAWFLOWS_DIR/system/scheduler.md" \
+        --no-deliver </dev/null >/dev/null 2>&1 || true
+      echo "scheduler started (checks every 15 min)"
+    fi
+  fi
+
   cmd_sync
 }
 
@@ -573,8 +618,10 @@ cmd_uninstall() {
     echo "  Removed ClawFlows section from AGENTS.md"
   fi
 
-  if command -v openclaw >/dev/null 2>&1; then
-    openclaw cron remove --name "clawflows-scheduler" </dev/null >/dev/null 2>&1 || true
+  local oc
+  oc="$(_find_openclaw)"
+  if [ -n "$oc" ]; then
+    "$oc" cron remove --name "clawflows-scheduler" </dev/null >/dev/null 2>&1 || true
     echo "  Removed scheduler cron"
   fi
 
@@ -1027,11 +1074,12 @@ cmd_run() {
   [ -f "$wf_file" ] || die "WORKFLOW.md not found at $wf_file"
 
   # Run via openclaw if available
-  if command -v openclaw >/dev/null 2>&1; then
+  local oc
+  oc="$(_find_openclaw)"
+  if [ -n "$oc" ]; then
     echo "Running $name..."
     echo ""
-    local session_id="clawflows-run-${name}-$(date +%s)"
-    openclaw agent --session-id "$session_id" --timeout 300 -m "Run the $name workflow by reading and following $wf_file. Execute it now regardless of the current time."
+    "$oc" agent --agent main -m "Run the $name workflow by following $wf_file"
   else
     echo ""
     echo "  ✓ Workflow ready: $name"
