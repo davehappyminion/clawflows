@@ -118,6 +118,8 @@ Workflow names start with a verb. Pick from these six:
 
 ## Workflow Content
 
+Keep it **simple and clear**. Each step should be one action described in plain language. Fewer steps is better — if you can say it in 3 steps, don't use 7.
+
 Write clear, numbered steps the agent can follow:
 
 ```markdown

@@ -13,6 +13,27 @@ teardown() {
 }
 
 # ============================================================================
+# Simple Workflow Guidance
+# ============================================================================
+
+@test "build_block: includes simple workflow guidance section" {
+    run_clawflows sync-agent
+
+    assert_success
+    run cat "$AGENTS_MD"
+    assert_output --partial "Keep Workflows Simple"
+}
+
+@test "build_block: advises plain language and short steps" {
+    run_clawflows sync-agent
+
+    assert_success
+    run cat "$AGENTS_MD"
+    assert_output --partial "Plain language"
+    assert_output --partial "Fewer steps is better"
+}
+
+# ============================================================================
 # Generic Workflow Guidance
 # ============================================================================
 

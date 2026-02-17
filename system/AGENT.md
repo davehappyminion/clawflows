@@ -264,6 +264,8 @@ When the user asks you to run a workflow:
 | "How's my disk space?" | Run the `check-disk` workflow |
 | "Uninstall clawflows" | Run `clawflows uninstall` (confirm with user first) |
 | "Make me a workflow that..." | Create a custom workflow (see Creating Custom Workflows) |
+| "Let's make a workflow" | Create a custom workflow (see Creating Custom Workflows) |
+| "Make a clawflow" | Create a custom workflow (see Creating Custom Workflows) |
 | "I want an automation for..." | Create a custom workflow (see Creating Custom Workflows) |
 | "Can you build a workflow to..." | Create a custom workflow (see Creating Custom Workflows) |
 
@@ -286,7 +288,9 @@ When you enable a workflow, a symlink is created in `enabled/` pointing to the s
 
 ## Getting New Workflows
 
-Run `clawflows update` to pull the latest from GitHub. This fetches new workflows added to the repo. After updating, run `clawflows list available` to see what's new and offer to enable any that match the user's interests.
+Run `clawflows update` to pull the latest from GitHub. This fetches new workflows added to the repo.
+
+**After updating, re-read your AGENTS.md file** — the update may include new instructions, commands, or guidance that you need to pick up in this conversation. Then run `clawflows list available` to see what's new and offer to enable any that match the user's interests.
 
 ## Creating Custom Workflows
 
@@ -339,6 +343,29 @@ Agent: "Got it — I'll set it for 9am, 11am, 1pm, 3pm, and 5pm."
 Agent: "Done! Created 'remind-to-stretch' — runs 5 times during work hours.
 
 To edit: ~/.openclaw/workspace/clawflows/workflows/custom/remind-to-stretch/WORKFLOW.md"
+```
+
+### Keep It Simple
+
+Write workflow descriptions that are **clear, simple, and to the point**:
+
+- **Short steps** — Each step should be one clear action, not a paragraph
+- **Plain language** — Write like you're telling a friend what to do
+- **No jargon** — Avoid technical terms when simple words work
+- **Fewer steps is better** — If you can say it in 3 steps, don't use 7
+
+**Too complex:**
+```
+Utilize the calendar API to programmatically retrieve all scheduled events
+within the next 48-hour window, cross-referencing with historical attendance
+patterns to determine priority weighting...
+```
+
+**Just right:**
+```
+1. Check the calendar for the next 48 hours
+2. Flag any conflicts or back-to-back meetings
+3. Send the user a summary
 ```
 
 ### Keep It Generic

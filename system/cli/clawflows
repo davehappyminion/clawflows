@@ -582,6 +582,8 @@ cmd_update() {
     return 1
   fi
   cmd_sync
+  echo ""
+  echo "IMPORTANT: Re-read your AGENTS.md file now to pick up any new instructions or workflows."
 }
 
 cmd_uninstall() {
@@ -678,7 +680,7 @@ _build_block() {
   lines+=("- \`clawflows submit <name>\` — submit a custom workflow for community review")
   lines+=("- \`clawflows backup\` — back up custom workflows and enabled list")
   lines+=("- \`clawflows restore\` — restore from a backup")
-  lines+=("- \`clawflows update\` — pull the latest community workflows")
+  lines+=("- \`clawflows update\` — pull the latest community workflows. **After running, re-read your AGENTS.md** to pick up new instructions")
   lines+=("- \`clawflows sync-agent\` — refresh your agent's workflow list in AGENTS.md")
   lines+=("")
   lines+=("### Sharing Workflows")
@@ -688,8 +690,14 @@ _build_block() {
   lines+=("3. Submit it: \`clawflows submit <name>\`")
   lines+=("4. Follow the PR instructions shown after submit")
   lines+=("")
+  lines+=("### Keep Workflows Simple")
+  lines+=("Write workflow descriptions that are **clear, simple, and to the point**:")
+  lines+=("- Short steps — each step is one clear action, not a paragraph")
+  lines+=("- Plain language — write like you're telling a friend what to do")
+  lines+=("- Fewer steps is better — if you can say it in 3 steps, don't use 7")
+  lines+=("")
   lines+=("### Keep Workflows Generic")
-  lines+=("When creating workflows, write them so **any user** can use them without editing:")
+  lines+=("Write them so **any user** can use them without editing:")
   lines+=("- **Never hardcode** the user's name, location, timezone, employer, skills, or preferences")
   lines+=("- **Discover at runtime** — check the user's calendar, location, or settings when the workflow runs instead of baking values in")
   lines+=("- **Use generic language** — say \"the user\" not a specific person's name")
