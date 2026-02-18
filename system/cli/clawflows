@@ -55,19 +55,19 @@ cmd_help() {
 
   Usage: clawflows <command> [args]
 
-  Browsing
+  📋 Browsing
     list                 Show all workflows (enabled + available)
     list enabled         Show only enabled workflows
     list available       Show only available workflows
 
-  Creating
+  ✨ Creating
     create               Create a new custom workflow (interactive)
     create --from-json   Create from JSON (for agents)
 
-  Running
+  ▶️  Running
     run <name>           Run a workflow now (invokes your agent)
 
-  Managing
+  🔧 Managing
     enable <name>        Turn on a workflow (symlinks to enabled/)
     disable <name>       Turn off a workflow (removes symlink)
     edit <name>          Copy a community workflow to custom/ for editing
@@ -75,16 +75,16 @@ cmd_help() {
     validate <name>      Check a workflow has required fields
     submit <name>        Submit a custom workflow for community review
 
-  Backup
+  💾 Backup
     backup               Back up custom workflows and enabled list
     restore              Restore from a backup
 
-  Maintenance
+  🔄 Maintenance
     update               Pull the latest workflows from GitHub
     sync-agent           Refresh your agent's workflow list in AGENTS.md
     uninstall            Remove clawflows and clean up
 
-  Info
+  ℹ️  Info
     help, --help, -h     Show this help
 
   Examples
