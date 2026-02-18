@@ -33,7 +33,8 @@ Your agent will install everything and ask which workflows you want to enable.
 ### Option 2: Manual install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/install.sh \
+  | bash
 ```
 
 Then enable workflows with `clawflows enable <name>`.

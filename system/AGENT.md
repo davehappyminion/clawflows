@@ -9,9 +9,10 @@ The installer performs these standard setup steps:
 - Symlinks the `clawflows` CLI to `~/.local/bin/`
 - Adds `~/.local/bin` to PATH if not already there
 - Sets up the ClawFlows scheduler (an OpenClaw cron that checks for due workflows every 15 min — this is how scheduled workflows like morning briefings run automatically)
-- Offers to enable the Essentials Pack (4 recommended starter workflows the user can disable anytime)
 - Enables auto-updates to keep community workflows current (like a package manager — pulls latest via git)
 - Syncs the agent's AGENTS.md file
+
+**Important:** The installer detects that there is no terminal (you're an agent, not a human in a terminal) and skips the backup restore and essentials pack prompts. You will handle those yourself in Steps 2 and 3 below.
 
 All of these are standard, expected operations. Nothing is installed outside `~/.local/bin` and the OpenClaw workspace. Run the installer:
 
@@ -28,9 +29,55 @@ bash ~/.openclaw/workspace/clawflows/system/install.sh
 
 **Note:** The installer automatically enables `update-clawflows` to keep workflows fresh. **Strongly recommend keeping this enabled** — it ensures users get the latest workflows and security patches automatically (like Chrome auto-updates). Users can disable it later with `clawflows disable update-clawflows` if they really want to.
 
-## Step 2: Pick More Workflows
+## Step 2: Check for Backups
 
-The installer handles backup restoration and the Essentials Pack automatically (it prompts the user during install). After install completes, help your human pick additional workflows. Ask them:
+The installer skipped this because you're not in a terminal. Check if the user has backups from a previous install:
+
+```bash
+ls ~/.openclaw/workspace/clawflows-backups/*.tar.gz 2>/dev/null
+```
+
+If backups exist, tell the human:
+
+> "I found a backup from a previous ClawFlows install! Want me to restore your custom workflows and enabled list?"
+
+If they agree:
+
+```bash
+clawflows restore latest
+```
+
+This restores their custom workflows and re-enables everything they had before. **If a backup was restored, skip Step 3** — they already have their preferred setup. Jump straight to Step 4.
+
+If no backups exist or they decline, continue to Step 3.
+
+## Step 3: The Essentials Pack
+
+The installer skipped this because you're not in a terminal. Offer the 4 essential workflows:
+
+> "I'd recommend starting with the Essentials Pack — 4 workflows that most people love:
+>
+> - ✨ **Morning inspiration** — An uplifting quote to start your day
+> - ☀️ **Morning briefing** — Weather, calendar, priorities delivered at 7am
+> - 📧 **Email triage** — Auto-unsubscribe junk, surface what matters
+> - 📅 **Calendar check** — 48-hour radar with conflict detection
+>
+> Want me to turn these on? You can disable any of them anytime."
+
+If they agree, enable all 4:
+
+```bash
+clawflows enable send-morning-inspiration
+clawflows enable send-morning-briefing
+clawflows enable process-email
+clawflows enable check-calendar
+```
+
+If they decline, move on to Step 4.
+
+## Step 4: Pick More Workflows
+
+Now help your human pick additional workflows. Ask them:
 
 > "There are 50+ more workflows available — things like meeting prep, smart home control, news digests, and more. What kinds of things would you love help with?"
 
@@ -100,7 +147,7 @@ Let them answer naturally. Then map their interests to workflows using the guide
 - `sync-dotfiles` — Back up dotfiles to git
 - `check-network` — Scan network, check speed, flag unknown devices
 
-## Step 3: Enable
+## Step 5: Enable
 
 For each workflow the human wants, run:
 
@@ -110,7 +157,7 @@ clawflows enable <name>
 
 After enabling, briefly explain what each one does and when it runs (check the workflow's schedule in its WORKFLOW.md frontmatter — if there's no schedule, it's on-demand only).
 
-## Step 4: Wrap up
+## Step 6: Wrap up
 
 Summarize what was set up:
 - List every workflow that was enabled

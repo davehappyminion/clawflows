@@ -11,8 +11,8 @@ set -euo pipefail
 #   4. Sets up the workflow scheduler via OpenClaw cron (checks every 15 min
 #      for due workflows — this is how scheduled workflows like morning
 #      briefings run automatically)
-#   5. Optionally enables recommended starter workflows (user can disable
-#      any of them anytime with: clawflows disable <name>)
+#   5. In a terminal: prompts to restore backups and enable starter workflows
+#      Without a terminal (agent install): skips prompts for conversational handling
 #   6. Enables auto-updates to keep community workflows current (like a
 #      package manager — pulls latest via git)
 #   7. Syncs AGENTS.md so the agent knows about available workflows
@@ -179,7 +179,7 @@ fi
 BACKUP_DIR="${BACKUP_DIR:-$_oc_workspace/clawflows-backups}"
 RESTORED_BACKUP=false
 
-if [ -d "$BACKUP_DIR" ] && ls "$BACKUP_DIR"/*.tar.gz >/dev/null 2>&1; then
+if [ -t 1 ] && [ -d "$BACKUP_DIR" ] && ls "$BACKUP_DIR"/*.tar.gz >/dev/null 2>&1; then
   backup_count=$(ls -1 "$BACKUP_DIR"/*.tar.gz 2>/dev/null | wc -l | tr -d ' ')
   latest_backup=$(ls -r "$BACKUP_DIR"/*.tar.gz 2>/dev/null | head -1)
   latest_name=$(basename "$latest_backup")
@@ -238,7 +238,7 @@ fi
 # Optional recommended starter workflows — the user can disable any of them
 # anytime with: clawflows disable <name>
 
-if ! $RESTORED_BACKUP; then
+if [ -t 1 ] && ! $RESTORED_BACKUP; then
   ESSENTIALS=(send-morning-inspiration send-morning-briefing process-email check-calendar)
 
   echo ""
