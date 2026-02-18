@@ -15,6 +15,7 @@
 - ➕ **Morning briefing** — Added morning-briefing workflow.
 - ➖ **Morning briefing reverted** — Reverted the morning-briefing workflow.
 - 📝 **Updates formatting** — Changelog entries grouped by day with bolded summaries and emojis.
+- 📅 **Day names** — Changelog headings now show the day of the week (e.g., "Tue, Feb 17").
 
 ## Mon, Feb 16
 
