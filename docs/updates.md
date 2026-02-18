@@ -25,8 +25,10 @@
 
 ## Feb 14
 
-- ✏️ **Edit & open commands** — `clawflows edit` copies a community workflow to custom/ for editing. `clawflows open` opens it in your editor.
-- 💾 **Backup & restore** — `clawflows backup` saves your custom workflows and enabled list. `clawflows restore` brings them back.
+- ✏️ **Edit command** — `clawflows edit` copies a community workflow to custom/ so you can modify it without losing changes on update.
+- 📂 **Open command** — `clawflows open` opens any workflow in your editor.
+- 💾 **Backup command** — `clawflows backup` saves your custom workflows and enabled list to a tar.gz.
+- ♻️ **Restore command** — `clawflows restore` brings back your workflows from a backup.
 - 📝 **CLAUDE.md** — Added project context doc so Claude Code understands the codebase.
 - 🌍 **Community submissions** — `clawflows submit` packages your workflow for a PR to the community repo.
 - 🔄 **Auto-updater workflow** — `update-clawflows` keeps your workflows fresh automatically, like Chrome updates.
@@ -34,7 +36,8 @@
 
 ## Feb 13
 
-- ✨ **Create wizard** — `clawflows create` walks you through naming, emoji, schedule, and description step by step. Agents use `--from-json`.
+- ✨ **Create wizard** — `clawflows create` walks you through naming, emoji, schedule, and description step by step.
+- 🤖 **JSON API** — Agents create workflows programmatically with `clawflows create --from-json`.
 - 📂 **Community/custom split** — Workflows now live in `community/` (from the repo) and `custom/` (yours, gitignored). Custom overrides community by name.
 - ▶️ **Run command** — `clawflows run` fires up your agent to execute a workflow right now.
 - 🍌 **Star prompt** — Dave the Happy Minion asks you to star the repo. He worked very hard. Many banana fuel.
@@ -59,11 +62,13 @@
 ## Feb 10
 
 - 🏗️ **Project restructure** — Available/enabled pattern with symlinks. Enable creates a symlink, disable removes it. Clean and simple.
-- 🔧 **CLI + installer** — Full CLI with list, enable, disable, and an installer that sets up the symlink and scheduler.
+- 🔧 **CLI** — Full CLI with list, enable, and disable commands.
+- 📥 **Installer** — Install script sets up the symlink, scheduler, and directory structure.
 - 📦 **33 workflows** — Added 20 more workflows (smart home, finance, health, dev tools, content) for a total of 53.
 - 🗓️ **Scheduling** — Workflows now have a `schedule` field in frontmatter. The scheduler runs them automatically via cron.
 - 😎 **Emojis everywhere** — Every workflow gets an emoji. List command shows them. README shows them. Emojis!
 - 📋 **List upgrades** — Grouped by Enabled/Available, filtering (`list enabled`, `list available`), helpful empty-state messages.
+- ❓ **Help command** — `clawflows help` shows all commands with descriptions and examples.
 - 🔄 **Update command** — `clawflows update` pulls the latest workflows from GitHub.
 - 🗑️ **Uninstall command** — Clean removal of symlink, AGENTS.md block, and scheduler cron.
 - 📚 **Docs** — Added workflow creation guide, How to Use section, and cleaned up README.
