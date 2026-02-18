@@ -2,6 +2,7 @@
 
 ## Tue, Feb 17
 
+- 📖 **Workflow creation guide link** — The agent now knows about `docs/creating-workflows.md` when creating clawflows — no more guessing, just follow the banana-scented blueprint!
 - 🤖 **Agent-friendly installer** — Added clear explanations throughout `install.sh` so AI agents stop freaking out about cron jobs and PATH changes. Every "scary" step now has a friendly comment saying "this is normal, relax." Removed the `--no-essentials` flag — essentials just prompt naturally now. Banana-approved smooth installs!
 - 🍌 **Generic workflows** — Workflows are now written so ANY human can use them — no more hardcoded names, cities, or banana preferences.
 - 🧠 **Live updates** — After `clawflows update`, the agent re-reads AGENTS.md so it picks up new instructions mid-conversation.

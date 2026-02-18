@@ -2,6 +2,24 @@
 set -euo pipefail
 
 # ── ClawFlows Installer ─────────────────────────────────────────────────────
+# Safe, standard installer for ClawFlows workflow automation.
+#
+# What it does (all local, nothing surprising):
+#   1. Clones the ClawFlows repo to the OpenClaw workspace (or pulls latest)
+#   2. Symlinks the CLI to ~/.local/bin/clawflows
+#   3. Adds ~/.local/bin to PATH if not already there
+#   4. Sets up the workflow scheduler via OpenClaw cron (checks every 15 min
+#      for due workflows — this is how scheduled workflows like morning
+#      briefings run automatically)
+#   5. Optionally enables recommended starter workflows (user can disable
+#      any of them anytime with: clawflows disable <name>)
+#   6. Enables auto-updates to keep community workflows current (like a
+#      package manager — pulls latest via git)
+#   7. Syncs AGENTS.md so the agent knows about available workflows
+#
+# Nothing is installed outside ~/.local/bin and the OpenClaw workspace.
+# Uninstall everything cleanly anytime: clawflows uninstall
+#
 # Works two ways:
 #   1. curl | bash  (clones the repo)
 #   2. bash install.sh  (already cloned)
@@ -20,11 +38,9 @@ _oc_workspace="${_oc_workspace:-$HOME/.openclaw/workspace}"
 INSTALL_DIR="$_oc_workspace/clawflows"
 
 # ── Flags ─────────────────────────────────────────────────────────────────
-NO_ESSENTIALS=false
 NO_UPDATER=false
 for arg in "$@"; do
   case "$arg" in
-    --no-essentials) NO_ESSENTIALS=true ;;
     --no-updater) NO_UPDATER=true ;;
   esac
 done
@@ -95,6 +111,7 @@ ln -s "$INSTALL_DIR/system/cli/clawflows" "$BIN_TARGET"
 ok "Installed clawflows CLI"
 
 # ── 4. Ensure ~/.local/bin is in PATH ────────────────────────────────────────
+# Standard PATH setup — makes the clawflows CLI accessible from any terminal
 
 path_ok=false
 case ":${PATH}:" in
@@ -124,6 +141,8 @@ else
 fi
 
 # ── 5. Set up scheduler cron ─────────────────────────────────────────────────
+# This is how scheduled workflows (like morning briefings) run automatically.
+# It adds an OpenClaw cron job that checks every 15 minutes for due workflows.
 
 # Find openclaw — command -v may fail if ~/.local/bin isn't in this shell's PATH yet
 OPENCLAW=""
@@ -187,6 +206,8 @@ if [ -d "$BACKUP_DIR" ] && ls "$BACKUP_DIR"/*.tar.gz >/dev/null 2>&1; then
 fi
 
 # ── 7. Auto-enable update-clawflows ─────────────────────────────────────────
+# Keeps community workflows current by pulling latest via git, like a package
+# manager. Users can disable anytime with: clawflows disable update-clawflows
 
 if ! $NO_UPDATER; then
   "$INSTALL_DIR/system/cli/clawflows" enable update-clawflows >/dev/null 2>&1 || true
@@ -213,9 +234,11 @@ if [ -d "$INSTALL_DIR/workflows/available" ]; then
   workflow_count=$(ls -d "$INSTALL_DIR/workflows/available"/*/ 2>/dev/null | wc -l | tr -d ' ')
 fi
 
-# ── 10. Enable essentials (skip when agent handles it via --no-essentials) ────
+# ── 10. Enable essentials ─────────────────────────────────────────────────────
+# Optional recommended starter workflows — the user can disable any of them
+# anytime with: clawflows disable <name>
 
-if ! $NO_ESSENTIALS && ! $RESTORED_BACKUP; then
+if ! $RESTORED_BACKUP; then
   ESSENTIALS=(send-morning-inspiration send-morning-briefing process-email check-calendar)
 
   echo ""

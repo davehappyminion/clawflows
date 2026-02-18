@@ -13,6 +13,19 @@ teardown() {
 }
 
 # ============================================================================
+# Creating Workflows Guide Link
+# ============================================================================
+
+@test "build_block: includes creating workflows guide link" {
+    run_clawflows sync-agent
+
+    assert_success
+    run cat "$AGENTS_MD"
+    assert_output --partial "Creating Workflows Guide"
+    assert_output --partial "docs/creating-workflows.md"
+}
+
+# ============================================================================
 # Simple Workflow Guidance
 # ============================================================================
 
