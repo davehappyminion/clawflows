@@ -1,6 +1,6 @@
 # Updates
 
-## Feb 17
+## Tue, Feb 17
 
 - 🤖 **Agent-friendly installer** — Added clear explanations throughout `install.sh` so AI agents stop freaking out about cron jobs and PATH changes. Every "scary" step now has a friendly comment saying "this is normal, relax." Removed the `--no-essentials` flag — essentials just prompt naturally now. Banana-approved smooth installs!
 - 🍌 **Generic workflows** — Workflows are now written so ANY human can use them — no more hardcoded names, cities, or banana preferences.
@@ -16,7 +16,7 @@
 - ➖ **Morning briefing reverted** — Reverted the morning-briefing workflow.
 - 📝 **Updates formatting** — Changelog entries grouped by day with bolded summaries and emojis.
 
-## Feb 16
+## Mon, Feb 16
 
 - 🔍 **Custom workspace detection** — AGENTS.md sync now finds your workspace from `openclaw.json`, even if it's not the default path.
 - 💾 **Backup on install** — Installer checks for existing backups and offers to restore your custom workflows and enabled list.
@@ -31,11 +31,11 @@
 - 🧪 **Workspace tests** — Added workspace detection tests for custom OpenClaw workspaces.
 - 🍌 **Generic workflow guidance** — Added docs about keeping workflows shareable and user-agnostic.
 
-## Feb 15
+## Sun, Feb 15
 
 - 🧪 **Comprehensive test suite** — 132 BATS tests covering enable, disable, list, create, run, backup, restore, validate, submit, and more.
 
-## Feb 14
+## Sat, Feb 14
 
 - ✏️ **Edit command** — `clawflows edit` copies a community workflow to custom/ so you can modify it without losing changes on update.
 - 📂 **Open command** — `clawflows open` opens any workflow in your editor.
@@ -46,7 +46,7 @@
 - 🔄 **Auto-updater workflow** — `update-clawflows` keeps your workflows fresh automatically, like Chrome updates.
 - ✅ **Validate command** — `clawflows validate` checks that a workflow has all required fields before you share it.
 
-## Feb 13
+## Fri, Feb 13
 
 - ✨ **Create wizard** — `clawflows create` walks you through naming, emoji, schedule, and description step by step.
 - 🤖 **JSON API** — Agents create workflows programmatically with `clawflows create --from-json`.
@@ -67,12 +67,12 @@
 - 🍌 **Star prompt** — Dave the Happy Minion asks you to star the repo. He worked very hard.
 - 💛 **Personal star prompt** — Added personal touch to the star prompt.
 
-## Feb 12
+## Thu, Feb 12
 
 - ⏪ **Essentials reverted** — Restored the 4 essential workflows to their original, simpler versions.
 - 🤝 **Meeting prep** — New `prep-next-meeting` workflow for attendee research and talking points.
 
-## Feb 11
+## Wed, Feb 11
 
 - 🤖 **Agent install guide** — Full step-by-step guide so your agent can install ClawFlows for you.
 - 📋 **Author field spec** — Added author field to the frontmatter specification.
@@ -101,7 +101,7 @@
 - 🎨 **ASCII art fix** — Fixed ASCII art to clearly spell ClawFlows.
 - 🤖 **Agent onboarding fix** — Fixed agent onboarding to ask about essentials and explain interactive usage.
 
-## Feb 10
+## Tue, Feb 10
 
 - 🏗️ **Project restructure** — Available/enabled pattern with symlinks. Enable creates a symlink, disable removes it.
 - 📝 **README tagline** — Enhanced README with project tagline and purpose.
@@ -161,7 +161,7 @@
 - 🗑️ **Uninstall command** — Clean removal of symlink, AGENTS.md block, and scheduler cron.
 - 📚 **How to Use docs** — Added How to Use section and updated CLI commands documentation.
 
-## Feb 9
+## Mon, Feb 9
 
 - 🚀 **Initial commit** — ClawFlows is born! Reusable workflows for AI agents.
 - 📝 **README capitalize** — Capitalized ClawFlows and added benefits section to README.
