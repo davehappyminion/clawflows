@@ -25,7 +25,7 @@ Some examples:
 Send this message to your OpenClaw agent:
 
 ```
-Set up ClawFlows for me: https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/AGENT.md
+Install https://raw.githubusercontent.com/davehappyminion/clawflows/main/system/AGENT.md
 ```
 
 Your agent will install everything and ask which workflows you want to enable.
